@@ -10,7 +10,7 @@
 template <typename T>
 class Exp1{
 public:
-	class Iterator : public std::iterator<std::input_iterator_tag, T, std::ptrdiff_t, T*, T&>{
+	class Iterator : public ft::iterator<ft::input_iterator_tag, T, std::ptrdiff_t, T*, T&>{
 
 	};
 	Exp1() : iterator() {}
@@ -21,7 +21,7 @@ public:
 template <typename T>
 class Exp2{
 public:
-	class Iterator : public std::iterator<std::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T&>{
+	class Iterator : public ft::iterator<ft::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T&>{
 
 	};
 	Exp2() : iterator() {}
@@ -30,13 +30,13 @@ public:
 };
 
 template <typename It>
-void foo(It &it, std::bidirectional_iterator_tag){
+void foo(It &it, ft::bidirectional_iterator_tag){
 	std::cout << "specialized function called" << std::endl;
 	(void) it;
 }
 
 template <typename It>
-void foo(It &it, std::input_iterator_tag){
+void foo(It &it, ft::input_iterator_tag){
 	std::cout << "generalized function called" << std::endl;
 	(void) it;
 }
@@ -47,12 +47,11 @@ void foo(It it){
 }
 
 int	main(){
-	std::vector<int> v;
+	std::vector<int> v(2,3);
 	Exp1<int> objectWithWeakIterator;
 	Exp2<int> objectWithStrongIterator;
 	foo<Exp1<int>::Iterator>(objectWithWeakIterator.iterator); // will call the specialized version
 	foo<Exp2<int>::Iterator>(objectWithStrongIterator.iterator); // will call the specialized version
-	foo<std::vector<int>::iterator>(v.begin());  // works with vector as well!
 	return (0);
 }
 

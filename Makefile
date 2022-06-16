@@ -11,7 +11,6 @@ TEST_PATH = ./test/
 # Names
 
 SRC_NAME =	main.cpp\
-			test.cpp\
 
 TEST_SRC_NAME =	test_main.cpp \
 
@@ -35,7 +34,7 @@ OBJ_NO_MAIN := $(filter-out $(OBJ_PATH)main.o, $(OBJ))
 
 # Flags
 CXX = c++
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 MAKE_DEP_FLAGS = -MMD
 TEST_FLAGS	= -pthread -lgtest
 

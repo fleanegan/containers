@@ -1,6 +1,7 @@
 #include <iostream>
-#include "iterators.hpp"
-#include "../inc/iterators.hpp"
+#include "Iterators.hpp"
+#include "../inc/Iterators.hpp"
+#include "../inc/Vector.hpp"
 #include <iterator>
 #include <vector>
 

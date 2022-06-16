@@ -2,7 +2,8 @@
 # define TEST_UTILS_H
 
 #include "gtest/gtest.h"
-#include "../inc/iterators.hpp"
+#include "../inc/Iterators.hpp"
+#include "../inc/Vector.hpp"
 #include <iostream>
 
 

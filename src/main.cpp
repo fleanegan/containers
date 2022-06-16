@@ -29,22 +29,6 @@ public:
 	Iterator iterator;
 };
 
-template <typename It>
-void foo(It &it, ft::bidirectional_iterator_tag){
-	std::cout << "specialized function called" << std::endl;
-	(void) it;
-}
-
-template <typename It>
-void foo(It &it, ft::input_iterator_tag){
-	std::cout << "generalized function called" << std::endl;
-	(void) it;
-}
-
-template <typename It>
-void foo(It it){
-	foo<It>(it, typename It::iterator_category());
-}
 
 int	main(){
 	std::vector<int> v(2,3);

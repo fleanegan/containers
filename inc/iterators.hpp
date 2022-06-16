@@ -5,6 +5,12 @@
 #ifndef CONTAINERS_ITERATORS_H
 #define CONTAINERS_ITERATORS_H
 
+#ifdef USE_STD_TRAITS
+# define TRAIT_NS std
+#else
+# define TRAIT_NS ft
+#endif
+
 namespace ft {
 	struct input_iterator_tag { };
 	struct output_iterator_tag { };

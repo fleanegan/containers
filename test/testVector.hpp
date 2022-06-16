@@ -1,9 +1,9 @@
 #include "testUtils.hpp"
 
-TEST(vector, initVectorHasCapacityOne){
+TEST(vector, initVectorHasCapacityZero){
 	ft::vector<int> vec;
 
-	ASSERT_EQ(1, vec.capacity());
+	ASSERT_EQ(0, vec.capacity());
 }
 
 TEST(vector, push_backIncreasesSize){
@@ -30,5 +30,36 @@ TEST(vector, exceedingCapacityOnPush_backDoublesSize){
 
 	vec.push_back(2);
 	vec.push_back(2);
-	ASSERT_EQ(2 * capacityInital, vec.capacity());
+	vec.push_back(2);
+	ASSERT_EQ(4, vec.capacity());
+}
+
+TEST(vector, properDestruction){
+	ft::vector<simpleDummy> vec;
+
+	simpleDummy a;
+	vec.push_back(a);
+	vec.push_back(a);
+
+	simpleDummy res = vec.front();
+	res.dummyFunction();
+	std::cout << "end of test" << std::endl;
+}
+
+TEST(vector, canModifyResultOfBracketOperator){
+	ft::vector<int> vec;
+
+	vec.push_back(2);
+	vec.push_back(3);
+	++vec[1];
+	ASSERT_EQ(4, vec[1]);
+}
+
+#include <vector>
+
+TEST(vector, canGetConstBracketOperator){
+	const ft::vector<int> vec(1);
+
+	const int i = vec[0];
+	ASSERT_EQ(0, i);
 }

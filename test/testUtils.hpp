@@ -6,7 +6,18 @@
 #include "../inc/Vector.hpp"
 #include <iostream>
 
-
+class simpleDummy{
+	int *i;
+public:
+	simpleDummy() : i(new int) {}
+	simpleDummy(const simpleDummy & other) : i(new int){}
+	simpleDummy &operator=(const simpleDummy &other){
+		i = new int;
+		return *this;
+	}
+	void dummyFunction(){}
+	~simpleDummy() { delete i; }
+};
 
 template <typename It>
 bool getHasSpecializedTag(TRAIT_NS::bidirectional_iterator_tag a){

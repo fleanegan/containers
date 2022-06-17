@@ -50,7 +50,7 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 
 $(OBJ_PATH)%.o: $(TEST_PATH)%.cpp
 	@mkdir -p $(@D)
-	$(CXX) -D TESTING -I$(TEST_PATH) $(INC_PARAMS) $(MAKE_DEP_FLAGS) -c $< -o $@
+	$(CXX) -D TESTING -g -I$(TEST_PATH) $(INC_PARAMS) $(MAKE_DEP_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
 	@echo "Build $(NAME)"

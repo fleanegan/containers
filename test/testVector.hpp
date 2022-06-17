@@ -105,7 +105,7 @@ TEST(vector, iteratorEndPointsBehindLastElement){
 }
 
 TEST(vector, clearResetsSize){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ASSERT_NE(0, vec.size());
 
 	vec.clear();
@@ -120,6 +120,15 @@ TEST(vector, reserveGreaterThanMaxSizeThrows){
 	ASSERT_ANY_THROW(vec.reserve(-1));
 }
 
+TEST(vector, equalityTakesSizeAndElementComparisonIntoConsideration){
+	ft::vector<simpleDummy> source;
+	source.push_back(simpleDummy(1));
+//	ft::vector<simpleDummy> vec(source);
+	source.push_back(simpleDummy(1));
+//	vec.push_back(simpleDummy(2));
+
+//	ASSERT_NE(vec, source);
+}
 
 TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
 	ft::vector<int> source;

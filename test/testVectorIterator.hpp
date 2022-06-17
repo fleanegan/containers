@@ -1,13 +1,15 @@
 #include "testUtils.hpp"
 
 TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+	createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 
 	ASSERT_EQ(1, **it1);
 	ASSERT_EQ(&(**it1), &(*(it1->i)));
 }
-
+/*
 TEST(vectorIterator, testCanonicalForm){
 	ft::vector<simpleDummy> vec = createTestDumyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
@@ -18,6 +20,7 @@ TEST(vectorIterator, testCanonicalForm){
 	ASSERT_EQ(it1, it2);
 	ASSERT_EQ(it1, it3);
 }
+
 
 TEST(vectorIterator, comparingTheSamePointers){
 	ft::vector<simpleDummy> vec = createTestDumyVector();
@@ -117,7 +120,7 @@ TEST(vectorIterator, incrementDereferenced){
 }
 
 TEST(vectorIterator, relationalComparison){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin() + 1;
 	ft::vector<simpleDummy>::iterator it3 = vec.begin() + 1;
@@ -128,4 +131,4 @@ TEST(vectorIterator, relationalComparison){
 	ASSERT_TRUE(it2 >= it3);
 	ASSERT_TRUE(it1 <= it2);
 	ASSERT_TRUE(it3 <= it2);
-}
+}*/

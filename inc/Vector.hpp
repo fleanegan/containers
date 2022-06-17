@@ -3,6 +3,8 @@
 
 // todo: probably needs to be removed before handing in
 // -> how to compile independently?
+#define _DEBUG true
+
 #include "IteratorTraits.hpp"
 #include "VectorIterator.hpp"
 
@@ -44,19 +46,24 @@ namespace ft {
 
 	public:
 		explicit vector(const allocator_type &alloc = allocator_type()) : \
-        _capacity(0), \
-        _allocator(alloc), \
-        _size(0), \
-        _arr() {}
+				_capacity(0), \
+				_allocator(alloc), \
+				_size(0), \
+				_arr() {}
 
 		explicit vector(size_type n, const allocator_type &alloc = allocator_type()) : \
-        _capacity(n), \
-        _allocator(alloc), \
-        _size(n) {
+				_capacity(n), \
+				_allocator(alloc), \
+				_size(n) {
 			_arr = _allocator.allocate(n);
 			for (size_type i = 0; i < n; ++i) {
 				_allocator.construct(_arr, T());
 			}
+		}
+
+		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \
+		        _allocator(rhs._allocator){
+			assign(rhs.begin(), rhs.end());
 		}
 
 		virtual ~vector() {
@@ -89,10 +96,12 @@ namespace ft {
 		}
 
 		void push_back(const T &x) {
+			_DEBUG && std::cout << "push back\n";
 			if (_size == _capacity) {
 				reserve(_capacity * 2);
 			}
-			_arr[_size++] = x;
+			_arr[_size] = x;
+			_size++;
 		}
 
 		reference front() {
@@ -161,6 +170,7 @@ namespace ft {
 		}
 
 		void reserve(size_type newCapacity) {
+			_DEBUG && std::cout << "reserving\n";
 			if (newCapacity <= _capacity && _capacity != 0)
 				return ;
 			if (newCapacity > max_size())
@@ -168,7 +178,11 @@ namespace ft {
 			if (_capacity == 0 && newCapacity == 0)
 				++newCapacity;
 			T *tmp = _allocator.allocate(newCapacity);
+			for (int i = 0; i < newCapacity; ++i) {
+				_allocator.construct(&tmp[i], T());
+			}
 			for (int i = 0; i < _size; ++i) {
+				_DEBUG && std::cout << "reserve loop\n";
 				tmp[i] = _arr[i];
 				_allocator.destroy(&_arr[i]);
 			}

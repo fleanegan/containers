@@ -43,19 +43,15 @@ TEST(vector, properDestruction){
 
 	simpleDummy res = vec.front();
 	res.dummyFunction();
-	std::cout << "end of test" << std::endl;
 }
 
 TEST(vector, canModifyResultOfBracketOperator){
 	ft::vector<int> vec;
 
 	vec.push_back(2);
-	vec.push_back(3);
-	++vec[1];
-	ASSERT_EQ(4, vec[1]);
+	++vec[0];
+	ASSERT_EQ(3, vec[0]);
 }
-
-#include <vector>
 
 TEST(vector, canGetConstBracketOperator){
 	const ft::vector<int> vec(1);
@@ -63,3 +59,53 @@ TEST(vector, canGetConstBracketOperator){
 	const int i = vec[0];
 	ASSERT_EQ(0, i);
 }
+
+TEST(vector, atGetsElementIfValidAccessor){
+	ft::vector<int> vec(1);
+
+	vec.at(0) = 9;
+	const int result = vec.at(0);
+
+	ASSERT_EQ(9, result);
+}
+
+TEST(vector, atGetsElementIfValidAccessorConst){
+	const ft::vector<int> vec(1);
+
+	const int result = vec.at(0);
+
+	ASSERT_EQ(0, result);
+}
+
+TEST(vector, atThrowsIfOutOfRange){
+	ft::vector<int> vec(1);
+
+	ASSERT_ANY_THROW(vec.at(1));
+}
+
+TEST(vector, atThrowsIfOutOfRangeConst){
+	const ft::vector<int> vec(1);
+
+	ASSERT_ANY_THROW(vec.at(1));
+}
+
+TEST(vector, iteratorBeginPointsAtFirstElement){
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+
+	simpleDummy result = *vec.begin();
+	ASSERT_EQ(1, *result);
+}
+
+//TEST(vector, assignmentMakesDeep){
+//	ft::vector<simpleDummy> source;
+//	ft::vector<simpleDummy> target;
+//	source.push_back(simpleDummy());
+//
+//	target = source;
+//
+//	ASSERT_EQ(source.size(), target.size());
+//	ASSERT_EQ(source.capacity(), target.capacity());
+//	ASSERT_EQ(*source.front().i, *target.front().i);
+//	ASSERT_NE(source.front().i, target.front().i);
+//}

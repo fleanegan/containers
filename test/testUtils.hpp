@@ -2,18 +2,23 @@
 # define TEST_UTILS_H
 
 #include "gtest/gtest.h"
-#include "../inc/Iterators.hpp"
+#include "../inc/IteratorTraits.hpp"
 #include "../inc/Vector.hpp"
+#include "../inc/VectorIterator.hpp"
 #include <iostream>
 
-class simpleDummy{
+struct simpleDummy{
 	int *i;
-public:
 	simpleDummy() : i(new int) {}
-	simpleDummy(const simpleDummy & other) : i(new int){}
+	explicit simpleDummy(int in) : i(new int) { *i = in; }
+	simpleDummy(const simpleDummy & other) : i(new int){ *i = *other.i; }
 	simpleDummy &operator=(const simpleDummy &other){
 		i = new int;
+		*i = *other.i;
 		return *this;
+	}
+	int &operator*(){
+		return *i;
 	}
 	void dummyFunction(){}
 	~simpleDummy() { delete i; }

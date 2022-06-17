@@ -1,17 +1,28 @@
 #ifndef CONTAINERS_VECTOR_HPP
 #define CONTAINERS_VECTOR_HPP
 
+// todo: probably needs to be removed before handing in
+// -> how to compile independently?
+#include "IteratorTraits.hpp"
+#include "VectorIterator.hpp"
+
 namespace ft {
-	template<class T, class Allocator = std::allocator <T> >
+	template<class T, class Allocator = std::allocator<T> >
 	class vector {
 	public:
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
-		typedef T value_type;
+		typedef VectorIterator<T>		iterator;
+		//typedef ConstVectorIterator<T>		const_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
+
+		iterator begin() {
+			return iterator(_arr);
+		}
+
 	private:
 		Allocator _allocator;
 		size_type _capacity;
@@ -19,21 +30,21 @@ namespace ft {
 		T *_arr;
 
 	public:
-		vector() : \
-		_capacity(0), \
-		_allocator(), \
-		_size(0), \
-		_arr(){}
+		explicit vector(const allocator_type &alloc = allocator_type()) : \
+        _capacity(0), \
+        _allocator(alloc), \
+        _size(0), \
+        _arr() {}
 
-		explicit vector(size_type n) : \
-		_capacity(n), \
-		_allocator(Allocator()), \
-		_size(n){
+		explicit vector(size_type n, const allocator_type &alloc = allocator_type()) : \
+        _capacity(n), \
+        _allocator(alloc), \
+        _size(n) {
 			_arr = _allocator.allocate(n);
 			for (size_type i = 0; i < n; ++i) {
 				_allocator.construct(_arr, T());
 			}
-	}
+		}
 
 		virtual ~vector() {
 			for (int i = 0; i < _size; ++i)
@@ -41,16 +52,23 @@ namespace ft {
 			_allocator.deallocate(_arr, _capacity);
 		}
 
-		size_type capacity() const{
+		vector &operator=(const vector &rhs) {
+			if (&rhs == this)
+				return *this;
+			_size = rhs._size;
+			_capacity = rhs._capacity;
+		}
+
+		size_type capacity() const {
 			return _capacity;
 		}
 
-		size_type size() const{
+		size_type size() const {
 			return _size;
 		}
 
-		void push_back(const T& x) {
-			if (_size == _capacity){
+		void push_back(const T &x) {
+			if (_size == _capacity) {
 				doubleCapacity();
 			}
 			_arr[_size++] = x;
@@ -60,7 +78,7 @@ namespace ft {
 			return _arr[0];
 		}
 
-		const_reference front() const{
+		const_reference front() const {
 			return _arr[0];
 		}
 
@@ -68,16 +86,26 @@ namespace ft {
 			return _arr[_capacity - 1];
 		}
 
-		const_reference back() const{
+		const_reference back() const {
 			return _arr[_capacity - 1];
 		}
 
-		reference operator[](size_type pos){
+		reference operator[](size_type pos) {
 			return (_arr[pos]);
 		}
 
-		const_reference operator[](size_type pos) const{
+		const_reference operator[](size_type pos) const {
 			return (_arr[pos]);
+		}
+
+		const_reference at(int i) const {
+			outOfRangeGuard(i);
+			return _arr[i];
+		}
+
+		reference at(int i) {
+			outOfRangeGuard(i);
+			return _arr[i];
 		}
 
 	private:
@@ -93,6 +121,11 @@ namespace ft {
 			_allocator.deallocate(_arr, _capacity);
 			_arr = tmp;
 			_capacity = newCapacity;
+		}
+
+		void outOfRangeGuard(int i) const {
+			if (i >= _size)
+				throw std::out_of_range("index is out of range");
 		}
 	};
 }

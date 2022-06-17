@@ -14,9 +14,19 @@ namespace ft {
 	struct bidirectional_iterator_tag : public forward_iterator_tag { };
 	struct random_access_iterator_tag : public bidirectional_iterator_tag { };
 	typedef unsigned long ptrdiff_t;
+
+	template<class Iterator>
+	struct iterator_traits {
+		typedef typename Iterator::difference_type difference_type;
+		typedef typename Iterator::value_type value_type;
+		typedef typename Iterator::pointer pointer;
+		typedef typename Iterator::reference reference;
+		typedef typename Iterator::iterator_category iterator_category;
+	};
+
 	template<typename Category, typename Tp, typename Distance = ptrdiff_t,
 			typename Pointer = Tp*, typename Reference = Tp&>
-	struct iterator
+	struct iterator_traits_bundle
 	{
 		typedef Category  iterator_category;
 		typedef Tp        value_type;
@@ -25,9 +35,5 @@ namespace ft {
 		typedef Reference reference;
 	};
 }
-
-#ifdef COMPAT_MODE
-#else
-#endif
 
 #endif //CONTAINERS_ITERATORS_H

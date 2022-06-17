@@ -113,14 +113,25 @@ TEST(vector, clearResetsSize){
 	ASSERT_EQ(0, vec.size());
 	ASSERT_EQ(0, vec.capacity());
 }
-//
-//TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
-//	ft::vector<simpleDummy> source = createTestDumyVector();
-//	ft::vector<simpleDummy> vec;
-//
-//	vec.assign(source.begin(), source.begin() + 2);
-//	ASSERT_EQ(2, vec.size());
-//}
+
+TEST(vector, reserveGreaterThanMaxSizeThrows){
+	ft::vector<simpleDummy> vec;
+
+	ASSERT_ANY_THROW(vec.reserve(-1));
+}
+
+
+TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
+	ft::vector<int> source;
+	source.push_back(1);
+	source.push_back(1);
+	source.push_back(1);
+	ft::vector<int> vec;
+
+	vec.assign(source.begin(), source.end());
+	ASSERT_EQ(3, vec.size());
+	ASSERT_EQ(vec, source);
+}
 
 
 //TEST(vector, assignmentMakesDeep){

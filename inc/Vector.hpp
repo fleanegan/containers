@@ -18,6 +18,7 @@ namespace ft {
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
+		typedef ft::ptrdiff_t difference_type;
 
 		iterator begin() const {
 			return iterator(_arr);
@@ -89,7 +90,7 @@ namespace ft {
 
 		void push_back(const T &x) {
 			if (_size == _capacity) {
-				doubleCapacity();
+				reserve(_capacity * 2);
 			}
 			_arr[_size++] = x;
 		}
@@ -128,21 +129,43 @@ namespace ft {
 			return _arr[i];
 		}
 
-//		void assign(iterator from, iterator to){
-//			size_type requiredCapacity = to - from;
-//			clear();
-//				reserve(requiredCapacity);
-//			while (from != to)
-//			{
-//
-//			}
-//			_size = 2;
-//		}
+		void assign(iterator from, iterator to){
+			size_type requiredCapacity = to - from;
+			clear();
+			reserve(requiredCapacity);
+			while (from != to)
+				push_back(*from++);
+		}
 
-	private:
-		void doubleCapacity() {
-			size_type newCapacity = _capacity * 2;
-			if (_capacity == 0)
+		bool operator==(const vector &rhs) const {
+			iterator ours = begin();
+			iterator theirs = rhs.begin();
+			if (_size != rhs._size)
+				return false;
+			while (ours != end() && theirs != rhs.end())
+				if (*ours == *theirs){
+					++ours;
+					++theirs;
+				}
+				else
+					return false;
+			return (ours == end() && theirs == rhs.end());
+		}
+
+		bool operator!=(const vector &rhs) const {
+			return !(rhs == *this);
+		}
+
+		size_type max_size() const{
+			return std::numeric_limits<difference_type>::max();
+		}
+
+		void reserve(size_type newCapacity) {
+			if (newCapacity <= _capacity && _capacity != 0)
+				return ;
+			if (newCapacity > max_size())
+				throw std::length_error("the requested capacity is too big");
+			if (_capacity == 0 && newCapacity == 0)
 				++newCapacity;
 			T *tmp = _allocator.allocate(newCapacity);
 			for (int i = 0; i < _size; ++i) {
@@ -153,7 +176,7 @@ namespace ft {
 			_arr = tmp;
 			_capacity = newCapacity;
 		}
-
+	private:
 		void outOfRangeGuard(int i) const {
 			if (i >= _size)
 				throw std::out_of_range("index is out of range");

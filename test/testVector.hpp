@@ -93,9 +93,35 @@ TEST(vector, iteratorBeginPointsAtFirstElement){
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
 
-	simpleDummy result = *vec.begin();
-	ASSERT_EQ(1, *result);
+	ASSERT_EQ(vec.front(), *vec.begin());
 }
+
+TEST(vector, iteratorEndPointsBehindLastElement){
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+	vec.push_back(simpleDummy(1));
+
+	ASSERT_EQ(vec.back(), *(--vec.end()));
+}
+
+TEST(vector, clearResetsSize){
+	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ASSERT_NE(0, vec.size());
+
+	vec.clear();
+
+	ASSERT_EQ(0, vec.size());
+	ASSERT_EQ(0, vec.capacity());
+}
+//
+//TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
+//	ft::vector<simpleDummy> source = createTestDumyVector();
+//	ft::vector<simpleDummy> vec;
+//
+//	vec.assign(source.begin(), source.begin() + 2);
+//	ASSERT_EQ(2, vec.size());
+//}
+
 
 //TEST(vector, assignmentMakesDeep){
 //	ft::vector<simpleDummy> source;

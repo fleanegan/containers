@@ -31,6 +31,10 @@ namespace ft {
 			return *this;
 		}
 
+		virtual ~VectorIterator(){
+
+		}
+
 		bool operator==(const VectorIterator &rhs) const {
 			return _ptr == rhs._ptr;
 		}

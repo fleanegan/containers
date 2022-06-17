@@ -19,8 +19,20 @@ namespace ft {
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
 
+		iterator begin() const {
+			return iterator(_arr);
+		}
+
 		iterator begin() {
 			return iterator(_arr);
+		}
+
+		iterator end() const {
+			return iterator(&_arr[_size]);
+		}
+
+		iterator end() {
+			return iterator(&_arr[_size]);
 		}
 
 	private:
@@ -47,9 +59,17 @@ namespace ft {
 		}
 
 		virtual ~vector() {
-			for (int i = 0; i < _size; ++i)
-				_allocator.destroy(&_arr[i]);
-			_allocator.deallocate(_arr, _capacity);
+			clear();
+		}
+
+		void clear() {
+			if (_capacity != 0) {
+				for (int i = 0; i < _size; ++i)
+					_allocator.destroy(&_arr[i]);
+				_allocator.deallocate(_arr, _capacity);
+				_capacity = 0;
+				_size = 0;
+			}
 		}
 
 		vector &operator=(const vector &rhs) {
@@ -107,6 +127,17 @@ namespace ft {
 			outOfRangeGuard(i);
 			return _arr[i];
 		}
+
+//		void assign(iterator from, iterator to){
+//			size_type requiredCapacity = to - from;
+//			clear();
+//				reserve(requiredCapacity);
+//			while (from != to)
+//			{
+//
+//			}
+//			_size = 2;
+//		}
 
 	private:
 		void doubleCapacity() {

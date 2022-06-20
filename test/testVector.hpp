@@ -143,7 +143,7 @@ TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
 }
 
 
-//TEST(vector, assignmentMakesDeep){
+//TEST(vector, assignmentMakesDeepCopy){
 //	ft::vector<simpleDummy> source;
 //	ft::vector<simpleDummy> target;
 //	source.push_back(simpleDummy());

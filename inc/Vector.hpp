@@ -3,7 +3,7 @@
 
 // todo: probably needs to be removed before handing in
 // -> how to compile independently?
-#define _DEBUG true
+#define _DEBUG false
 
 #include "IteratorTraits.hpp"
 #include "VectorIterator.hpp"
@@ -70,16 +70,6 @@ namespace ft {
 			clear();
 		}
 
-		void clear() {
-			if (_capacity != 0) {
-				for (int i = 0; i < _size; ++i)
-					_allocator.destroy(&_arr[i]);
-				_allocator.deallocate(_arr, _capacity);
-				_capacity = 0;
-				_size = 0;
-			}
-		}
-
 		vector &operator=(const vector &rhs) {
 			if (&rhs == this)
 				return *this;
@@ -93,15 +83,6 @@ namespace ft {
 
 		size_type size() const {
 			return _size;
-		}
-
-		void push_back(const T &x) {
-			_DEBUG && std::cout << "push back\n";
-			if (_size == _capacity) {
-				reserve(_capacity * 2);
-			}
-			_arr[_size] = x;
-			_size++;
 		}
 
 		reference front() {
@@ -136,6 +117,26 @@ namespace ft {
 		reference at(int i) {
 			outOfRangeGuard(i);
 			return _arr[i];
+		}
+
+		void push_back(const T &x) {
+			_DEBUG && std::cout << "push back\n";
+			if (_size == _capacity) {
+				reserve(_capacity * 2);
+			}
+			_arr[_size] = x;
+			_size++;
+		}
+
+		void clear() {
+			if (_capacity != 0) {
+				for (int i = 0; i < _capacity; ++i)
+					_allocator.destroy(&_arr[i]);
+				_allocator.deallocate(_arr, _capacity);
+				_capacity = 0;
+				_size = 0;
+				_DEBUG && std::cout << "cleared" << std::endl;
+			}
 		}
 
 		void assign(iterator from, iterator to){

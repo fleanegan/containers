@@ -9,9 +9,9 @@ TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo)
 	ASSERT_EQ(1, **it1);
 	ASSERT_EQ(&(**it1), &(*(it1->i)));
 }
-/*
+
 TEST(vectorIterator, testCanonicalForm){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2(it1);
 	ft::vector<simpleDummy>::iterator it3 = vec.begin();
@@ -23,7 +23,7 @@ TEST(vectorIterator, testCanonicalForm){
 
 
 TEST(vectorIterator, comparingTheSamePointers){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 
@@ -31,7 +31,7 @@ TEST(vectorIterator, comparingTheSamePointers){
 }
 
 TEST(vectorIterator, comparingTheUnequalPointers){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 	++it2;
@@ -40,7 +40,7 @@ TEST(vectorIterator, comparingTheUnequalPointers){
 }
 
 TEST(vectorIterator, equalIteratorsStayEqualWhenAdvancing){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 	++it2;
@@ -50,7 +50,7 @@ TEST(vectorIterator, equalIteratorsStayEqualWhenAdvancing){
 }
 
 TEST(vectorIterator, postIncrementingChangesValueAfter){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 
@@ -58,7 +58,7 @@ TEST(vectorIterator, postIncrementingChangesValueAfter){
 }
 
 TEST(vectorIterator, incrementMultipleTimes){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 
 	ASSERT_EQ(5, *(*(++++++++it1)));
@@ -66,7 +66,7 @@ TEST(vectorIterator, incrementMultipleTimes){
 }
 
 TEST(vectorIterator, plusEqualOperator){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	it1 += 1;
 
@@ -74,7 +74,7 @@ TEST(vectorIterator, plusEqualOperator){
 }
 
 TEST(vectorIterator, addingIntsToIterators){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 	it2 = it1 + 1;
@@ -84,7 +84,7 @@ TEST(vectorIterator, addingIntsToIterators){
 }
 
 TEST(vectorIterator, subtractingIteratorsFromIterators){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2 = vec.begin();
 	it1++;
@@ -103,7 +103,7 @@ TEST(vectorIterator, dereferenceAsLvalue){
 }
 
 TEST(vectorIterator, offsetDereferenceAsLvalue){
-	ft::vector<simpleDummy> vec = createTestDumyVector();
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 
 	ASSERT_EQ(1, *it1[0]);
@@ -131,4 +131,4 @@ TEST(vectorIterator, relationalComparison){
 	ASSERT_TRUE(it2 >= it3);
 	ASSERT_TRUE(it1 <= it2);
 	ASSERT_TRUE(it3 <= it2);
-}*/
+}

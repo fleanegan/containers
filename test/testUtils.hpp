@@ -6,31 +6,32 @@
 #include "../inc/Vector.hpp"
 #include "../inc/VectorIterator.hpp"
 #include <iostream>
+#define _DEBUG_SD 0
 
 struct simpleDummy {
 	int *i = NULL;
 
 	simpleDummy() {
-		_DEBUG && std::cout << "default constructor" << std::endl;
+		_DEBUG_SD && std::cout << "default constructor" << std::endl;
 		i = new int;
 	}
 
 	explicit simpleDummy(int in) {
-		_DEBUG && std::cout << "argument constructor. i is " << (void *) i << std::endl;
+		_DEBUG_SD && std::cout << "argument constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = in;
 	}
 
 	simpleDummy(const simpleDummy &other) {
-		_DEBUG && std::cout << "copy constructor. i is " << (void *) i << std::endl;
+		_DEBUG_SD && std::cout << "copy constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = *(other.i);
 	}
 
 	simpleDummy &operator=(const simpleDummy &other) {
-		_DEBUG && std::cout << "assignment start" << std::endl;
+		_DEBUG_SD && std::cout << "assignment start" << std::endl;
 		*i = *(other.i);
-		_DEBUG && std::cout << "assignment end" << std::endl;
+		_DEBUG_SD && std::cout << "assignment end" << std::endl;
 		return *this;
 	}
 
@@ -49,7 +50,7 @@ struct simpleDummy {
 	void dummyFunction() {}
 
 	~simpleDummy() {
-		_DEBUG && std::cout << "destructor" << std::endl;
+		_DEBUG_SD && std::cout << "destructor" << std::endl;
 		delete i;
 	}
 };
@@ -64,13 +65,13 @@ ft::vector<simpleDummy> createTestDummyVector() {
 
 template<typename It>
 bool getHasSpecializedTag(TRAIT_NS::bidirectional_iterator_tag a) {
-	_DEBUG && std::cout << "specialized function called" << std::endl;
+	_DEBUG_SD && std::cout << "specialized function called" << std::endl;
 	return true;
 }
 
 template<typename It>
 bool getHasSpecializedTag(TRAIT_NS::input_iterator_tag a) {
-	_DEBUG && std::cout << "generalized function called" << std::endl;
+	_DEBUG_SD && std::cout << "generalized function called" << std::endl;
 	return false;
 }
 

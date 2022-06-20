@@ -140,21 +140,6 @@ namespace ft {
 			}
 		}
 
-		void assign(iterator from, iterator to) {
-			size_type requiredCapacity = to - from;
-			clear();
-			reserve(requiredCapacity);
-			while (from != to)
-				push_back(*from++);
-		}
-
-		void assign(size_type count, const T &value) {
-			clear();
-			reserve(count);
-			while (count--)
-				push_back(value);
-		}
-
 		bool operator==(const vector &rhs) const {
 			iterator ours = begin();
 			iterator theirs = rhs.begin();
@@ -177,13 +162,45 @@ namespace ft {
 			return std::numeric_limits<difference_type>::max();
 		}
 
+		void assign(iterator from, iterator to) {
+			size_type requiredCapacity = to - from;
+			clear();
+			reserve(requiredCapacity);
+			while (from != to)
+				push_back(*from++);
+		}
+
+		void assign(size_type count, const T &value) {
+			clear();
+			reserve(count);
+			while (count--)
+				push_back(value);
+		}
+
+		iterator insert( iterator pos, const T& value ){
+			int index = pos - begin();
+			if (_size + 1 >= _capacity)
+				reserve(_size + 1);
+			for (int i = index; i < _size; ++i)
+				_arr[i + 1] = _arr[i];
+			_arr[index] = value;
+			return (&_arr[index]);
+		}
+
+		void insert( iterator pos, size_type count, const T& value );
+		template< class InputIt >
+		void insert( iterator pos, InputIt first, InputIt last );
+
+		iterator erase(iterator first, iterator last) {
+			int distance = last - first;
+			iterator tmp = moveForwardElements(first, distance);
+			for (int i = 0; i < distance; ++i)
+				pop_back();
+			return tmp;
+		}
+
 		iterator erase(iterator pos) {
-			iterator tmp = pos + 1;
-			while (pos + 1 != end())
-			{
-				*pos = *(pos + 1);
-				pos++;
-			}
+			iterator tmp = moveForwardElements(pos, 1);
 			pop_back();
 			return tmp;
 		}
@@ -225,6 +242,15 @@ namespace ft {
 			for (int i = 0; i < n; ++i)
 				_allocator.construct(&result[i], T());
 			return result;
+		}
+
+		iterator moveForwardElements(iterator &first, int distance) const {
+			iterator tmp = first + 1;
+			while (first + distance != end()) {
+				*first = *(first + distance);
+				first++;
+			}
+			return tmp;
 		}
 	};
 }

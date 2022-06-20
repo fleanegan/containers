@@ -201,6 +201,53 @@ TEST(vector, eraseReturnsIteratorToNextElementAfterDeleted) {
 	ASSERT_EQ(**result, **secondElement);
 }
 
+TEST(vector, eraseRangeRemovesMultipleElements) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 
+	vec.erase(vec.begin(), vec.end() - 1);
 
-// erasingEmptyRangeIsNoOp
+	ASSERT_EQ(1, vec.size());
+	ASSERT_EQ(5, *vec[0]);
+}
+
+TEST(vector, erasingEmptyRangeIsNoOp) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	size_t sizeOriginal = vec.size();
+
+	vec.erase(vec.begin(), vec.begin());
+
+	ASSERT_EQ(sizeOriginal, vec.size());
+}
+
+TEST(vector, insertingChangesCapacityIfNecessary) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+	simpleDummy element(-1);
+	size_t originalCapacity = vec.capacity();
+
+	vec.insert(vec.begin(), element);
+
+	ASSERT_LT(originalCapacity, vec.capacity());
+}
+
+TEST(vector, insertingBeforeBeginPutsElementInTheFront) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	simpleDummy element(-1);
+	size_t originalCapacity = vec.capacity();
+
+	vec.insert(vec.begin(), element);
+
+	ASSERT_EQ(*vec.front(), *element);
+}
+
+TEST(vector, insertingInTheMiddleReturnsIteratorToNewElement) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	simpleDummy element(-1);
+	size_t originalCapacity = vec.capacity();
+
+	ft::vector<simpleDummy>::iterator result = vec.insert(vec.begin() + 1, element);
+
+	ASSERT_EQ(**result, *element);
+	ASSERT_EQ(*result, *(vec.begin() + 1));
+}
+

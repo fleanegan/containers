@@ -29,7 +29,7 @@ struct simpleDummy {
 	}
 
 	simpleDummy &operator=(const simpleDummy &other) {
-		_DEBUG_SD && std::cout << "assignment start" << std::endl;
+		_DEBUG_SD && std::cout << "assignment start, updating addr: " << (void *) i << " from addr: " << (void *) other.i << std::endl;
 		*i = *(other.i);
 		_DEBUG_SD && std::cout << "assignment end" << std::endl;
 		return *this;
@@ -61,6 +61,11 @@ ft::vector<simpleDummy> createTestDummyVector() {
 		result.push_back(simpleDummy(i));
 	}
 	return result;
+}
+
+template<class T>
+void testIterator(typename T::iterator it){
+	(void) it;
 }
 
 template<typename It>

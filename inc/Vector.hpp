@@ -9,12 +9,12 @@
 #include "VectorIterator.hpp"
 
 namespace ft {
-	template<class T, class Allocator = std::allocator<T> >
+	template<class T, class Allocator = std::allocator <T> >
 	class vector {
 	public:
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
-		typedef VectorIterator<T>		iterator;
+		typedef VectorIterator<T> iterator;
 		//typedef ConstVectorIterator<T>		const_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
@@ -46,23 +46,23 @@ namespace ft {
 
 	public:
 		explicit vector(const allocator_type &alloc = allocator_type()) : \
-				_capacity(0), \
-				_allocator(alloc), \
-				_size(0), \
-				_arr() {}
+                _capacity(0), \
+                _allocator(alloc), \
+                _size(0), \
+                _arr() {}
 
 		explicit vector(size_type n, const allocator_type &alloc = allocator_type()) : \
-				_capacity(n), \
-				_allocator(alloc), \
-				_size(n) {
-			_arr = _allocator.allocate(n);
-			for (size_type i = 0; i < n; ++i) {
-				_allocator.construct(_arr, T());
-			}
+                _capacity(n), \
+                _allocator(alloc), \
+                _size(n) {
+			_arr = createElementsN(n);
 		}
 
 		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \
-		        _allocator(rhs._allocator){
+               _capacity(0), \
+               _allocator(alloc), \
+               _size(0),
+			   _arr() {
 			assign(rhs.begin(), rhs.end());
 		}
 
@@ -73,8 +73,8 @@ namespace ft {
 		vector &operator=(const vector &rhs) {
 			if (&rhs == this)
 				return *this;
-			_size = rhs._size;
-			_capacity = rhs._capacity;
+			assign(rhs.begin(), rhs.end());
+			return *this;
 		}
 
 		size_type capacity() const {
@@ -135,16 +135,24 @@ namespace ft {
 				_allocator.deallocate(_arr, _capacity);
 				_capacity = 0;
 				_size = 0;
+				_arr = NULL;
 				_DEBUG && std::cout << "cleared" << std::endl;
 			}
 		}
 
-		void assign(iterator from, iterator to){
+		void assign(iterator from, iterator to) {
 			size_type requiredCapacity = to - from;
 			clear();
 			reserve(requiredCapacity);
 			while (from != to)
 				push_back(*from++);
+		}
+
+		void assign(size_type count, const T &value) {
+			clear();
+			reserve(count);
+			while (count--)
+				push_back(value);
 		}
 
 		bool operator==(const vector &rhs) const {
@@ -153,11 +161,10 @@ namespace ft {
 			if (_size != rhs._size)
 				return false;
 			while (ours != end() && theirs != rhs.end())
-				if (*ours == *theirs){
+				if (*ours == *theirs) {
 					++ours;
 					++theirs;
-				}
-				else
+				} else
 					return false;
 			return (ours == end() && theirs == rhs.end());
 		}
@@ -166,35 +173,58 @@ namespace ft {
 			return !(rhs == *this);
 		}
 
-		size_type max_size() const{
+		size_type max_size() const {
 			return std::numeric_limits<difference_type>::max();
+		}
+
+		iterator erase(iterator pos) {
+			iterator tmp = pos + 1;
+			while (pos + 1 != end())
+			{
+				*pos = *(pos + 1);
+				pos++;
+			}
+			pop_back();
+			return tmp;
+		}
+
+		void pop_back() {
+			_allocator.destroy(&_arr[_size - 1]);
+			_allocator.construct(&_arr[_size - 1], T());
+			--_size;
 		}
 
 		void reserve(size_type newCapacity) {
 			_DEBUG && std::cout << "reserving\n";
 			if (newCapacity <= _capacity && _capacity != 0)
-				return ;
+				return;
 			if (newCapacity > max_size())
 				throw std::length_error("the requested capacity is too big");
 			if (_capacity == 0 && newCapacity == 0)
 				++newCapacity;
-			T *tmp = _allocator.allocate(newCapacity);
-			for (int i = 0; i < newCapacity; ++i) {
-				_allocator.construct(&tmp[i], T());
-			}
+			T *tmp = createElementsN(newCapacity);
 			for (int i = 0; i < _size; ++i) {
 				_DEBUG && std::cout << "reserve loop\n";
 				tmp[i] = _arr[i];
 				_allocator.destroy(&_arr[i]);
 			}
-			_allocator.deallocate(_arr, _capacity);
+			if (_arr != NULL)
+				_allocator.deallocate(_arr, _capacity);
 			_arr = tmp;
 			_capacity = newCapacity;
 		}
+
 	private:
 		void outOfRangeGuard(int i) const {
 			if (i >= _size)
 				throw std::out_of_range("index is out of range");
+		}
+
+		T *createElementsN(size_type n) {
+			T *result = _allocator.allocate(n);
+			for (int i = 0; i < n; ++i)
+				_allocator.construct(&result[i], T());
+			return result;
 		}
 	};
 }

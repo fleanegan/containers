@@ -119,6 +119,14 @@ TEST(vectorIterator, incrementDereferenced){
 	ASSERT_NE(vec.begin(), it1);
 }
 
+TEST(vectorIterator, canUseIteratorAdditionDirectlyInFunctionCall){
+	ft::vector<int> vec;
+	vec.push_back(1);
+	ft::vector<int>::iterator it1 = vec.end();
+
+	testIterator<ft::vector<int> >(it1 - 1);
+}
+
 TEST(vectorIterator, relationalComparison){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();

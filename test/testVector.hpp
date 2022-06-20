@@ -120,14 +120,21 @@ TEST(vector, reserveGreaterThanMaxSizeThrows){
 	ASSERT_ANY_THROW(vec.reserve(-1));
 }
 
-TEST(vector, equalityTakesSizeAndElementComparisonIntoConsideration){
-	ft::vector<simpleDummy> source;
-	source.push_back(simpleDummy(1));
-//	ft::vector<simpleDummy> vec(source);
-	source.push_back(simpleDummy(1));
-//	vec.push_back(simpleDummy(2));
+TEST(vector, equalityOfTwoVectorsTrue){
+	ft::vector<int> source;
+	source.push_back(1);
+	ft::vector<int> vec(source);
 
-//	ASSERT_NE(vec, source);
+	ASSERT_EQ(vec, source);
+}
+
+TEST(vector, equalityOfTwoVectorsFalse){
+	ft::vector<int> source;
+	source.push_back(1);
+	ft::vector<int> vec(source);
+	source.push_back(3);
+
+	ASSERT_NE(vec, source);
 }
 
 TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
@@ -142,16 +149,58 @@ TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
 	ASSERT_EQ(vec, source);
 }
 
+TEST(vector, assignmentMakesDeepCopy){
+	ft::vector<simpleDummy> source;
+	ft::vector<simpleDummy> target;
+	source.push_back(simpleDummy(0));
 
-//TEST(vector, assignmentMakesDeepCopy){
-//	ft::vector<simpleDummy> source;
-//	ft::vector<simpleDummy> target;
-//	source.push_back(simpleDummy());
-//
-//	target = source;
-//
-//	ASSERT_EQ(source.size(), target.size());
-//	ASSERT_EQ(source.capacity(), target.capacity());
-//	ASSERT_EQ(*source.front().i, *target.front().i);
-//	ASSERT_NE(source.front().i, target.front().i);
-//}
+	target = source;
+
+	ASSERT_EQ(source.size(), target.size());
+	ASSERT_EQ(source.capacity(), target.capacity());
+	ASSERT_EQ(*source.front().i, *target.front().i);
+	ASSERT_NE(source.front().i, target.front().i);
+}
+
+TEST(vector, assignResetsSizes){
+	simpleDummy i(1);
+	ft::vector<simpleDummy> vec;
+	vec.push_back(i);
+	vec.push_back(i);
+
+	vec.assign(3, i);
+
+	ASSERT_EQ(3, vec.size());
+	ASSERT_EQ(*(vec[0]), 1);
+}
+
+TEST(vector, erasingSingleElementDecrementsSize){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	vec.erase(vec.begin() + 1);
+
+	ASSERT_EQ(4, vec.size());
+	ASSERT_EQ(*(vec[0]), 1);
+}
+
+TEST(vector, erasingMovesRest){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	vec.erase(vec.begin());
+
+	ASSERT_EQ(4, vec.size());
+	ASSERT_EQ(*(vec[0]), 2);
+}
+
+TEST(vector, eraseReturnsIteratorToNextElementAfterDeleted) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ft::vector<simpleDummy>::iterator secondElement = vec.begin() + 1;
+
+	ft::vector<simpleDummy>::iterator result = vec.erase(vec.begin());
+
+	ASSERT_EQ(**result, **secondElement);
+}
+
+
+
+// erasingEmptyRangeIsNoOp

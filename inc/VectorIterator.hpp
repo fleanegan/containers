@@ -117,8 +117,19 @@ namespace ft {
 			return result;
 		}
 
+		VectorIterator operator-(int i) {
+			VectorIterator<T> result(*this);
+			result -= i;
+			return result;
+		}
+
 		VectorIterator &operator+=(int i) {
 			_ptr += i;
+			return *this;
+		}
+
+		VectorIterator &operator-=(int i) {
+			_ptr -= i;
 			return *this;
 		}
 

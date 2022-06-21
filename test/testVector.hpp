@@ -251,3 +251,40 @@ TEST(vector, insertingInTheMiddleReturnsIteratorToNewElement) {
 	ASSERT_EQ(*result, *(vec.begin() + 1));
 }
 
+TEST(vector, insertingNElementsInEmptyListUpdatesCapacity) {
+	ft::vector<simpleDummy> vec;
+	simpleDummy element(-1);
+	ASSERT_EQ(0, vec.capacity());
+
+	vec.insert(vec.begin(), 2, element);
+	ASSERT_GE(vec.capacity(), 2);
+}
+
+TEST(vector, insertingNElementsAddsCopiesToArray) {
+	ft::vector<simpleDummy> vec;
+	simpleDummy element(-1);
+
+	vec.insert(vec.begin(), 2, element);
+	ASSERT_EQ(*element, *vec[0]);
+	ASSERT_EQ(*element, *vec[1]);
+}
+
+TEST(vector, existingElementsAreNotOverwrittenByInsert) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	EXPECT_EQ(1, *vec[0]);
+	EXPECT_EQ(2, *vec[1]);
+	EXPECT_EQ(3, *vec[2]);
+	EXPECT_EQ(4, *vec[3]);
+	EXPECT_EQ(5, *vec[4]);
+	EXPECT_EQ(5, vec.size());
+	simpleDummy element(-1);
+
+	vec.insert(vec.begin() + 1, 2, element);
+	ASSERT_EQ(1, *vec[0]);
+	ASSERT_EQ(*element, *vec[1]);
+	ASSERT_EQ(*element, *vec[2]);
+	EXPECT_EQ(2, *vec[3]);
+	EXPECT_EQ(3, *vec[4]);
+	EXPECT_EQ(4, *vec[5]);
+	EXPECT_EQ(5, *vec[6]);
+}

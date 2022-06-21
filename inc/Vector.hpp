@@ -9,7 +9,7 @@
 #include "VectorIterator.hpp"
 
 namespace ft {
-	template<class T, class Allocator = std::allocator <T> >
+	template<class T, class Allocator = std::allocator<T> >
 	class vector {
 	public:
 		typedef typename Allocator::reference reference;
@@ -177,19 +177,25 @@ namespace ft {
 				push_back(value);
 		}
 
-		iterator insert( iterator pos, const T& value ){
+		iterator insert(iterator pos, const T &value) {
 			int index = pos - begin();
-			if (_size + 1 >= _capacity)
-				reserve(_size + 1);
-			for (int i = index; i < _size; ++i)
-				_arr[i + 1] = _arr[i];
-			_arr[index] = value;
+			insert(pos, 1, value);
 			return (&_arr[index]);
 		}
 
-		void insert( iterator pos, size_type count, const T& value );
-		template< class InputIt >
-		void insert( iterator pos, InputIt first, InputIt last );
+		void insert(iterator pos, size_type count, const T &value) {
+			int index = pos - begin();
+			size_type newSize = _size + count;
+			size_type offset = index + count - 1;
+
+			reserve(newSize);
+			moveBackwardElements(begin() + index, count);
+			for (size_type i = index; i <= offset; ++i)
+				_arr[i] = value;
+		}
+
+		template<class InputIt>
+		void insert(iterator pos, InputIt first, InputIt last);
 
 		iterator erase(iterator first, iterator last) {
 			int distance = last - first;
@@ -244,11 +250,22 @@ namespace ft {
 			return result;
 		}
 
-		iterator moveForwardElements(iterator &first, int distance) const {
+		iterator moveForwardElements(iterator first, int distance) const {
 			iterator tmp = first + 1;
+
 			while (first + distance != end()) {
 				*first = *(first + distance);
-				first++;
+				++first;
+			}
+			return tmp;
+		}
+
+		iterator moveBackwardElements(iterator first, int distance) const {
+			iterator tmp = end() + distance - 1;
+
+			while (tmp != first + distance - 1) {
+				*tmp = *(tmp - distance);
+				--tmp;
 			}
 			return tmp;
 		}

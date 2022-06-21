@@ -94,11 +94,11 @@ namespace ft {
 		}
 
 		reference back() {
-			return _arr[_capacity - 1];
+			return _arr[_size - 1];
 		}
 
 		const_reference back() const {
-			return _arr[_capacity - 1];
+			return _arr[_size - 1];
 		}
 
 		reference operator[](size_type pos) {
@@ -199,8 +199,9 @@ namespace ft {
 		template<class InputIt>
 		void insert(iterator pos, InputIt first, InputIt last){
 			int index = pos - begin();
-			size_type newSize = _size + count;
 			size_type count = (last - first);
+			//todo: replace with ft::distance(first, last);
+			size_type newSize = _size + count;
 
 			reserve(newSize);
 			moveBackwardElements(begin() + index, count);

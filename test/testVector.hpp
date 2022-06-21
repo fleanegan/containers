@@ -100,6 +100,9 @@ TEST(vector, iteratorEndPointsBehindLastElement){
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
 	vec.push_back(simpleDummy(1));
+	vec.push_back(simpleDummy(1));
+	vec.push_back(simpleDummy(1));
+	vec.push_back(simpleDummy(1));
 
 	ASSERT_EQ(vec.back(), *(--vec.end()));
 }

@@ -85,4 +85,13 @@ bool getHasSpecializedTag() {
 	return getHasSpecializedTag<It>(typename It::iterator_category());
 }
 
+void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> &x, ft::vector<simpleDummy> &y, size_t forElements){
+	ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
+
+	for (int i = 0; i < forElements; ++i) {
+		EXPECT_EQ(*x[i], *y[i]) << "Vectors x and y differ at index " << i;
+	}
+}
+
+
 #endif     // TEST_UTILS_H

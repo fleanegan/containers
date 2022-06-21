@@ -230,6 +230,17 @@ TEST(vector, insertingChangesCapacityIfNecessary) {
 	ASSERT_LT(originalCapacity, vec.capacity());
 }
 
+TEST(vector, insertingDoesNotChangeTheCapacityIfNotNecessary) {
+	ft::vector<simpleDummy> vec;
+	vec.reserve(1);
+	size_t originalCapacity = vec.capacity();
+	simpleDummy element(-1);
+
+	vec.insert(vec.begin(), element);
+
+	ASSERT_EQ(originalCapacity, vec.capacity());
+}
+
 TEST(vector, insertingBeforeBeginPutsElementInTheFront) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	simpleDummy element(-1);
@@ -264,9 +275,11 @@ TEST(vector, insertingNElementsAddsCopiesToArray) {
 	ft::vector<simpleDummy> vec;
 	simpleDummy element(-1);
 
-	vec.insert(vec.begin(), 2, element);
+	int count = 2;
+	vec.insert(vec.begin(), count, element);
 	ASSERT_EQ(*element, *vec[0]);
 	ASSERT_EQ(*element, *vec[1]);
+	ASSERT_EQ(count, vec.size());
 }
 
 TEST(vector, existingElementsAreNotOverwrittenByInsert) {
@@ -287,4 +300,14 @@ TEST(vector, existingElementsAreNotOverwrittenByInsert) {
 	EXPECT_EQ(3, *vec[4]);
 	EXPECT_EQ(4, *vec[5]);
 	EXPECT_EQ(5, *vec[6]);
+}
+
+TEST(vector, insertingRangeInEmptyVectorDoesTheSameThingThanAssign) {
+	ft::vector<simpleDummy> source = createTestDummyVector();
+	ft::vector<simpleDummy> target;
+
+	target.insert(target.begin(), source.begin(), source.end());
+
+	assertEqualityOfValuesContainedBySimpleDummyVector(source, target, source.size());
+	ASSERT_EQ(source.size(), target.size());
 }

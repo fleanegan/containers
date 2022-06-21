@@ -190,12 +190,28 @@ namespace ft {
 
 			reserve(newSize);
 			moveBackwardElements(begin() + index, count);
-			for (size_type i = index; i <= offset; ++i)
+			for (size_type i = index; i <= offset; ++i){
+				++_size;
 				_arr[i] = value;
+			}
 		}
 
 		template<class InputIt>
-		void insert(iterator pos, InputIt first, InputIt last);
+		void insert(iterator pos, InputIt first, InputIt last){
+			int index = pos - begin();
+			size_type newSize = _size + count;
+			size_type count = (last - first);
+
+			reserve(newSize);
+			moveBackwardElements(begin() + index, count);
+			pos = begin() + index;
+			while (first != last) {
+				*pos = *first;
+				++_size;
+				++pos;
+				++first;
+			}
+		}
 
 		iterator erase(iterator first, iterator last) {
 			int distance = last - first;

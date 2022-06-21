@@ -254,6 +254,21 @@ namespace ft {
 			_capacity = newCapacity;
 		}
 
+		void swap(vector &other){
+			size_type tmpSize;
+			pointer tmpArr;
+
+			tmpSize = _size;
+			_size = other._size;
+			other._size = tmpSize;
+			tmpSize = _capacity;
+			_capacity = other._capacity;
+			other._capacity = tmpSize;
+			tmpArr = _arr;
+			_arr = other._arr;
+			other._arr = tmpArr;
+		}
+
 	private:
 		void outOfRangeGuard(int i) const {
 			if (i >= _size)

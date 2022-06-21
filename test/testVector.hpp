@@ -314,3 +314,23 @@ TEST(vector, insertingRangeInEmptyVectorDoesTheSameThingThanAssign) {
 	assertEqualityOfValuesContainedBySimpleDummyVector(source, target, source.size());
 	ASSERT_EQ(source.size(), target.size());
 }
+
+TEST(vector, swapChangesSizeCapacityAndArr){
+	ft::vector<simpleDummy> a = createTestDummyVector();
+	ft::vector<simpleDummy> b;
+	b.push_back(simpleDummy(9));
+	size_t bSizeOriginal = b.size();
+	size_t aSizeOriginal = a.size();
+	size_t bCapacityOriginal = b.capacity();
+	size_t aCapacityOriginal = a.capacity();
+
+	b.swap(a);
+
+	ASSERT_EQ(aSizeOriginal, b.size());
+	ASSERT_EQ(bSizeOriginal, a.size());
+	ASSERT_EQ(aCapacityOriginal, b.capacity());
+	ASSERT_EQ(bCapacityOriginal, a.capacity());
+	ASSERT_EQ(9, *a[0]);
+	ASSERT_EQ(1, *b[0]);
+	ASSERT_EQ(2, *b[1]);
+}

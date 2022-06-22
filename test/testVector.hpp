@@ -265,6 +265,18 @@ TEST(vector, insertingInTheMiddleReturnsIteratorToNewElement) {
 	ASSERT_EQ(*result, *(vec.begin() + 1));
 }
 
+TEST(vector, insertingAtTheEndWithFreeCapacityDoesNotMoveTheRest) {
+	ft::vector<simpleDummy> vec;
+	vec.reserve(3);
+	simpleDummy element(-1);
+
+	vec.insert(vec.begin(), element);
+	vec.insert(vec.end(), element);
+
+	ASSERT_EQ(vec[0].moves, vec[1].moves);
+	ASSERT_EQ(-1, *vec[1]);
+}
+
 TEST(vector, insertingNElementsInEmptyListUpdatesCapacity) {
 	ft::vector<simpleDummy> vec;
 	simpleDummy element(-1);

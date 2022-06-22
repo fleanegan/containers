@@ -166,14 +166,14 @@ namespace ft {
 
 		void assign(iterator from, iterator to) {
 			size_type requiredCapacity = to - from;
-			clear();
+			erase(begin(), end());
 			reserve(requiredCapacity);
 			while (from != to)
 				push_back(*from++);
 		}
 
 		void assign(size_type count, const T &value) {
-			clear();
+			erase(begin(), end());
 			reserve(count);
 			while (count--)
 				push_back(value);
@@ -191,8 +191,7 @@ namespace ft {
 			size_type offset = index + count - 1;
 
 			reserve(newSize);
-			if (pos <= end() && _size > 0)
-				moveBackwardElements(begin() + index, count);
+			moveBackwardElements(begin() + index, count);
 			for (size_type i = index; i <= offset; ++i){
 				setElementAt(value, i);
 			}
@@ -207,8 +206,7 @@ namespace ft {
 			size_type newSize = _size + count;
 
 			reserve(newSize);
-			if (pos <= end() && _size > 0)
-				moveBackwardElements(begin() + index, count);
+			moveBackwardElements(begin() + index, count);
 			pos = begin() + index;
 			for (size_type i = index; first != last; ++i, ++first)
 				setElementAt(*first, i);
@@ -263,6 +261,10 @@ namespace ft {
 			tmpArr = _arr;
 			_arr = other._arr;
 			other._arr = tmpArr;
+		}
+
+		allocator_type get_allocator(){
+			return _allocator();
 		}
 
 	private:

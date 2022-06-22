@@ -10,27 +10,32 @@
 
 struct simpleDummy {
 	int *i = NULL;
+	int moves;
 
 	simpleDummy() {
 		_DEBUG_SD && std::cout << "default constructor" << std::endl;
 		i = new int;
+		moves = 0;
 	}
 
 	explicit simpleDummy(int in) {
 		_DEBUG_SD && std::cout << "argument constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = in;
+		moves = 0;
 	}
 
 	simpleDummy(const simpleDummy &other) {
 		_DEBUG_SD && std::cout << "copy constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = *(other.i);
+		moves = other.moves + 1;
 	}
 
 	simpleDummy &operator=(const simpleDummy &other) {
 		_DEBUG_SD && std::cout << "assignment start, updating addr: " << (void *) i << " from addr: " << (void *) other.i << std::endl;
 		*i = *(other.i);
+		moves = other.moves + 1;
 		_DEBUG_SD && std::cout << "assignment end" << std::endl;
 		return *this;
 	}

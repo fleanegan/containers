@@ -38,6 +38,10 @@ namespace ft {
 			return iterator(&_arr[_size]);
 		}
 
+		bool empty() {
+			return _size == 0;
+		}
+
 	private:
 		Allocator _allocator;
 		size_type _capacity;

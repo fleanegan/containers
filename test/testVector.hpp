@@ -375,3 +375,16 @@ TEST(vector, usingResizeWithEqualSizeDoesNothing) {
 	ASSERT_EQ(1, vec.size());
 }
 
+TEST(vector, vectorWithoutElementsIsEmpty) {
+	ft::vector<simpleDummy> vec;
+
+	ASSERT_EQ(true, vec.empty());
+}
+
+TEST(vector, vectorWithElementsIsNotEmpty) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+
+	ASSERT_EQ(false, vec.empty());
+}
+

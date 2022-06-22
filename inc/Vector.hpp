@@ -55,7 +55,9 @@ namespace ft {
                 _capacity(n), \
                 _allocator(alloc), \
                 _size(n) {
-			_arr = createElementsN(n);
+			_arr = _allocator.allocate(n);
+			for (int i = 0; i < n; ++i)
+				_allocator.construct(&_arr[i], T());
 		}
 
 		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \
@@ -124,13 +126,13 @@ namespace ft {
 			if (_size == _capacity) {
 				reserve(_capacity * 2);
 			}
-			_arr[_size] = x;
+			_allocator.construct(&_arr[_size], x);
 			_size++;
 		}
 
 		void clear() {
 			if (_capacity != 0) {
-				for (int i = 0; i < _capacity; ++i)
+				for (int i = 0; i < _size; ++i)
 					_allocator.destroy(&_arr[i]);
 				_allocator.deallocate(_arr, _capacity);
 				_capacity = 0;
@@ -189,11 +191,12 @@ namespace ft {
 			size_type offset = index + count - 1;
 
 			reserve(newSize);
-			moveBackwardElements(begin() + index, count);
+			if (pos <= end() && _size > 0)
+				moveBackwardElements(begin() + index, count);
 			for (size_type i = index; i <= offset; ++i){
-				++_size;
-				_arr[i] = value;
+				setElementAt(value, i);
 			}
+			_size = newSize;
 		}
 
 		template<class InputIt>
@@ -204,14 +207,12 @@ namespace ft {
 			size_type newSize = _size + count;
 
 			reserve(newSize);
-			moveBackwardElements(begin() + index, count);
+			if (pos <= end() && _size > 0)
+				moveBackwardElements(begin() + index, count);
 			pos = begin() + index;
-			while (first != last) {
-				*pos = *first;
-				++_size;
-				++pos;
-				++first;
-			}
+			for (size_type i = index; first != last; ++i, ++first)
+				setElementAt(*first, i);
+			_size = newSize;
 		}
 
 		iterator erase(iterator first, iterator last) {
@@ -223,36 +224,31 @@ namespace ft {
 		}
 
 		iterator erase(iterator pos) {
-			iterator tmp = moveForwardElements(pos, 1);
-			pop_back();
-			return tmp;
+			return erase(pos, pos + 1);
 		}
 
 		void pop_back() {
 			_allocator.destroy(&_arr[_size - 1]);
-			_allocator.construct(&_arr[_size - 1], T());
 			--_size;
 		}
 
 		void reserve(size_type newCapacity) {
 			_DEBUG && std::cout << "reserving\n";
-			if (newCapacity <= _capacity && _capacity != 0)
+			if (! isReserveNecessary(newCapacity))
 				return;
-			if (newCapacity > max_size())
-				throw std::length_error("the requested capacity is too big");
-			if (_capacity == 0 && newCapacity == 0)
-				++newCapacity;
-			T *tmp = createElementsN(newCapacity);
+			arrayTooBigGuard(newCapacity);
+			newCapacity = preventZeroCapacity(newCapacity);
+			T *tmp = _allocator.allocate(newCapacity);
 			for (int i = 0; i < _size; ++i) {
 				_DEBUG && std::cout << "reserve loop\n";
-				tmp[i] = _arr[i];
+				_allocator.construct(&tmp[i], _arr[i]);
 				_allocator.destroy(&_arr[i]);
 			}
-			if (_arr != NULL)
-				_allocator.deallocate(_arr, _capacity);
+			freeOldArray();
 			_arr = tmp;
 			_capacity = newCapacity;
 		}
+
 
 		void swap(vector &other){
 			size_type tmpSize;
@@ -275,14 +271,7 @@ namespace ft {
 				throw std::out_of_range("index is out of range");
 		}
 
-		T *createElementsN(size_type n) {
-			T *result = _allocator.allocate(n);
-			for (int i = 0; i < n; ++i)
-				_allocator.construct(&result[i], T());
-			return result;
-		}
-
-		iterator moveForwardElements(iterator first, int distance) const {
+		iterator moveForwardElements(iterator first, int distance) {
 			iterator tmp = first + 1;
 
 			while (first + distance != end()) {
@@ -292,15 +281,44 @@ namespace ft {
 			return tmp;
 		}
 
-		iterator moveBackwardElements(iterator first, int distance) const {
+		iterator moveBackwardElements(iterator first, size_type distance) {
 			iterator tmp = end() + distance - 1;
 
 			while (tmp != first + distance - 1) {
-				*tmp = *(tmp - distance);
+				setElementAt(*(tmp - distance), tmp - begin());
 				--tmp;
 			}
 			return tmp;
 		}
+
+		void setElementAt(const T &value, size_type i) {
+			if (i >= _size)
+				_allocator.construct(&_arr[i], value);
+			else
+				_arr[i] = value;
+		}
+		void freeOldArray() {
+			if (_arr != NULL)
+				_allocator.deallocate(_arr, _capacity);
+		}
+
+		bool isReserveNecessary(size_type newCapacity) const {
+			if (newCapacity <= _capacity && _capacity != 0)
+				return false;
+			return true;
+		}
+
+		void arrayTooBigGuard(size_type newCapacity) const {
+			if (newCapacity > max_size())
+				throw std::length_error("the requested capacity is too big");
+		}
+
+		size_type preventZeroCapacity(size_type newCapacity) const {
+			if (_capacity == 0 && newCapacity == 0)
+				++newCapacity;
+			return newCapacity;
+		}
+
 	};
 }
 #endif //CONTAINERS_VECTOR_HPP

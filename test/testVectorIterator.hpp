@@ -3,7 +3,6 @@
 TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo){
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
-	createTestDummyVector();
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 
 	ASSERT_EQ(1, **it1);
@@ -12,8 +11,10 @@ TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo)
 
 TEST(vectorIterator, testCanonicalForm){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
+	std::cout << "creating test vector " << std::endl;
 	ft::vector<simpleDummy>::iterator it1 = vec.begin();
 	ft::vector<simpleDummy>::iterator it2(it1);
+	std::cout << "creating from iterator: done " << std::endl;
 	ft::vector<simpleDummy>::iterator it3 = vec.begin();
 	it3 = it1;
 

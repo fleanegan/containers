@@ -263,6 +263,13 @@ namespace ft {
 			other._arr = tmpArr;
 		}
 
+		void resize(size_type sz, T c = T()){
+			if (sz > _size)
+				insert(end(), sz, c);
+			else if (sz < _size)
+				erase(begin(), end());
+		}
+
 		allocator_type get_allocator(){
 			return _allocator();
 		}

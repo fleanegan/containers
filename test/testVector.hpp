@@ -346,3 +346,32 @@ TEST(vector, swapChangesSizeCapacityAndArr){
 	ASSERT_EQ(1, *b[0]);
 	ASSERT_EQ(2, *b[1]);
 }
+
+TEST(vector, usingResizeToEnlargeVectorInitializesNewElements) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+
+	vec.resize(2, simpleDummy(2));
+
+	ASSERT_EQ(1, *vec[0]);
+	ASSERT_EQ(2, *vec[1]);
+}
+
+TEST(vector, usingResizeToDeminishVectorErasesAllElements) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+
+	vec.resize(0, simpleDummy(2));
+
+	ASSERT_EQ(0, vec.size());
+}
+
+TEST(vector, usingResizeWithEqualSizeDoesNothing) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+
+	vec.resize(1, simpleDummy(2));
+
+	ASSERT_EQ(1, vec.size());
+}
+

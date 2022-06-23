@@ -7,6 +7,8 @@
 
 #include "IteratorTraits.hpp"
 #include "VectorIterator.hpp"
+#include "ReverseIterator.hpp"
+#include <limits>
 
 namespace ft {
 	template<class T, class Allocator = std::allocator<T> >
@@ -15,36 +17,16 @@ namespace ft {
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
 		typedef VectorIterator<T> iterator;
-		//typedef ConstVectorIterator<T>		const_iterator;
+		typedef ConstVectorIterator<T>		const_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
 		typedef ft::ptrdiff_t difference_type;
 
-		iterator begin() const {
-			return iterator(_arr);
-		}
-
-		iterator begin() {
-			return iterator(_arr);
-		}
-
-		iterator end() const {
-			return iterator(&_arr[_size]);
-		}
-
-		iterator end() {
-			return iterator(&_arr[_size]);
-		}
-
-		bool empty() {
-			return _size == 0;
-		}
-
 	private:
-		Allocator _allocator;
 		size_type _capacity;
+		Allocator _allocator;
 		size_type _size;
 		T *_arr;
 
@@ -136,7 +118,7 @@ namespace ft {
 
 		void clear() {
 			if (_capacity != 0) {
-				for (int i = 0; i < _size; ++i)
+				for (size_type i = 0; i < _size; ++i)
 					_allocator.destroy(&_arr[i]);
 				_allocator.deallocate(_arr, _capacity);
 				_capacity = 0;
@@ -146,29 +128,32 @@ namespace ft {
 			}
 		}
 
-		bool operator==(const vector &rhs) const {
-			iterator ours = begin();
-			iterator theirs = rhs.begin();
-			if (_size != rhs._size)
-				return false;
-			while (ours != end() && theirs != rhs.end())
-				if (*ours == *theirs) {
-					++ours;
-					++theirs;
-				} else
-					return false;
-			return (ours == end() && theirs == rhs.end());
-		}
-
-		bool operator!=(const vector &rhs) const {
-			return !(rhs == *this);
-		}
-
 		size_type max_size() const {
 			return std::numeric_limits<difference_type>::max();
 		}
 
-		void assign(iterator from, iterator to) {
+		const_iterator begin() const {
+			return const_iterator(_arr);
+		}
+
+		iterator begin() {
+			return iterator(_arr);
+		}
+
+		const_iterator end() const {
+			return const_iterator(&_arr[_size]);
+		}
+
+		iterator end() {
+			return iterator(&_arr[_size]);
+		}
+
+		bool empty() const {
+			return _size == 0;
+		}
+
+		template <class InputIterator>
+		void assign(InputIterator from, InputIterator to) {
 			size_type requiredCapacity = to - from;
 			erase(begin(), end());
 			reserve(requiredCapacity);
@@ -182,6 +167,7 @@ namespace ft {
 			while (count--)
 				push_back(value);
 		}
+
 
 		iterator insert(iterator pos, const T &value) {
 			int index = pos - begin();
@@ -241,7 +227,7 @@ namespace ft {
 			arrayTooBigGuard(newCapacity);
 			newCapacity = preventZeroCapacity(newCapacity);
 			T *tmp = _allocator.allocate(newCapacity);
-			for (int i = 0; i < _size; ++i) {
+			for (size_type i = 0; i < _size; ++i) {
 				_DEBUG && std::cout << "reserve loop\n";
 				_allocator.construct(&tmp[i], _arr[i]);
 				_allocator.destroy(&_arr[i]);
@@ -333,5 +319,57 @@ namespace ft {
 		}
 
 	};
+	template <class T, class Allocator>
+	bool operator==(const ft::vector<T,Allocator>& x,
+					const ft::vector<T,Allocator>& y) {
+		typename ft::vector<T, Allocator>::const_iterator ours = x.begin();
+		typename ft::vector<T, Allocator>::const_iterator theirs = y.begin();
+		if (x.size() != y.size())
+			return false;
+		while (ours != x.end() && theirs != y.end())
+			if (*ours == *theirs) {
+				++ours;
+				++theirs;
+			} else
+				return false;
+		return (ours == x.end() && theirs == y.end());
+	}
+
+	template <class T, class Allocator>
+	bool operator!=(const ft::vector<T,Allocator>& x,
+					const ft::vector<T,Allocator>& y){
+		return !(x == y);
+	}
+
+	template <class T, class Allocator>
+	bool operator< (const vector<T,Allocator>& x,
+					const vector<T,Allocator>& y){
+		if (x.size() == y.size())
+			return x.back() < y.back();
+		return x.size() < y.size();
+	}
+
+	template <class T, class Allocator>
+	bool operator> (const vector<T,Allocator>& x,
+					const vector<T,Allocator>& y){
+		return !(x < y);
+	}
+
+	template <class T, class Allocator>
+	bool operator>=(const vector<T,Allocator>& x,
+					const vector<T,Allocator>& y){
+		return x == y || x > y;
+	}
+
+	template <class T, class Allocator>
+	bool operator<=(const vector<T,Allocator>& x,
+					const vector<T,Allocator>& y){
+		return x == y || x < y;
+	}
+
+	template <class T, class Allocator>
+	void swap(vector<T,Allocator>& x, vector<T,Allocator>& y){
+		x.swap(y);
+	}
 }
 #endif //CONTAINERS_VECTOR_HPP

@@ -5,6 +5,7 @@
 #include "../inc/IteratorTraits.hpp"
 #include "../inc/Vector.hpp"
 #include "../inc/VectorIterator.hpp"
+#include "../inc/Utils.hpp"
 #include <iostream>
 #define _DEBUG_SD 0
 

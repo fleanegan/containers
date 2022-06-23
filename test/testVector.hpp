@@ -128,7 +128,8 @@ TEST(vector, equalityOfTwoVectorsTrue){
 	source.push_back(1);
 	ft::vector<int> vec(source);
 
-	ASSERT_EQ(vec, source);
+	ASSERT_TRUE(vec == source);
+	ASSERT_FALSE(vec != source);
 }
 
 TEST(vector, equalityOfTwoVectorsFalse){
@@ -137,7 +138,29 @@ TEST(vector, equalityOfTwoVectorsFalse){
 	ft::vector<int> vec(source);
 	source.push_back(3);
 
-	ASSERT_NE(vec, source);
+	ASSERT_TRUE(vec != source);
+	ASSERT_FALSE(vec == source);
+}
+
+TEST(vector, aVectorWithLessElementsIsShorter){
+	ft::vector<int> a;
+	a.push_back(1);
+	ft::vector<int> b(a);
+	b.push_back(3);
+
+	ASSERT_TRUE(a < b);
+	ASSERT_TRUE(b > a);
+}
+
+TEST(vector, vectorsWithSameLengthAreLexicallyCompared){
+	ft::vector<int> a;
+	a.push_back(1);
+	ft::vector<int> b(a);
+	b.push_back(3);
+	a.push_back(2);
+
+	ASSERT_TRUE(a < b);
+	ASSERT_TRUE(b > a);
 }
 
 TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
@@ -387,4 +410,15 @@ TEST(vector, vectorWithElementsIsNotEmpty) {
 
 	ASSERT_EQ(false, vec.empty());
 }
+
+TEST(vector, canAssignFromConst) {
+	ft::vector<simpleDummy> vec;
+	vec.push_back(simpleDummy(1));
+	const ft::vector<simpleDummy> consty(vec);
+
+	ASSERT_EQ(false, consty.empty());
+}
+
+// lexicalCompare
+// canCompareWithConst
 

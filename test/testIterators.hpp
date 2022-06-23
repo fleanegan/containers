@@ -27,3 +27,24 @@ TEST(iterators, init) {
 	Exp2<int> iterableTestObject;
 	ASSERT_TRUE(getHasSpecializedTag<Exp2<int>::Iterator>());
 }
+
+TEST(reverseIterator, nextIsElementBeforeCurrentPos) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ReverseIterator revIt(vec.end());
+
+	++revIt;
+
+	ASSERT_EQ(**revIt, *vec.back());
+}
+
+TEST(reverseIterator, nextIsElementBeforeCurrentPos) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ReverseIterator revIt(vec.end());
+
+	++revIt;
+
+	ASSERT_EQ(**revIt, *vec.back());
+}
+
+
+// todo: reverseIteratorWithInputIteratorDoesNotCallAnyNonExistingFunctions

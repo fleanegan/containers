@@ -28,22 +28,31 @@ TEST(iterators, init) {
 	ASSERT_TRUE(getHasSpecializedTag<Exp2<int>::Iterator>());
 }
 
-TEST(reverseIterator, nextIsElementBeforeCurrentPos) {
+TEST(reverseIterator, canDereferenceNormally) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator revIt(vec.end());
+	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
 
-	++revIt;
+	simpleDummy result = *revIt;
 
-	ASSERT_EQ(**revIt, *vec.back());
+	ASSERT_EQ(*result, **vec.begin());
 }
 
-TEST(reverseIterator, nextIsElementBeforeCurrentPos) {
+TEST(reverseIterator, advancingReverseIteratorMeansRetreating) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator revIt(vec.end());
+	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + 1);
+	ASSERT_EQ(2, **revIt);
 
-	++revIt;
+	revIt++;
 
-	ASSERT_EQ(**revIt, *vec.back());
+	ASSERT_EQ(**revIt, **vec.begin());
+}
+
+TEST(reverseIterator, postAndPrefixIncrementing) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+
+	ASSERT_EQ(**(revIt--), **(vec.begin()));
+	ASSERT_EQ(**(++revIt), **(vec.begin()));
 }
 
 

@@ -24,48 +24,48 @@ public:
 
 	ReverseIterator operator++(int i){
 		ReverseIterator result = *this;
-		iterator.operator++(i);
+		iterator.operator--(i);
 		return result;
 	}
 
 	ReverseIterator &operator++(){
-		iterator.operator++();
+		iterator.operator--();
 		return *this;
 	}
 
 	ReverseIterator &operator--() {
-		iterator.operator--();
+		iterator.operator++();
 		return *this;
 	}
 
 	ReverseIterator operator--(int i) {
 		ReverseIterator result = *this;
-		iterator.operator--(i);
+		iterator.operator++(i);
 		return result;
 	}
 
 	ReverseIterator operator+(int i) {
-		iterator.operator+(i);
-		return *this;
-	}
-
-	ReverseIterator operator-(int i) {
 		iterator.operator-(i);
 		return *this;
 	}
 
-	ReverseIterator &operator+=(int i) {
-		iterator.operator+=(i);
+	ReverseIterator operator-(int i) {
+		iterator.operator+(i);
 		return *this;
 	}
 
-	ReverseIterator &operator-=(int i) {
+	ReverseIterator &operator+=(int i) {
 		iterator.operator-=(i);
 		return *this;
 	}
 
+	ReverseIterator &operator-=(int i) {
+		iterator.operator+=(i);
+		return *this;
+	}
+
 	difference_type operator-(const It &in) {
-		iterator.operator-(in);
+		iterator.operator+(in);
 		return *this;
 	}
 
@@ -106,11 +106,11 @@ public:
 	}
 
 	reference operator[](int index) {
-		return iterator.operator[]();
+		return iterator.operator[](index);
 	}
 
 	reference operator[](int index) const {
-		return iterator.operator[]();
+		return iterator.operator[](index);
 	}
 };
 

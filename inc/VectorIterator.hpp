@@ -153,6 +153,7 @@ namespace ft {
 
 		ConstVectorIterator(pointer ptr) : _ptr(ptr) {}
 
+
 		ConstVectorIterator(const ConstVectorIterator &rhs) : _ptr(rhs._ptr) {}
 
 		ConstVectorIterator &operator=(const ConstVectorIterator &rhs) {

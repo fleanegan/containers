@@ -419,6 +419,25 @@ TEST(vector, canAssignFromConst) {
 	ASSERT_EQ(false, consty.empty());
 }
 
+TEST(vector, constructFromIterator) {
+	ft::vector<int> vec;
+	vec.push_back(1);
+	vec.push_back(3);
+	vec.push_back(2);
+
+	ft::vector<int> result(vec.begin(), vec.end());
+
+	ASSERT_EQ(vec, result);
+}
+
+TEST(vector, getReverseIterator) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	ft::vector<simpleDummy>::reverse_iterator revy(vec.end());
+
+	ASSERT_EQ(**++revy, *vec.back());
+}
+
 // lexicalCompare
 // canCompareWithConst
 

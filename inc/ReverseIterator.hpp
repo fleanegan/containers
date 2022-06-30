@@ -112,6 +112,14 @@ public:
 	reference operator[](int index) const {
 		return iterator.operator[](index);
 	}
+
+	It base(){
+		return iterator;
+	}
+
+	It base() const {
+		return iterator;
+	}
 };
 
 #endif //CONTAINERS_REVERSEITERATOR_HPP

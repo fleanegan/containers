@@ -8,6 +8,7 @@
 #include "IteratorTraits.hpp"
 #include "VectorIterator.hpp"
 #include "ReverseIterator.hpp"
+#include "Utils.hpp"
 #include <limits>
 
 namespace ft {
@@ -18,6 +19,8 @@ namespace ft {
 		typedef typename Allocator::const_reference const_reference;
 		typedef VectorIterator<T> iterator;
 		typedef ConstVectorIterator<T>		const_iterator;
+		typedef ReverseIterator<iterator>		reverse_iterator;
+		typedef ReverseIterator<const_iterator>		reverse_const_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
@@ -42,7 +45,7 @@ namespace ft {
                 _allocator(alloc), \
                 _size(n) {
 			_arr = _allocator.allocate(n);
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 				_allocator.construct(&_arr[i], T());
 		}
 
@@ -52,6 +55,16 @@ namespace ft {
                _size(0),
 			   _arr() {
 			assign(rhs.begin(), rhs.end());
+		}
+
+		template< class InputIt >
+		vector( InputIt first, InputIt last,
+				const Allocator& alloc = Allocator() ) : \
+               _capacity(0), \
+               _allocator(alloc), \
+               _size(0),
+			   _arr() {
+			assign(first, last);
 		}
 
 		virtual ~vector() {
@@ -141,10 +154,20 @@ namespace ft {
 		}
 
 		const_iterator end() const {
+			std::cout << "const iterator \n";
 			return const_iterator(&_arr[_size]);
 		}
 
 		iterator end() {
+			std::cout << "nonconst iterator \n";
+			return iterator(&_arr[_size]);
+		}
+
+		reverse_const_iterator rend() const {
+			return const_iterator(&_arr[_size]);
+		}
+
+		reverse_iterator rend() {
 			return iterator(&_arr[_size]);
 		}
 
@@ -152,8 +175,10 @@ namespace ft {
 			return _size == 0;
 		}
 
+		//todo: implement ft::distance, else this will not work with stupid inputIterators
 		template <class InputIterator>
-		void assign(InputIterator from, InputIterator to) {
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+		assign(InputIterator from, InputIterator to) {
 			size_type requiredCapacity = to - from;
 			erase(begin(), end());
 			reserve(requiredCapacity);
@@ -204,9 +229,9 @@ namespace ft {
 		}
 
 		iterator erase(iterator first, iterator last) {
-			int distance = last - first;
+			size_type distance = last - first;
 			iterator tmp = moveForwardElements(first, distance);
-			for (int i = 0; i < distance; ++i)
+			for (size_type i = 0; i < distance; ++i)
 				pop_back();
 			return tmp;
 		}
@@ -265,12 +290,12 @@ namespace ft {
 		}
 
 	private:
-		void outOfRangeGuard(int i) const {
+		void outOfRangeGuard(size_type i) const {
 			if (i >= _size)
 				throw std::out_of_range("index is out of range");
 		}
 
-		iterator moveForwardElements(iterator first, int distance) {
+		iterator moveForwardElements(iterator first, size_type distance) {
 			iterator tmp = first + 1;
 
 			while (first + distance != end()) {

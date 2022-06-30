@@ -9,12 +9,23 @@
 
 #ifndef TESTING
 
+template <typename T>
+typename ft::enable_if<ft::is_integral<T>::value, void>::type foo(T in ){
+	std::cout << "is integral" << std::endl;
+	(void) in;
+}
+
+template <typename T>
+typename ft::enable_if<!ft::is_integral<T>::value, void>::type foo(T in ){
+	std::cout << "is class" << std::endl;
+	(void) in;
+}
+
+
 int main() {
-	ft::vector<int> nonConst;
-	nonConst.push_back(8);
-	ft::vector<int> tmp;
-	tmp.assign(nonConst.begin(), nonConst.end());
-	const ft::vector<int> consty(nonConst);
+	ft::vector<char> it;
+	foo(it);
+	foo(3);
 
 	return (0);
 }

@@ -47,6 +47,16 @@ TEST(reverseIterator, advancingReverseIteratorMeansRetreating) {
 	ASSERT_EQ(**revIt, **vec.begin());
 }
 
+TEST(reverseIterator, baseIteratorIsNotReverse) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+	ft::vector<simpleDummy>::iterator forwIt = revIt.base();
+
+	forwIt++;
+
+	ASSERT_EQ(**forwIt, **(vec.begin() + 1)	);
+}
+
 TEST(reverseIterator, postAndPrefixIncrementing) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());

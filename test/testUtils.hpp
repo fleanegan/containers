@@ -91,6 +91,62 @@ bool getHasSpecializedTag() {
 	return getHasSpecializedTag<It>(typename It::iterator_category());
 }
 
+template<typename T>
+class StupidInputIterator {
+public:
+	typedef ptrdiff_t difference_type;
+	typedef T value_type;
+	typedef T *pointer;
+	typedef T &reference;
+	typedef TRAIT_NS::input_iterator_tag iterator_category;
+private:
+	pointer _ptr;
+public:
+	StupidInputIterator(pointer ptr) : _ptr(ptr) {}
+
+	bool operator==(const StupidInputIterator &rhs) const {
+		return _ptr == rhs._ptr;
+	}
+
+	bool operator!=(const StupidInputIterator &rhs) const {
+		return _ptr != rhs._ptr;
+	}
+
+	reference operator*() const {
+		return *_ptr;
+	}
+
+	StupidInputIterator &operator++(){
+		++_ptr;
+		return *this;
+	}
+
+	StupidInputIterator operator++(int i) {
+		StupidInputIterator<T> result = *this;
+		if (i == 0)
+			_ptr++;
+		else
+			while (i--)
+				++_ptr;
+		return result;
+	}
+
+	StupidInputIterator &operator--() {
+		--_ptr;
+		return *this;
+	}
+
+	StupidInputIterator operator--(int i) {
+		StupidInputIterator<T> result = *this;
+		if (i == 0)
+			_ptr--;
+		else
+			while (i--)
+				--_ptr;
+		return result;
+	}
+};
+
 void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> &x, ft::vector<simpleDummy> &y, size_t forElements){
 	ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
 

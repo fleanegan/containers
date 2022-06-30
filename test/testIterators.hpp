@@ -1,33 +1,5 @@
 #include "testUtils.hpp"
 
-template <typename T>
-class Exp1{
-public:
-	class Iterator;
-	Exp1() : iterator() {}
-	Iterator iterator;
-};
-
-template <typename T>
-class Exp1<T>::Iterator : public TRAIT_NS::iterator_traits_bundle<TRAIT_NS::input_iterator_tag, T, std::ptrdiff_t, T*, T&>{};
-
-template <typename T>
-class Exp2{
-public:
-	class Iterator;
-	Exp2() : iterator() {}
-	Iterator iterator;
-};
-
-template <typename T>
-class Exp2<T>::Iterator : public TRAIT_NS::iterator_traits_bundle<TRAIT_NS::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T&>{};
-
-
-TEST(iterators, init) {
-	Exp2<int> iterableTestObject;
-	ASSERT_TRUE(getHasSpecializedTag<Exp2<int>::Iterator>());
-}
-
 TEST(reverseIterator, canDereferenceNormally) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
@@ -65,5 +37,20 @@ TEST(reverseIterator, postAndPrefixIncrementing) {
 	ASSERT_EQ(**(++revIt), **(vec.begin()));
 }
 
+TEST(ftDistance, useRandomAccessIterator){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	ft::ptrdiff_t result = TRAIT_NS::distance(vec.begin(), vec.end());
+
+	ASSERT_EQ(5, result);
+}
+
+TEST(ftDistance, useInputIterator){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	ft::ptrdiff_t result = TRAIT_NS::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
+
+	ASSERT_EQ(5, result);
+}
 
 // todo: reverseIteratorWithInputIteratorDoesNotCallAnyNonExistingFunctions

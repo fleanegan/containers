@@ -438,6 +438,14 @@ TEST(vector, getReverseIterator) {
 	ASSERT_EQ(**++revy, *vec.back());
 }
 
+TEST(vector, DISABLED_useInputIteratorForAssign) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	ft::vector<simpleDummy>::reverse_iterator revy(vec.end());
+
+	ASSERT_EQ(**++revy, *vec.back());
+}
+
 // lexicalCompare
 // canCompareWithConst
 

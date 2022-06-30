@@ -18,7 +18,7 @@ namespace ft {
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
 		typedef VectorIterator<T> iterator;
-		typedef ConstVectorIterator<T>		const_iterator;
+		typedef VectorIterator<const T>		const_iterator;
 		typedef ReverseIterator<iterator>		reverse_iterator;
 		typedef ReverseIterator<const_iterator>		reverse_const_iterator;
 		typedef Allocator allocator_type;
@@ -179,7 +179,7 @@ namespace ft {
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to) {
-			size_type requiredCapacity = to - from;
+			size_type requiredCapacity = TRAIT_NS::distance(from, to);
 			erase(begin(), end());
 			reserve(requiredCapacity);
 			while (from != to)
@@ -193,14 +193,16 @@ namespace ft {
 				push_back(value);
 		}
 
-
-		iterator insert(iterator pos, const T &value) {
+		template<class InputIt>
+		iterator insert(InputIt pos, const T &value) {
 			int index = pos - begin();
 			insert(pos, 1, value);
 			return (&_arr[index]);
 		}
 
-		void insert(iterator pos, size_type count, const T &value) {
+		template<class InputIterator>
+		void
+		insert(InputIterator pos, size_type count, const T &value) {
 			int index = pos - begin();
 			size_type newSize = _size + count;
 			size_type offset = index + count - 1;
@@ -214,10 +216,9 @@ namespace ft {
 		}
 
 		template<class InputIt>
-		void insert(iterator pos, InputIt first, InputIt last){
+		void insert(InputIt pos, InputIt first, InputIt last){
 			int index = pos - begin();
-			size_type count = (last - first);
-			//todo: replace with ft::distance(first, last);
+			size_type count = TRAIT_NS::distance(first, last);
 			size_type newSize = _size + count;
 
 			reserve(newSize);
@@ -229,7 +230,7 @@ namespace ft {
 		}
 
 		iterator erase(iterator first, iterator last) {
-			size_type distance = last - first;
+			size_type distance = TRAIT_NS::distance(first, last);
 			iterator tmp = moveForwardElements(first, distance);
 			for (size_type i = 0; i < distance; ++i)
 				pop_back();

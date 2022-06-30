@@ -144,6 +144,6 @@ TEST(vectorIterator, relationalComparison){
 
 TEST(vectorIterator, canConstructConstFromNormal){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-ft::vector<simpleDummy>::const_iterator consty((const)(vec.end()));
+	ft::vector<simpleDummy>::const_iterator consty(vec.end());
 //(ft::vector<simpleDummy>::const_iterator) vec.end();
 }

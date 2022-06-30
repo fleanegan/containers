@@ -154,12 +154,10 @@ namespace ft {
 		}
 
 		const_iterator end() const {
-			std::cout << "const iterator \n";
 			return const_iterator(&_arr[_size]);
 		}
 
 		iterator end() {
-			std::cout << "nonconst iterator \n";
 			return iterator(&_arr[_size]);
 		}
 
@@ -194,7 +192,8 @@ namespace ft {
 		}
 
 		template<class InputIt>
-		iterator insert(InputIt pos, const T &value) {
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, iterator>::type
+		insert(InputIt pos, const T &value) {
 			int index = pos - begin();
 			insert(pos, 1, value);
 			return (&_arr[index]);
@@ -215,8 +214,9 @@ namespace ft {
 			_size = newSize;
 		}
 
-		template<class InputIt>
-		void insert(InputIt pos, InputIt first, InputIt last){
+		template<class InputIt, class I>
+		typename ft::enable_if<!ft::is_integral<I>::value, void>::type
+		insert(InputIt pos, I first, I last){
 			int index = pos - begin();
 			size_type count = TRAIT_NS::distance(first, last);
 			size_type newSize = _size + count;

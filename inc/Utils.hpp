@@ -29,7 +29,7 @@ namespace ft{
 	template<class InputIterator>
 	typename iterator_traits<InputIterator>::difference_type
 	distance (InputIterator first, InputIterator last){
-		return ft::distance(first, last, typename InputIterator::iterator_category());
+		return TRAIT_NS::distance(first, last, typename InputIterator::iterator_category());
 	}
 
 	template <bool, typename T = void>

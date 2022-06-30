@@ -147,3 +147,27 @@ TEST(vectorIterator, canConstructConstFromNormal){
 
 	ft::vector<simpleDummy>::const_iterator nameOfConstIterator(vec.end());
 }
+
+TEST(vectorIterator, subtractConstIteratorFromNormal){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ft::vector<simpleDummy>::const_iterator consty(vec.end());
+	ft::vector<simpleDummy>::iterator non_consty(vec.begin());
+
+	ft::vector<simpleDummy>::difference_type result = consty - non_consty;
+
+}
+
+template<typename T>
+void checkErase(ft::vector<T> const &vct, typename ft::vector<T>::const_iterator const &it)
+{
+	static int i = 0;
+	it - vct.begin();
+	//std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+}
+
+
+TEST(vectorIterator, subtractConstFromNonConst){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	checkErase(vec, vec.end());
+}

@@ -6,6 +6,7 @@
 #define CONTAINERS_VECTORITERATOR_HPP
 
 #include "Vector.hpp"
+#include "Utils.hpp"
 
 namespace ft {
 
@@ -38,28 +39,34 @@ namespace ft {
 
 		}
 
-		bool operator==(const VectorIterator &rhs) const {
-			return _ptr == rhs._ptr;
+		template <typename Iterator>
+		bool operator==(const Iterator &rhs) const {
+			return _ptr == &*rhs;
 		}
 
-		bool operator!=(const VectorIterator &rhs) const {
-			return _ptr != rhs._ptr;
+		template <typename Iterator>
+		bool operator!=(const Iterator &rhs) const {
+			return _ptr != &*rhs;
 		}
 
-		bool operator<(const VectorIterator &rhs) const {
-			return _ptr < rhs._ptr;
+		template <typename Iterator>
+		bool operator<(const Iterator &rhs) const {
+			return _ptr < &*rhs;
 		}
 
-		bool operator>(const VectorIterator &rhs) const {
-			return _ptr > rhs._ptr;
+		template <typename Iterator>
+		bool operator>(const Iterator &rhs) const {
+			return _ptr > &*rhs;
 		}
 
-		bool operator>=(const VectorIterator &rhs) const {
-			return _ptr >= rhs._ptr;
+		template <typename Iterator>
+		bool operator>=(const Iterator &rhs) const {
+			return _ptr >= &*rhs;
 		}
 
-		bool operator<=(const VectorIterator &rhs) const {
-			return _ptr <= rhs._ptr;
+		template <typename Iterator>
+		bool operator<=(const Iterator &rhs) const {
+			return _ptr <= &*rhs;
 		}
 
 		pointer operator->() const {
@@ -136,8 +143,10 @@ namespace ft {
 			return *this;
 		}
 
-		difference_type operator-(const VectorIterator &in) {
-			return _ptr - in._ptr;
+		template<class Iterator>
+		typename ft::enable_if<!ft::is_integral<Iterator>::value, difference_type>::type
+		operator-(const Iterator &in) const {
+			return const_cast<T *>(_ptr) - const_cast<T *>(&*in);
 		}
 	};
 }

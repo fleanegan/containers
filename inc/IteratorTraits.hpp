@@ -4,7 +4,7 @@
 #ifdef USE_STD_TRAITS
 # define TRAIT_NS std
 #else
-# define TRAIT_NS ft
+# define TRAIT_NS std
 #endif
 
 namespace ft {
@@ -13,7 +13,7 @@ namespace ft {
 	struct forward_iterator_tag : public input_iterator_tag { };
 	struct bidirectional_iterator_tag : public forward_iterator_tag { };
 	struct random_access_iterator_tag : public bidirectional_iterator_tag { };
-	typedef unsigned long ptrdiff_t;
+	typedef long ptrdiff_t;
 
 	template<class Iterator>
 	struct iterator_traits {

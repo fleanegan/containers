@@ -20,7 +20,7 @@ namespace ft {
 		typedef VectorIterator<T> iterator;
 		typedef VectorIterator<const T>		const_iterator;
 		typedef ReverseIterator<iterator>		reverse_iterator;
-		typedef ReverseIterator<const_iterator>		reverse_const_iterator;
+		typedef ReverseIterator<const_iterator>		const_reverse_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
@@ -161,7 +161,7 @@ namespace ft {
 			return iterator(&_arr[_size]);
 		}
 
-		reverse_const_iterator rend() const {
+		const_reverse_iterator rend() const {
 			return const_iterator(&_arr[_size]);
 		}
 

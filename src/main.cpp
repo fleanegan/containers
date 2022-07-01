@@ -9,23 +9,14 @@
 
 #ifndef TESTING
 
-template <typename T>
-typename ft::enable_if<ft::is_integral<T>::value, void>::type foo(T in ){
-	std::cout << "is integral" << std::endl;
-	(void) in;
-}
-
-template <typename T>
-typename ft::enable_if<!ft::is_integral<T>::value, void>::type foo(T in ){
-	std::cout << "is class" << std::endl;
-	(void) in;
-}
 
 
 int main() {
-	ft::vector<char> it;
-	foo(it);
-	foo(3);
+
+	std::vector<int> vecS;
+	std::vector<int>::iterator tes;
+	vecS.push_back(9);
+	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
 
 	return (0);
 }

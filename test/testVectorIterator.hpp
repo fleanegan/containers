@@ -165,6 +165,16 @@ void checkErase(ft::vector<T> const &vct, typename ft::vector<T>::const_iterator
 	//std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
 }
 
+TEST(vectorIterator, addToInt){
+	ft::vector<simpleDummy> vec;
+	std::vector<simpleDummy> vecS;
+	vec.push_back(simpleDummy(9));
+	vecS.push_back(simpleDummy(9));
+
+	ft::vector<simpleDummy>::iterator it = 1 + vec.begin();
+	std::vector<simpleDummy>::iterator itS = 1 + vecS.begin();
+
+}
 
 TEST(vectorIterator, subtractConstFromNonConst){
 	ft::vector<simpleDummy> vec = createTestDummyVector();

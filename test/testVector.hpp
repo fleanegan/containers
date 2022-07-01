@@ -432,8 +432,20 @@ TEST(vector, constructFromIterator) {
 
 TEST(vector, getReverseIterator) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ft::vector<simpleDummy> constVec = createTestDummyVector();
 
-	ft::vector<simpleDummy>::reverse_iterator revy(vec.end());
+	ft::vector<simpleDummy>::reverse_iterator revy = vec.rend();
+	ft::vector<simpleDummy>::const_iterator nonConsty = vec.end();
+	ft::vector<simpleDummy>::const_reverse_iterator constRevy = revy;
+	ft::vector<simpleDummy>::const_reverse_iterator test = constRevy.wtf(revy); vec.rend();
+
+	std::vector<int> vecS;
+	std::vector<int>::iterator tes;
+	vecS.push_back(9);
+	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
+
+
+//	constRevy = vec.rbegin();
 
 	ASSERT_EQ(**++revy, *vec.back());
 }

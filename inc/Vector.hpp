@@ -153,6 +153,14 @@ namespace ft {
 			return iterator(_arr);
 		}
 
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(begin());
+		}
+
+		reverse_iterator rbegin() {
+			return reverse_iterator(begin());
+		}
+
 		const_iterator end() const {
 			return const_iterator(&_arr[_size]);
 		}
@@ -162,11 +170,11 @@ namespace ft {
 		}
 
 		const_reverse_iterator rend() const {
-			return const_iterator(&_arr[_size]);
+			return const_reverse_iterator(end());
 		}
 
 		reverse_iterator rend() {
-			return iterator(&_arr[_size]);
+			return reverse_iterator(end());
 		}
 
 		bool empty() const {

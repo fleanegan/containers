@@ -6,19 +6,48 @@
 #define CONTAINERS_REVERSEITERATOR_HPP
 #include "IteratorTraits.hpp"
 
-template <typename It>
+template <typename T>
 class ReverseIterator{
-	It iterator;
+	T iterator;
 public:
-	typedef typename It::difference_type difference_type;
-	typedef typename It::value_type value_type;
-	typedef typename It::reference reference;
-	typedef typename It::pointer pointer;
-	typedef typename It::iterator_category iterator_category;
+	typedef typename T::difference_type difference_type;
+	typedef typename T::value_type value_type;
+	typedef typename T::reference reference;
+	typedef typename T::pointer pointer;
+	typedef typename T::iterator_category iterator_category;
 
-	explicit ReverseIterator(It iterator) : iterator(iterator) {}
+	ReverseIterator() : iterator(){
+		std::cout << "default reverse iterator constructor called \n";
+	}
 
-	reference &operator*(){
+	ReverseIterator(T it) : iterator(it) {}
+
+	ReverseIterator(const ReverseIterator &revIt) : iterator(&*revIt) {}
+
+	template<class NonConstIterator>
+	ReverseIterator(const ReverseIterator<NonConstIterator> &revIt) : iterator(T(revIt.current())) {}
+
+	template<class NonConstIterator>
+	ReverseIterator &operator=(const ReverseIterator<NonConstIterator> &rhs){
+		iterator = T(rhs.current());
+		return *this;
+	}
+
+	template<class NonConstIterator>
+	T wtf(const ReverseIterator<NonConstIterator> &revIt){
+		T result(revIt.current());
+		return result;
+	}
+
+	pointer current(){
+		return iterator.current();
+	}
+
+	pointer current() const{
+		return iterator.current();
+	}
+
+	reference operator*(){
 		return iterator.operator*();
 	}
 
@@ -71,27 +100,27 @@ public:
 		return *this;
 	}
 
-	bool operator==(const It &rhs) const {
+	bool operator==(const T &rhs) const {
 		return iterator.operator==(rhs);
 	}
 
-	bool operator!=(const It &rhs) const {
+	bool operator!=(const T &rhs) const {
 		return iterator.operator!=(rhs);
 	}
 
-	bool operator<(const It &rhs) const {
+	bool operator<(const T &rhs) const {
 		return iterator.operator<(rhs);
 	}
 
-	bool operator>(const It &rhs) const {
+	bool operator>(const T &rhs) const {
 		return iterator.operator>(rhs);
 	}
 
-	bool operator>=(const It &rhs) const {
+	bool operator>=(const T &rhs) const {
 		return iterator.operator>=(rhs);
 	}
 
-	bool operator<=(const It &rhs) const {
+	bool operator<=(const T &rhs) const {
 		return iterator.operator<=(rhs);
 	}
 
@@ -115,13 +144,14 @@ public:
 		return iterator.operator[](index);
 	}
 
-	It base(){
+	T base(){
 		return iterator;
 	}
 
-	It base() const {
+	T base() const {
 		return iterator;
 	}
+
 };
 
 #endif //CONTAINERS_REVERSEITERATOR_HPP

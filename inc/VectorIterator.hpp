@@ -30,7 +30,8 @@ namespace ft {
 
 		VectorIterator(const VectorIterator &rhs) : _ptr(rhs._ptr) {}
 
-		VectorIterator &operator=(const VectorIterator &rhs) {
+		template<class NonConstIterator>
+		VectorIterator &operator=(const NonConstIterator &rhs) {
 			_ptr = rhs._ptr;
 			return *this;
 		}
@@ -38,6 +39,15 @@ namespace ft {
 		virtual ~VectorIterator(){
 
 		}
+
+		pointer current(){
+			return _ptr;
+		}
+
+		pointer current() const{
+			return _ptr;
+		}
+
 
 		template <typename Iterator>
 		bool operator==(const Iterator &rhs) const {
@@ -149,6 +159,13 @@ namespace ft {
 			return const_cast<T *>(_ptr) - const_cast<T *>(&*in);
 		}
 	};
+
+	template <typename T>
+	VectorIterator<T> operator+(int i, const VectorIterator<T>& n)
+	{
+		VectorIterator<T> result(&*n + i);
+		return result;
+	}
 }
 
 #endif //CONTAINERS_VECTORITERATOR_HPP

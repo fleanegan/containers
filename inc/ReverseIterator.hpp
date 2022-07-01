@@ -16,11 +16,9 @@ public:
 	typedef typename T::pointer pointer;
 	typedef typename T::iterator_category iterator_category;
 
-	ReverseIterator() : iterator(){
-		std::cout << "default reverse iterator constructor called \n";
-	}
+	ReverseIterator() : iterator(){}
 
-	ReverseIterator(T it) : iterator(it) {}
+	explicit ReverseIterator(T it) : iterator(it) {}
 
 	ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.current()) {}
 
@@ -31,12 +29,6 @@ public:
 	ReverseIterator &operator=(const ReverseIterator<NonConstIterator> &rhs){
 		iterator = T(rhs.current());
 		return *this;
-	}
-
-	template<class NonConstIterator>
-	T wtf(const ReverseIterator<NonConstIterator> &revIt){
-		T result(revIt.current());
-		return result;
 	}
 
 	pointer current(){
@@ -101,32 +93,32 @@ public:
 	}
 
 	template <typename Iterator>
-	bool operator==(const ReverseIterator<Iterator> &rhs) const {
+	bool operator==(const Iterator &rhs) const {
 		return iterator.operator==(rhs.base());
 	}
 
 	template <typename Iterator>
-	bool operator!=(const ReverseIterator<Iterator> &rhs) const {
+	bool operator!=(const Iterator &rhs) const {
 		return iterator.operator!=(rhs.base());
 	}
 
 	template <typename Iterator>
-	bool operator<(const ReverseIterator<Iterator> &rhs) const {
+	bool operator<(const Iterator &rhs) const {
 		return iterator.operator<(rhs.base());
 	}
 
 	template <typename Iterator>
-	bool operator>(const ReverseIterator<Iterator> &rhs) const {
+	bool operator>(const Iterator &rhs) const {
 		return iterator.operator>(rhs.base());
 	}
 
 	template <typename Iterator>
-	bool operator>=(const ReverseIterator<Iterator> &rhs) const {
+	bool operator>=(const Iterator &rhs) const {
 		return iterator.operator>=(rhs.base());
 	}
 
 	template <typename Iterator>
-	bool operator<=(const ReverseIterator<Iterator> &rhs) const {
+	bool operator<=(const Iterator &rhs) const {
 		return iterator.operator<=(rhs.base());
 	}
 

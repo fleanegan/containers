@@ -1,4 +1,5 @@
 #include "testUtils.hpp"
+#include "../inc/Vector.hpp"
 
 TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo){
 	ft::vector<simpleDummy> vec;
@@ -153,31 +154,22 @@ TEST(vectorIterator, subtractConstIteratorFromNormal){
 	ft::vector<simpleDummy>::const_iterator consty(vec.end());
 	ft::vector<simpleDummy>::iterator non_consty(vec.begin());
 
-	ft::vector<simpleDummy>::difference_type result = consty - non_consty;
-
-}
-
-template<typename T>
-void checkErase(ft::vector<T> const &vct, typename ft::vector<T>::const_iterator const &it)
-{
-	static int i = 0;
-	it - vct.begin();
-	//std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	ASSERT_EQ(5, consty - non_consty);
 }
 
 TEST(vectorIterator, addToInt){
 	ft::vector<simpleDummy> vec;
-	std::vector<simpleDummy> vecS;
 	vec.push_back(simpleDummy(9));
-	vecS.push_back(simpleDummy(9));
 
 	ft::vector<simpleDummy>::iterator it = 1 + vec.begin();
-	std::vector<simpleDummy>::iterator itS = 1 + vecS.begin();
 
+	ASSERT_EQ(it, vec.begin() + 1);
 }
 
 TEST(vectorIterator, subtractConstFromNonConst){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
-	checkErase(vec, vec.end());
+	const ft::vector<simpleDummy>::const_iterator &it = vec.end();
+	static int i = 0;
+	ASSERT_EQ(5, it - vec.begin());
 }

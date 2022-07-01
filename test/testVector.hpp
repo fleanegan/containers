@@ -436,26 +436,19 @@ TEST(vector, getReverseIterator) {
 
 	ft::vector<simpleDummy>::reverse_iterator revy = vec.rend();
 	ft::vector<simpleDummy>::const_iterator nonConsty = vec.end();
-	ft::vector<simpleDummy>::const_reverse_iterator constRevy = revy;
-	ft::vector<simpleDummy>::const_reverse_iterator test = constRevy.wtf(revy); vec.rend();
-
-	std::vector<int> vecS;
-	std::vector<int>::iterator tes;
-	vecS.push_back(9);
-	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
-
-
-//	constRevy = vec.rbegin();
-
-	ASSERT_EQ(**++revy, *vec.back());
+	ft::vector<simpleDummy>::const_reverse_iterator constRevy = vec.rbegin();
 }
 
-TEST(vector, DISABLED_useInputIteratorForAssign) {
-	ft::vector<simpleDummy> vec = createTestDummyVector();
+TEST(vector, useInputIteratorForAssign) {
+	ft::vector<simpleDummy> source = createTestDummyVector();
+	StupidInputIterator<simpleDummy> from(source.begin().current());
+	StupidInputIterator<simpleDummy> to(source.end().current());
+	ft::vector<simpleDummy> target;
 
-	ft::vector<simpleDummy>::reverse_iterator revy(vec.end());
+	target.insert(target.begin(), from, to);
 
-	ASSERT_EQ(**++revy, *vec.back());
+	ASSERT_EQ(**target.begin(), **source.begin());
+	ASSERT_EQ(**--target.end(), **--source.end());
 }
 
 // lexicalCompare

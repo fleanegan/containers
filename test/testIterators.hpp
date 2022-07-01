@@ -37,6 +37,14 @@ TEST(reverseIterator, postAndPrefixIncrementing) {
 	ASSERT_EQ(**(++revIt), **(vec.begin()));
 }
 
+TEST(reverseIterator, compareConstReverseIteratorAgainstNonConstReverseIterator) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
+	ReverseIterator<const ft::vector<simpleDummy>::iterator> constRevIt = vec.rbegin();
+
+	ASSERT_EQ(constRevIt, revIt);
+}
+
 TEST(ftDistance, useRandomAccessIterator){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 

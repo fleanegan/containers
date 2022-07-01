@@ -21,11 +21,14 @@ int main() {
 	ft::vector<int>::const_iterator consty = nonConsty;
 	ft::vector<int>::reverse_iterator nonConstRevy = vec.rend();
 	ft::vector<int>::const_reverse_iterator constRevy = nonConstRevy;
+	nonConstRevy == constRevy;
 
-//	std::vector<int> vecS;
-//	std::vector<int>::iterator tes;
-//	vecS.push_back(9);
-//	std::vector<int>::reverse_iterator vecSIt = vecS.rbegin();
+	std::vector<int> vecS;
+	std::vector<int>::iterator tes;
+	vecS.push_back(9);
+	std::vector<int>::reverse_iterator revSIt = vecS.rbegin();
+	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
+	vecSIt == revSIt;
 
 	return (0);
 }

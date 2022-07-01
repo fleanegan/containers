@@ -12,11 +12,20 @@
 
 
 int main() {
+	ft::vector<int> vec;
+	vec.push_back(9);
+	ft::vector<int> constVec = vec;
 
-	std::vector<int> vecS;
-	std::vector<int>::iterator tes;
-	vecS.push_back(9);
-	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
+	ft::vector<int>::reverse_iterator revy = vec.rend();
+	ft::vector<int>::iterator nonConsty = vec.end();
+	ft::vector<int>::const_iterator consty = nonConsty;
+	ft::vector<int>::reverse_iterator nonConstRevy = vec.rend();
+	ft::vector<int>::const_reverse_iterator constRevy = nonConstRevy;
+
+//	std::vector<int> vecS;
+//	std::vector<int>::iterator tes;
+//	vecS.push_back(9);
+//	std::vector<int>::reverse_iterator vecSIt = vecS.rbegin();
 
 	return (0);
 }

@@ -23,16 +23,18 @@ namespace ft {
 	public:
 		VectorIterator() : _ptr() {}
 
-		VectorIterator(pointer ptr) : _ptr(ptr) {}
+		VectorIterator(pointer ptr) : _ptr(ptr) {
+		}
 
 		template<class U>
-		VectorIterator(U ptr) : _ptr(&*ptr) {}
+		VectorIterator(VectorIterator<U> it) : _ptr(it.current()) {
+		}
 
 		VectorIterator(const VectorIterator &rhs) : _ptr(rhs._ptr) {}
 
 		template<class NonConstIterator>
 		VectorIterator &operator=(const NonConstIterator &rhs) {
-			_ptr = rhs._ptr;
+			_ptr = rhs.current();
 			return *this;
 		}
 
@@ -48,35 +50,34 @@ namespace ft {
 			return _ptr;
 		}
 
-
 		template <typename Iterator>
 		bool operator==(const Iterator &rhs) const {
-			return _ptr == &*rhs;
+			return _ptr == rhs.current();
 		}
 
 		template <typename Iterator>
 		bool operator!=(const Iterator &rhs) const {
-			return _ptr != &*rhs;
+			return _ptr != rhs.current();
 		}
 
 		template <typename Iterator>
 		bool operator<(const Iterator &rhs) const {
-			return _ptr < &*rhs;
+			return _ptr < rhs.current();
 		}
 
 		template <typename Iterator>
 		bool operator>(const Iterator &rhs) const {
-			return _ptr > &*rhs;
+			return _ptr > rhs.current();
 		}
 
 		template <typename Iterator>
 		bool operator>=(const Iterator &rhs) const {
-			return _ptr >= &*rhs;
+			return _ptr >= rhs.current();
 		}
 
 		template <typename Iterator>
 		bool operator<=(const Iterator &rhs) const {
-			return _ptr <= &*rhs;
+			return _ptr <= rhs.current();
 		}
 
 		pointer operator->() const {
@@ -156,7 +157,7 @@ namespace ft {
 		template<class Iterator>
 		typename ft::enable_if<!ft::is_integral<Iterator>::value, difference_type>::type
 		operator-(const Iterator &in) const {
-			return const_cast<T *>(_ptr) - const_cast<T *>(&*in);
+			return const_cast<T *>(_ptr) - const_cast<T *>(in.current());
 		}
 	};
 

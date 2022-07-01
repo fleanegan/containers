@@ -181,7 +181,6 @@ namespace ft {
 			return _size == 0;
 		}
 
-		//todo: implement ft::distance, else this will not work with stupid inputIterators
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to) {

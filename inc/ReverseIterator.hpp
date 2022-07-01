@@ -22,7 +22,7 @@ public:
 
 	ReverseIterator(T it) : iterator(it) {}
 
-	ReverseIterator(const ReverseIterator &revIt) : iterator(&*revIt) {}
+	ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.current()) {}
 
 	template<class NonConstIterator>
 	ReverseIterator(const ReverseIterator<NonConstIterator> &revIt) : iterator(T(revIt.current())) {}
@@ -100,28 +100,34 @@ public:
 		return *this;
 	}
 
-	bool operator==(const T &rhs) const {
-		return iterator.operator==(rhs);
+	template <typename Iterator>
+	bool operator==(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator==(rhs.base());
 	}
 
-	bool operator!=(const T &rhs) const {
-		return iterator.operator!=(rhs);
+	template <typename Iterator>
+	bool operator!=(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator!=(rhs.base());
 	}
 
-	bool operator<(const T &rhs) const {
-		return iterator.operator<(rhs);
+	template <typename Iterator>
+	bool operator<(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator<(rhs.base());
 	}
 
-	bool operator>(const T &rhs) const {
-		return iterator.operator>(rhs);
+	template <typename Iterator>
+	bool operator>(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator>(rhs.base());
 	}
 
-	bool operator>=(const T &rhs) const {
-		return iterator.operator>=(rhs);
+	template <typename Iterator>
+	bool operator>=(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator>=(rhs.base());
 	}
 
-	bool operator<=(const T &rhs) const {
-		return iterator.operator<=(rhs);
+	template <typename Iterator>
+	bool operator<=(const ReverseIterator<Iterator> &rhs) const {
+		return iterator.operator<=(rhs.base());
 	}
 
 	pointer operator->() const {
@@ -151,7 +157,13 @@ public:
 	T base() const {
 		return iterator;
 	}
-
 };
+
+template <typename T>
+ReverseIterator<T> operator+(int i, const ReverseIterator<T>& n)
+{
+	ReverseIterator<T> result(&*n + i);
+	return result;
+}
 
 #endif //CONTAINERS_REVERSEITERATOR_HPP

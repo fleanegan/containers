@@ -378,15 +378,20 @@ namespace ft {
 	template <class T, class Allocator>
 	bool operator< (const vector<T,Allocator>& x,
 					const vector<T,Allocator>& y){
-		if (x.size() == y.size())
-			return x.back() < y.back();
-		return x.size() < y.size();
+		typedef typename ft::vector<T>::size_type size_type;
+		size_type minSize = std::min(x.size(), y.size());
+		for (size_type i = 0; i < minSize; ++i)
+			if (x[i] != y[i])
+				return x[i] < y[i];
+		if (x.size() < y.size())
+			return true;
+		return false;
 	}
 
 	template <class T, class Allocator>
 	bool operator> (const vector<T,Allocator>& x,
 					const vector<T,Allocator>& y){
-		return !(x < y);
+		return !(x < y) && (x != y);
 	}
 
 	template <class T, class Allocator>

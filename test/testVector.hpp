@@ -123,6 +123,12 @@ TEST(vector, reserveGreaterThanMaxSizeThrows) {
 	ASSERT_ANY_THROW(vec.reserve(-1));
 }
 
+TEST(vector, emptyVectorsAreEqual){
+	ft::vector<int> vec;
+
+	ASSERT_TRUE(vec == vec);
+}
+
 TEST(vector, equalityOfTwoVectorsTrue) {
 	ft::vector<int> source;
 	source.push_back(1);
@@ -130,6 +136,8 @@ TEST(vector, equalityOfTwoVectorsTrue) {
 
 	ASSERT_TRUE(vec == source);
 	ASSERT_FALSE(vec != source);
+	ASSERT_FALSE(vec < source);
+	ASSERT_FALSE(vec > source);
 }
 
 TEST(vector, equalityOfTwoVectorsFalse) {
@@ -157,7 +165,9 @@ TEST(vector, vectorsWithSameLengthAreLexicallyCompared) {
 	a.push_back(1);
 	ft::vector<int> b(a);
 	b.push_back(3);
+	b.push_back(1);
 	a.push_back(2);
+	a.push_back(1);
 
 	ASSERT_TRUE(a < b);
 	ASSERT_TRUE(b > a);
@@ -468,7 +478,6 @@ TEST(vector, useInputIteratorForAssign) {
 	ASSERT_EQ(**--target.end(), **--source.end());
 }
 
-// lexicalCompare
 // canCompareWithConst
 // insertBeforeBeginDoes?????
 // insertAfterEndDoes?????

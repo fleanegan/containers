@@ -7,30 +7,45 @@
 #include <iterator>
 #include <vector>
 
+#define TESTF std
 #ifndef TESTING
 
+template <class T, class Alloc>
+void    cmp(const TESTF::vector<T, Alloc> &lhs, const TESTF::vector<T, Alloc> &rhs)
+{
+	static int i = 0;
 
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+}
 
-int main() {
-	ft::vector<int> vec;
-	vec.push_back(9);
-	ft::vector<int> constVec = vec;
+int     main(void)
+{
+	TESTF::vector<int> vct(4);
+	TESTF::vector<int> vct2(4);
 
-	ft::vector<int>::reverse_iterator revy = vec.rend();
-	ft::vector<int>::iterator nonConsty = vec.end();
-	ft::vector<int>::const_iterator consty = nonConsty;
-	ft::vector<int>::reverse_iterator nonConstRevy = vec.rend();
-	ft::vector<int>::const_reverse_iterator constRevy = nonConstRevy;
-	nonConstRevy == constRevy;
+	cmp(vct, vct);  // 0
+	cmp(vct, vct2); // 1
 
-	std::vector<int> vecS;
-	std::vector<int>::iterator tes;
-	vecS.push_back(9);
-	std::vector<int>::reverse_iterator revSIt = vecS.rbegin();
-	std::vector<int>::const_reverse_iterator vecSIt = vecS.rbegin();
-	vecSIt == revSIt;
+	vct2.resize(10);
+
+	cmp(vct, vct2); // 2
+	cmp(vct2, vct); // 3
+
+	vct[2] = 42;
+
+	cmp(vct, vct2); // 4
+	cmp(vct2, vct); // 5
+
+	swap(vct, vct2);
+
+	cmp(vct, vct2); // 6
+	cmp(vct2, vct); // 7
 
 	return (0);
 }
+
 
 #endif

@@ -395,10 +395,12 @@ TEST(vector, usingResizeToEnlargeVectorInitializesNewElements) {
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
 
-	vec.resize(2, simpleDummy(2));
+	int targetSize = 2;
+	vec.resize(targetSize, simpleDummy(2));
 
 	ASSERT_EQ(1, *vec[0]);
 	ASSERT_EQ(2, *vec[1]);
+	ASSERT_EQ(targetSize, vec.size());
 }
 
 TEST(vector, resizingToSmallerThanSizeDestroysOnlyOtherElements) {

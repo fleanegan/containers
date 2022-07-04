@@ -289,7 +289,7 @@ namespace ft {
 
 		void resize(size_type sz, T c = T()){
 			if (sz > _size)
-				insert(end(), sz, c);
+				insert(end(), sz - _size, c);
 			else if (sz < _size)
 				erase(begin() + sz, end());
 		}
@@ -383,9 +383,7 @@ namespace ft {
 		for (size_type i = 0; i < minSize; ++i)
 			if (x[i] != y[i])
 				return x[i] < y[i];
-		if (x.size() < y.size())
-			return true;
-		return false;
+		return x.size() < y.size();
 	}
 
 	template <class T, class Allocator>

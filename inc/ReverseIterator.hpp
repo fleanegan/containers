@@ -88,8 +88,7 @@ public:
 	template<class Iterator>
 	typename ft::enable_if<!ft::is_integral<Iterator>::value, difference_type>::type
 	operator-(const Iterator &in) {
-		iterator.operator+(in);
-		return *this;
+		return iterator.operator-(in);
 	}
 
 	template <typename Iterator>

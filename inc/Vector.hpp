@@ -214,6 +214,7 @@ namespace ft {
 			size_type offset = index + count - 1;
 
 			reserve(newSize);
+			//todo: segfault if pos > beginning and newSize == newCapacity
 			moveBackwardElements(begin() + index, count);
 			for (size_type i = index; i <= offset; ++i){
 				setElementAt(value, i);
@@ -290,7 +291,7 @@ namespace ft {
 			if (sz > _size)
 				insert(end(), sz, c);
 			else if (sz < _size)
-				erase(begin(), end());
+				erase(begin() + sz, end());
 		}
 
 		allocator_type get_allocator(){
@@ -304,10 +305,10 @@ namespace ft {
 		}
 
 		iterator moveForwardElements(iterator first, size_type distance) {
-			iterator tmp = first + 1;
+			iterator tmp = first;
 
 			while (first + distance != end()) {
-				*first = *(first + distance);
+				setElementAt(*(first + distance), first - begin());
 				++first;
 			}
 			return tmp;

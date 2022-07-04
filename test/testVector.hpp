@@ -1,12 +1,12 @@
 #include "testUtils.hpp"
 
-TEST(vector, initVectorHasCapacityZero){
+TEST(vector, initVectorHasCapacityZero) {
 	ft::vector<int> vec;
 
 	ASSERT_EQ(0, vec.capacity());
 }
 
-TEST(vector, push_backIncreasesSize){
+TEST(vector, push_backIncreasesSize) {
 	ft::vector<int> vec;
 	size_t sizeInital = vec.size();
 
@@ -14,7 +14,7 @@ TEST(vector, push_backIncreasesSize){
 	ASSERT_GT(vec.size(), sizeInital);
 }
 
-TEST(vector, canAccessStoredElementAtFront){
+TEST(vector, canAccessStoredElementAtFront) {
 	ft::vector<int> vec;
 	int elementToStore = 2;
 
@@ -24,7 +24,7 @@ TEST(vector, canAccessStoredElementAtFront){
 	ASSERT_EQ(retrievedElement, elementToStore);
 }
 
-TEST(vector, exceedingCapacityOnPush_backDoublesSize){
+TEST(vector, exceedingCapacityOnPush_backDoublesSize) {
 	ft::vector<int> vec;
 	size_t capacityInital = vec.capacity();
 
@@ -34,7 +34,7 @@ TEST(vector, exceedingCapacityOnPush_backDoublesSize){
 	ASSERT_EQ(4, vec.capacity());
 }
 
-TEST(vector, properDestruction){
+TEST(vector, properDestruction) {
 	ft::vector<simpleDummy> vec;
 
 	simpleDummy a;
@@ -45,7 +45,7 @@ TEST(vector, properDestruction){
 	res.dummyFunction();
 }
 
-TEST(vector, canModifyResultOfBracketOperator){
+TEST(vector, canModifyResultOfBracketOperator) {
 	ft::vector<int> vec;
 
 	vec.push_back(2);
@@ -53,14 +53,14 @@ TEST(vector, canModifyResultOfBracketOperator){
 	ASSERT_EQ(3, vec[0]);
 }
 
-TEST(vector, canGetConstBracketOperator){
+TEST(vector, canGetConstBracketOperator) {
 	const ft::vector<int> vec(1);
 
 	const int i = vec[0];
 	ASSERT_EQ(0, i);
 }
 
-TEST(vector, atGetsElementIfValidAccessor){
+TEST(vector, atGetsElementIfValidAccessor) {
 	ft::vector<int> vec(1);
 
 	vec.at(0) = 9;
@@ -69,7 +69,7 @@ TEST(vector, atGetsElementIfValidAccessor){
 	ASSERT_EQ(9, result);
 }
 
-TEST(vector, atGetsElementIfValidAccessorConst){
+TEST(vector, atGetsElementIfValidAccessorConst) {
 	const ft::vector<int> vec(1);
 
 	const int result = vec.at(0);
@@ -77,26 +77,26 @@ TEST(vector, atGetsElementIfValidAccessorConst){
 	ASSERT_EQ(0, result);
 }
 
-TEST(vector, atThrowsIfOutOfRange){
+TEST(vector, atThrowsIfOutOfRange) {
 	ft::vector<int> vec(1);
 
 	ASSERT_ANY_THROW(vec.at(1));
 }
 
-TEST(vector, atThrowsIfOutOfRangeConst){
+TEST(vector, atThrowsIfOutOfRangeConst) {
 	const ft::vector<int> vec(1);
 
 	ASSERT_ANY_THROW(vec.at(1));
 }
 
-TEST(vector, iteratorBeginPointsAtFirstElement){
+TEST(vector, iteratorBeginPointsAtFirstElement) {
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
 
 	ASSERT_EQ(vec.front(), *vec.begin());
 }
 
-TEST(vector, iteratorEndPointsBehindLastElement){
+TEST(vector, iteratorEndPointsBehindLastElement) {
 	ft::vector<simpleDummy> vec;
 	vec.push_back(simpleDummy(1));
 	vec.push_back(simpleDummy(1));
@@ -107,7 +107,7 @@ TEST(vector, iteratorEndPointsBehindLastElement){
 	ASSERT_EQ(vec.back(), *(--vec.end()));
 }
 
-TEST(vector, clearResetsSize){
+TEST(vector, clearResetsSize) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	ASSERT_NE(0, vec.size());
 
@@ -117,13 +117,13 @@ TEST(vector, clearResetsSize){
 	ASSERT_EQ(0, vec.capacity());
 }
 
-TEST(vector, reserveGreaterThanMaxSizeThrows){
+TEST(vector, reserveGreaterThanMaxSizeThrows) {
 	ft::vector<simpleDummy> vec;
 
 	ASSERT_ANY_THROW(vec.reserve(-1));
 }
 
-TEST(vector, equalityOfTwoVectorsTrue){
+TEST(vector, equalityOfTwoVectorsTrue) {
 	ft::vector<int> source;
 	source.push_back(1);
 	ft::vector<int> vec(source);
@@ -132,7 +132,7 @@ TEST(vector, equalityOfTwoVectorsTrue){
 	ASSERT_FALSE(vec != source);
 }
 
-TEST(vector, equalityOfTwoVectorsFalse){
+TEST(vector, equalityOfTwoVectorsFalse) {
 	ft::vector<int> source;
 	source.push_back(1);
 	ft::vector<int> vec(source);
@@ -142,7 +142,7 @@ TEST(vector, equalityOfTwoVectorsFalse){
 	ASSERT_FALSE(vec == source);
 }
 
-TEST(vector, aVectorWithLessElementsIsShorter){
+TEST(vector, aVectorWithLessElementsIsShorter) {
 	ft::vector<int> a;
 	a.push_back(1);
 	ft::vector<int> b(a);
@@ -152,7 +152,7 @@ TEST(vector, aVectorWithLessElementsIsShorter){
 	ASSERT_TRUE(b > a);
 }
 
-TEST(vector, vectorsWithSameLengthAreLexicallyCompared){
+TEST(vector, vectorsWithSameLengthAreLexicallyCompared) {
 	ft::vector<int> a;
 	a.push_back(1);
 	ft::vector<int> b(a);
@@ -163,7 +163,7 @@ TEST(vector, vectorsWithSameLengthAreLexicallyCompared){
 	ASSERT_TRUE(b > a);
 }
 
-TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
+TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary) {
 	ft::vector<int> source;
 	source.push_back(1);
 	source.push_back(1);
@@ -175,7 +175,7 @@ TEST(vector, assignPutsElementsFromToIntoVecModifyingTheCapacityAsNecessary){
 	ASSERT_EQ(vec, source);
 }
 
-TEST(vector, assignmentMakesDeepCopy){
+TEST(vector, assignmentMakesDeepCopy) {
 	ft::vector<simpleDummy> source;
 	ft::vector<simpleDummy> target;
 	source.push_back(simpleDummy(0));
@@ -188,7 +188,7 @@ TEST(vector, assignmentMakesDeepCopy){
 	ASSERT_NE(source.front().i, target.front().i);
 }
 
-TEST(vector, assignResetsSizes){
+TEST(vector, assignResetsSizes) {
 	simpleDummy i(1);
 	ft::vector<simpleDummy> vec;
 	vec.push_back(i);
@@ -200,7 +200,7 @@ TEST(vector, assignResetsSizes){
 	ASSERT_EQ(*(vec[0]), 1);
 }
 
-TEST(vector, erasingSingleElementDecrementsSize){
+TEST(vector, erasingSingleElementDecrementsSize) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
 	vec.erase(vec.begin() + 1);
@@ -209,7 +209,7 @@ TEST(vector, erasingSingleElementDecrementsSize){
 	ASSERT_EQ(*(vec[0]), 1);
 }
 
-TEST(vector, erasingMovesRest){
+TEST(vector, erasingMovesRest) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
 	vec.erase(vec.begin());
@@ -220,11 +220,11 @@ TEST(vector, erasingMovesRest){
 
 TEST(vector, eraseReturnsIteratorToNextElementAfterDeleted) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ft::vector<simpleDummy>::iterator secondElement = vec.begin() + 1;
+	int secondElement = *vec[1];
 
 	ft::vector<simpleDummy>::iterator result = vec.erase(vec.begin());
 
-	ASSERT_EQ(**result, **secondElement);
+	ASSERT_EQ(**result, secondElement);
 }
 
 TEST(vector, eraseRangeRemovesMultipleElements) {
@@ -234,6 +234,17 @@ TEST(vector, eraseRangeRemovesMultipleElements) {
 
 	ASSERT_EQ(1, vec.size());
 	ASSERT_EQ(5, *vec[0]);
+}
+
+TEST(vector, eraseRangeInMiddleDoesNotRemoveTail) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	ASSERT_EQ(5, vec.size());
+
+	vec.erase(vec.begin() + 1, vec.begin() + 4);
+
+	ASSERT_EQ(2, vec.size());
+	ASSERT_EQ(1, *vec[0]);
+	ASSERT_EQ(5, *vec[1]);
 }
 
 TEST(vector, erasingEmptyRangeIsNoOp) {
@@ -350,7 +361,7 @@ TEST(vector, insertingRangeInEmptyVectorDoesTheSameThingThanAssign) {
 	ASSERT_EQ(source.size(), target.size());
 }
 
-TEST(vector, swapChangesSizeCapacityAndArr){
+TEST(vector, swapChangesSizeCapacityAndArr) {
 	ft::vector<simpleDummy> a = createTestDummyVector();
 	ft::vector<simpleDummy> b;
 	b.push_back(simpleDummy(9));
@@ -380,13 +391,12 @@ TEST(vector, usingResizeToEnlargeVectorInitializesNewElements) {
 	ASSERT_EQ(2, *vec[1]);
 }
 
-TEST(vector, usingResizeToDeminishVectorErasesAllElements) {
-	ft::vector<simpleDummy> vec;
-	vec.push_back(simpleDummy(1));
+TEST(vector, resizingToSmallerThanSizeDestroysOnlyOtherElements) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
 
-	vec.resize(0, simpleDummy(2));
+	vec.resize(4, simpleDummy(2));
 
-	ASSERT_EQ(0, vec.size());
+	ASSERT_EQ(4, vec.size());
 }
 
 TEST(vector, usingResizeWithEqualSizeDoesNothing) {
@@ -432,11 +442,18 @@ TEST(vector, constructFromIterator) {
 
 TEST(vector, getReverseIterator) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ft::vector<simpleDummy> constVec = createTestDummyVector();
 
 	ft::vector<simpleDummy>::reverse_iterator revy = vec.rend();
 	ft::vector<simpleDummy>::const_iterator nonConsty = vec.end();
 	ft::vector<simpleDummy>::const_reverse_iterator constRevy = vec.rbegin();
+}
+
+TEST(vector, subtractNonConstAndConstReverseIterators) {
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+
+	ft::vector<simpleDummy>::reverse_iterator revy = vec.rend();
+	ft::vector<simpleDummy>::const_iterator constRevy = vec.end();
+	ASSERT_EQ(0, constRevy - revy);
 }
 
 TEST(vector, useInputIteratorForAssign) {
@@ -453,4 +470,5 @@ TEST(vector, useInputIteratorForAssign) {
 
 // lexicalCompare
 // canCompareWithConst
-
+// insertBeforeBeginDoes?????
+// insertAfterEndDoes?????

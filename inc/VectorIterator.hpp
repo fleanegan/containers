@@ -159,6 +159,12 @@ namespace ft {
 		operator-(const Iterator &in) const {
 			return const_cast<T *>(_ptr) - const_cast<T *>(in.current());
 		}
+
+		template<class Iterator>
+		typename ft::enable_if<!ft::is_integral<Iterator>::value, difference_type>::type
+		operator-(const Iterator &in) {
+			return _ptr - in.current();
+		}
 	};
 
 	template <typename T>

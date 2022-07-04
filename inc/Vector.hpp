@@ -142,7 +142,7 @@ namespace ft {
 		}
 
 		size_type max_size() const {
-			return std::numeric_limits<difference_type>::max();
+			return std::numeric_limits<difference_type>::max() / sizeof(T);
 		}
 
 		const_iterator begin() const {

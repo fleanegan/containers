@@ -6,6 +6,7 @@
 #include "Utils.hpp"
 #include <iterator>
 #include <vector>
+#include "Stack.hpp"
 
 //#define TESTED_TYPE int
 //#ifndef TESTED_NAMESPACE
@@ -15,6 +16,8 @@
 #ifndef TESTING
 #ifndef BASE_HPP
 # define BASE_HPP
+
+
 
 # if !defined(USING_STD)
 #  define TESTED_NAMESPACE ft

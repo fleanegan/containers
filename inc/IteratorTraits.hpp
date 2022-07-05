@@ -4,7 +4,7 @@
 #ifdef USE_STD_TRAITS
 # define TRAIT_NS std
 #else
-# define TRAIT_NS std
+# define TRAIT_NS ft
 #endif
 
 namespace ft {

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "gtest/gtest.h"
 #include "testUtils.hpp"
+#include "testStack.hpp"
 #include "testIterators.hpp"
 #include "testVectorIterator.hpp"
 #include "testVector.hpp"

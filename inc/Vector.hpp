@@ -15,6 +15,7 @@ namespace ft {
 	template<class T, class Allocator = std::allocator<T> >
 	class vector {
 	public:
+		typedef T value_type;
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
 		typedef VectorIterator<T> iterator;
@@ -25,7 +26,7 @@ namespace ft {
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
-		typedef ft::ptrdiff_t difference_type;
+		typedef TRAIT_NS::ptrdiff_t difference_type;
 
 	private:
 		size_type _capacity;

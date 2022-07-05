@@ -18,7 +18,9 @@ public:
 
 	ReverseIterator() : iterator(){}
 
-	explicit ReverseIterator(T it) : iterator(it) {}
+	explicit ReverseIterator(T it) : iterator(it) {
+
+	}
 
 	ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.current()) {}
 
@@ -40,7 +42,9 @@ public:
 	}
 
 	reference operator*(){
-		return iterator.operator*();
+		T result(base());
+		--result;
+		return *result;
 	}
 
 	ReverseIterator operator++(int i){
@@ -66,13 +70,16 @@ public:
 	}
 
 	ReverseIterator operator+(int i) {
-		iterator.operator-(i);
-		return *this;
+		T resultBase = iterator.operator-(i);
+		ReverseIterator<T> result(resultBase);
+		return result;
 	}
 
+
 	ReverseIterator operator-(int i) {
-		iterator.operator+(i);
-		return *this;
+		T resultBase = iterator.operator+(i);
+		ReverseIterator<T> result(resultBase);
+		return result;
 	}
 
 	ReverseIterator &operator+=(int i) {
@@ -88,7 +95,7 @@ public:
 	template<class Iterator>
 	typename ft::enable_if<!ft::is_integral<Iterator>::value, difference_type>::type
 	operator-(const Iterator &in) {
-		return iterator.operator-(in);
+		return -1 * iterator.operator-(in);
 	}
 
 	template <typename Iterator>
@@ -103,42 +110,48 @@ public:
 
 	template <typename Iterator>
 	bool operator<(const Iterator &rhs) const {
-		return iterator.operator<(rhs.base());
-	}
-
-	template <typename Iterator>
-	bool operator>(const Iterator &rhs) const {
 		return iterator.operator>(rhs.base());
 	}
 
 	template <typename Iterator>
+	bool operator>(const Iterator &rhs) const {
+		return iterator.operator<(rhs.base());
+	}
+
+	template <typename Iterator>
 	bool operator>=(const Iterator &rhs) const {
-		return iterator.operator>=(rhs.base());
+		return iterator.operator<=(rhs.base());
 	}
 
 	template <typename Iterator>
 	bool operator<=(const Iterator &rhs) const {
-		return iterator.operator<=(rhs.base());
+		return iterator.operator>=(rhs.base());
 	}
 
 	pointer operator->() const {
-		return iterator.operator->();
+		T result(base());
+		--result;
+		return result.operator->();
 	}
 
 	pointer operator->() {
-		return iterator.operator->();
+		T result(base());
+		--result;
+		return result.operator->();
 	}
 
 	reference operator*() const {
-		return iterator.operator*();
+		T result(base());
+		--result;
+		return *result;
 	}
 
 	reference operator[](int index) {
-		return iterator.operator[](index);
+		return iterator.operator[](- index - 1);
 	}
 
 	reference operator[](int index) const {
-		return iterator.operator[](index);
+		return iterator.operator[](- index - 1);
 	}
 
 	T base(){
@@ -153,7 +166,7 @@ public:
 template <typename T>
 ReverseIterator<T> operator+(int i, const ReverseIterator<T>& n)
 {
-	ReverseIterator<T> result(&*n + i);
+	ReverseIterator<T> result(n.current() - i);
 	return result;
 }
 

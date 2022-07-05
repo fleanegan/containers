@@ -464,7 +464,7 @@ TEST(vector, subtractNonConstAndConstReverseIterators) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
 	ft::vector<simpleDummy>::reverse_iterator revy = vec.rend();
-	ft::vector<simpleDummy>::const_iterator constRevy = vec.end();
+	ft::vector<simpleDummy>::const_iterator constRevy = vec.begin();
 	ASSERT_EQ(0, constRevy - revy);
 }
 

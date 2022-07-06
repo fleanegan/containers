@@ -17,7 +17,7 @@ namespace ft {
 		typedef T value_type;
 		typedef T *pointer;
 		typedef T &reference;
-		typedef TRAIT_NS::random_access_iterator_tag iterator_category;
+		typedef std::random_access_iterator_tag iterator_category;
 	private:
 		pointer _ptr;
 	public:

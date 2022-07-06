@@ -26,7 +26,7 @@ namespace ft {
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
 		typedef size_t size_type;
-		typedef TRAIT_NS::ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 
 	private:
 		size_type _capacity;
@@ -185,7 +185,7 @@ namespace ft {
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to) {
-			size_type requiredCapacity = TRAIT_NS::distance(from, to);
+			size_type requiredCapacity = ft::distance(from, to);
 			erase(begin(), end());
 			reserve(requiredCapacity);
 			while (from != to)
@@ -227,7 +227,7 @@ namespace ft {
 		typename ft::enable_if<!ft::is_integral<I>::value, void>::type
 		insert(InputIt pos, I first, I last){
 			int index = pos - begin();
-			size_type count = TRAIT_NS::distance(first, last);
+			size_type count = ft::distance(first, last);
 			size_type newSize = _size + count;
 
 			reserve(newSize);
@@ -239,7 +239,7 @@ namespace ft {
 		}
 
 		iterator erase(iterator first, iterator last) {
-			size_type distance = TRAIT_NS::distance(first, last);
+			size_type distance = ft::distance(first, last);
 			iterator tmp = moveForwardElements(first, distance);
 			for (size_type i = 0; i < distance; ++i)
 				pop_back();

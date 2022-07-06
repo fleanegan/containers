@@ -126,7 +126,7 @@ TEST(vectorIterator, canUseIteratorAdditionDirectlyInFunctionCall){
 	vec.push_back(1);
 	ft::vector<int>::iterator it1 = vec.end();
 
-	testIterator<ft::vector<int> >(it1 - 1);
+	ft::distance(it1 - 1, it1);
 }
 
 TEST(vectorIterator, relationalComparison){

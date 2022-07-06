@@ -69,20 +69,20 @@ ft::vector<simpleDummy> createTestDummyVector() {
 	}
 	return result;
 }
-
-template<class T>
-void testIterator(typename T::iterator it){
-	(void) it;
-}
+//
+//template<class T>
+//void testIterator(typename T::iterator it){
+//	(void) it;
+//}
 
 template<typename It>
-bool getHasSpecializedTag(TRAIT_NS::bidirectional_iterator_tag a) {
+bool getHasSpecializedTag(std::bidirectional_iterator_tag a) {
 	_DEBUG_SD && std::cout << "specialized function called" << std::endl;
 	return true;
 }
 
 template<typename It>
-bool getHasSpecializedTag(TRAIT_NS::input_iterator_tag a) {
+bool getHasSpecializedTag(std::input_iterator_tag a) {
 	_DEBUG_SD && std::cout << "generalized function called" << std::endl;
 	return false;
 }
@@ -99,7 +99,7 @@ public:
 	typedef T value_type;
 	typedef T *pointer;
 	typedef T &reference;
-	typedef TRAIT_NS::input_iterator_tag iterator_category;
+	typedef std::input_iterator_tag iterator_category;
 private:
 	pointer _ptr;
 public:

@@ -8,10 +8,10 @@
 #include <limits>
 
 namespace ft{
-	template<class InputIterator>
-	typename iterator_traits<InputIterator>::difference_type
-	distance (InputIterator first, InputIterator last, ft::input_iterator_tag){
-		typename InputIterator::difference_type result = 0;
+	template<typename It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last, std::input_iterator_tag){
+		typename ft::iterator_traits<It>::difference_type result = 0;
 
 		while (first != last){
 			++first;
@@ -20,16 +20,16 @@ namespace ft{
 		return result;
 	}
 
-	template<class InputIterator>
-	typename iterator_traits<InputIterator>::difference_type
-	distance (InputIterator first, InputIterator last, ft::random_access_iterator_tag){
+	template<typename It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last, std::random_access_iterator_tag){
 		return (last - first);
 	}
 
-	template<class InputIterator>
-	typename iterator_traits<InputIterator>::difference_type
-	distance (InputIterator first, InputIterator last){
-		return TRAIT_NS::distance(first, last, typename InputIterator::iterator_category());
+	template<typename  It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last){
+		return ft::distance<It>(first, last, typename ft::iterator_traits<It>::iterator_category());
 	}
 
 	template <bool, typename T = void>

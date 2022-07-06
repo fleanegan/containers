@@ -117,7 +117,7 @@ TEST(reverseIterator, movingIteratorBackwards) {
 TEST(ftDistance, useRandomAccessIterator){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
-	ft::ptrdiff_t result = TRAIT_NS::distance(vec.begin(), vec.end());
+	ft::ptrdiff_t result = std::distance(vec.begin(), vec.end());
 
 	ASSERT_EQ(5, result);
 }
@@ -125,7 +125,7 @@ TEST(ftDistance, useRandomAccessIterator){
 TEST(ftDistance, useInputIterator){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
-	ft::ptrdiff_t result = TRAIT_NS::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
+	ft::ptrdiff_t result = std::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
 
 	ASSERT_EQ(5, result);
 }
@@ -168,6 +168,16 @@ TEST(reverseIterator, equalityOfReverseAndNormalIterator) {
 	ft::vector<simpleDummy>::reverse_iterator revIt(it);
 
 	ASSERT_EQ(it, revIt);
+}
+
+TEST(iterator_traits, compilesWithPointerInsteadOfIterator){
+	ft::vector<simpleDummy> vec = createTestDummyVector();
+	simpleDummy *pointerBegin = &*vec.begin();
+	simpleDummy *pointerEnd = &*vec.end();
+
+	ft::iterator_traits<simpleDummy *>::difference_type result = ft::distance(pointerBegin, pointerEnd);
+
+	ASSERT_EQ(ft::distance(vec.begin(), vec.end()), result);
 }
 // todo: reverseIteratorWithInputIteratorDoesNotCallAnyNonExistingFunctions
 

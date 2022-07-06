@@ -5,6 +5,7 @@
 #include "testIterators.hpp"
 #include "testVectorIterator.hpp"
 #include "testVector.hpp"
+#include "testPair.hpp"
 
 GTEST_API_ int main(int argc, char **argv) {
 	std::cout << "Running main() from " << __FILE__ << std::endl;

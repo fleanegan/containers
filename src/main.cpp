@@ -8,6 +8,7 @@
 #include <vector>
 #include <typeinfo>
 #include "Stack.hpp"
+#include "Pair.hpp"
 
 //#define TESTED_TYPE int
 //#ifndef TESTED_NAMESPACE

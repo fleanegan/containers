@@ -7,6 +7,7 @@
 #include "../inc/VectorIterator.hpp"
 #include "../inc/Stack.hpp"
 #include "../inc/Utils.hpp"
+#include "../inc/Pair.hpp"
 #include <iostream>
 #define _DEBUG_SD 0
 

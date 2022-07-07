@@ -9,6 +9,7 @@
 #include <typeinfo>
 #include "Stack.hpp"
 #include "Pair.hpp"
+#include "BinarySearchTree.hpp"
 
 //#define TESTED_TYPE int
 //#ifndef TESTED_NAMESPACE

@@ -8,6 +8,7 @@
 #include "../inc/Stack.hpp"
 #include "../inc/Utils.hpp"
 #include "../inc/Pair.hpp"
+#include "../inc/BinarySearchTree.hpp"
 #include <iostream>
 #define _DEBUG_SD 0
 

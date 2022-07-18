@@ -158,5 +158,16 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 	}
 }
 
+ft::BinarySearchTree<int, int> createThreeLevelTree() {
+	ft::BinarySearchTree<int, int> result;
+
+	result.insert(ft::make_pair(1, 0));
+	result.insert(ft::make_pair(2, 0));
+	result.insert(ft::make_pair(5, 0));
+	result.insert(ft::make_pair(4, 0));
+//	result.insert(ft::make_pair(0, 0));
+//	result.insert(ft::make_pair(-1, 0));
+	return result;
+}
 
 #endif     // TEST_UTILS_H

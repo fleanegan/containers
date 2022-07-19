@@ -89,3 +89,63 @@ TEST(BinarySearchTree, copyIsDeep){
 	ASSERT_NE(to.root()->left, nullptr);
 	ASSERT_EQ(-1, to.root()->left->left->right->key);
 }
+
+TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
+	ft::BinarySearchTree<int, int> bst;
+	bst.insert(ft::make_pair(1, 0));
+	bst.insert(ft::make_pair(2, 0));
+
+	bst.popNode(2);
+
+	ASSERT_EQ(nullptr, bst.root()->right);
+	ASSERT_EQ(nullptr, bst.root()->left);
+}
+
+TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
+	ft::BinarySearchTree<int, int> bst;
+	bst.insert(ft::make_pair(1, 0));
+	bst.insert(ft::make_pair(2, 0));
+	bst.insert(ft::make_pair(3, 0));
+
+	bst.popNode(2);
+
+	ASSERT_NE(nullptr, bst.root()->right);
+	ASSERT_EQ(nullptr, bst.root()->left);
+}
+
+TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
+	ft::BinarySearchTree<int, int> bst;
+	bst.insert(ft::make_pair(1, 0));
+	bst.insert(ft::make_pair(3, 0));
+	bst.insert(ft::make_pair(2, 0));
+	bst.insert(ft::make_pair(4, 0));
+
+	bst.popNode(3);
+
+	ASSERT_EQ(4, bst.root()->right->key);
+	ASSERT_EQ(2, bst.root()->right->left->key);
+	ASSERT_EQ(nullptr, bst.root()->right->right);
+	ASSERT_EQ(nullptr, bst.root()->right->left->right);
+	ASSERT_EQ(nullptr, bst.root()->right->left->left);
+}
+
+TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOnThirdLevel){
+	ft::BinarySearchTree<int, int> bst;
+	bst.insert(ft::make_pair(-3, 0));
+	bst.insert(ft::make_pair(3, 0));
+	bst.insert(ft::make_pair(1, 0));
+	bst.insert(ft::make_pair(16, 0));
+	bst.insert(ft::make_pair(19, 0));
+	bst.insert(ft::make_pair(7, 0));
+	bst.insert(ft::make_pair(5, 0));
+	bst.insert(ft::make_pair(8, 0));
+	bst.insert(ft::make_pair(4, 0));
+	bst.insert(ft::make_pair(6, 0));
+
+
+	bst.popNode(3);
+
+	ASSERT_EQ(4, bst.root()->right->key);
+}
+
+// removingRootDoesNotAttemptToSetParentNULL

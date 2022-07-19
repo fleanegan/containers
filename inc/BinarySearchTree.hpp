@@ -19,17 +19,18 @@ namespace ft {
 		}
 	};
 
-	template<typename TKey, typename TValue>
+	template<typename TKey, typename TValue, template<typename, typename> class NodeType>
 	class BinarySearchTree {
 	private:
-		Node<TKey, TValue> *rootNode;
+		typedef NodeType<TKey, TValue> Node;
+		Node *rootNode;
 	public:
 		BinarySearchTree() : rootNode() {
 
 		}
 
 		BinarySearchTree &operator=(const BinarySearchTree &rhs) {
-			Node<TKey, TValue> *tmp = rhs.rootNode;
+			Node *tmp = rhs.rootNode;
 			if (rhs.rootNode == this->rootNode)
 				return *this;
 			copySubTree(rhs.rootNode, &rootNode);
@@ -40,8 +41,8 @@ namespace ft {
 			deleteSubTreeFrom(&rootNode);
 		}
 
-		Node<TKey, TValue> *findByKey(TKey i) {
-			Node<TKey, TValue> *tmp = rootNode;
+		Node *findByKey(TKey i) {
+			Node *tmp = rootNode;
 
 			while (tmp != NULL) {
 				if (tmp->key == i)
@@ -60,8 +61,8 @@ namespace ft {
 		}
 
 		void insert(ft::pair<TKey, TValue> in) {
-			Node<TKey, TValue> *newNode = new ::ft::Node<TKey, TValue>(in);
-			Node<TKey, TValue> *newParent = rootNode;
+			Node *newNode = new Node(in);
+			Node *newParent = rootNode;
 
 			if (rootNode == NULL)
 				rootNode = newNode;
@@ -71,19 +72,18 @@ namespace ft {
 			}
 		}
 
-		Node<TKey, TValue> *root() {
+		Node *root() {
 			return rootNode;
 		}
 
 		void popNode(TKey keyOfNodeToBeRemoved) {
-			Node<TKey, TValue> *nodeToBeRemoved = findByKey(keyOfNodeToBeRemoved);
+			Node *nodeToBeRemoved = findByKey(keyOfNodeToBeRemoved);
 			popNodeByPointer(nodeToBeRemoved);
-
 		}
 
-		void popNodeByPointer(Node<TKey, TValue> *nodeToBeRemoved) {
-			Node<TKey, TValue> *parent = nodeToBeRemoved->parent;
-			Node<TKey, TValue> *tmp;
+		void popNodeByPointer(Node *nodeToBeRemoved) {
+			Node *parent = nodeToBeRemoved->parent;
+			Node *tmp;
 
 			if (nodeToBeRemoved == NULL)
 				return;
@@ -92,33 +92,42 @@ namespace ft {
 				unlinkChildFromParent(nodeToBeRemoved, parent);
 				delete nodeToBeRemoved;
 			} else {
-				tmp = getInorderSuccessor(nodeToBeRemoved, nodeToBeRemoved, NULL);
+				tmp = getInorderSuccessor(nodeToBeRemoved, nodeToBeRemoved, nodeToBeRemoved->right);
 				nodeToBeRemoved->key = tmp->key;
 				nodeToBeRemoved->value = tmp->value;
 				popNodeByPointer(tmp);
 			}
 		}
 
-		void linkChildrenToGrandParent(Node <TKey, TValue> *parent, Node <TKey, TValue> *&grandParent) const {
-			if (parent->left != NULL)
-				linkChildAndParent(parent->left, &grandParent);
-			if (parent->right != NULL)
-				linkChildAndParent(parent->right, &grandParent);
+		void leftRotate(Node *pivot) {
+			Node *parent = pivot->parent;
+			Node *nodeToChangePlaceWith = pivot->right;
+
+			if (nodeToChangePlaceWith->parent == rootNode)
+				rootNode = nodeToChangePlaceWith;
+			pivot->right = nodeToChangePlaceWith->left;
+			linkChildAndParent(nodeToChangePlaceWith, &parent);
+			linkChildAndParent(pivot, &nodeToChangePlaceWith);
+		}
+
+		void rightRotate(Node *pivot) {
+			Node *parent = pivot->parent;
+			Node *nodeToChangePlaceWith = pivot->left;
+
+			if (nodeToChangePlaceWith->parent == rootNode)
+				rootNode = nodeToChangePlaceWith;
+			pivot->left = nodeToChangePlaceWith->right;
+			linkChildAndParent(nodeToChangePlaceWith, &parent);
+			linkChildAndParent(pivot, &nodeToChangePlaceWith);
 		}
 
 	private:
-		Node<TKey, TValue> *getInorderSuccessor(Node<TKey, TValue> *localRoot, Node<TKey, TValue> *biggerThan,
-												Node<TKey, TValue> *currentOptimum) {
-			Node<TKey, TValue> *leftMinimum = NULL;
-			Node<TKey, TValue> *rightMinimum = NULL;
 
-			if (localRoot == NULL)
-				return NULL;
-			if (currentOptimum == NULL){
-				currentOptimum = localRoot->right;
-				if (currentOptimum == NULL)
-					localRoot->left;
-			}
+		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
+								  Node *currentOptimum) {
+			Node *leftMinimum = NULL;
+			Node *rightMinimum = NULL;
+
 			if (localRoot->right == NULL && localRoot->left == NULL) {
 				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
 					return localRoot;
@@ -133,7 +142,7 @@ namespace ft {
 			return currentOptimum;
 		}
 
-		void unlinkChildFromParent(const Node<TKey, TValue> *nodeToBeRemoved, Node<TKey, TValue> *parent) const {
+		void unlinkChildFromParent(const Node *nodeToBeRemoved, Node *parent) const {
 			if (nodeToBeRemoved == NULL)
 				return;
 			if (parent->left == nodeToBeRemoved) {
@@ -146,7 +155,7 @@ namespace ft {
 			}
 		}
 
-		void linkChildAndParent(Node<TKey, TValue> *newNode, Node<TKey, TValue> **newParent) const {
+		void linkChildAndParent(Node *newNode, Node **newParent) const {
 			if (newNode == NULL)
 				return;
 			if (*newParent != NULL) {
@@ -159,8 +168,15 @@ namespace ft {
 			newNode->parent = *newParent;
 		}
 
-		Node<TKey, TValue> *findInsertPlace(const Node<TKey, TValue> *newNode) const {
-			Node<TKey, TValue> *tmp = rootNode;
+		void linkChildrenToGrandParent(Node *parent, Node *&grandParent) const {
+			if (parent->left != NULL)
+				linkChildAndParent(parent->left, &grandParent);
+			if (parent->right != NULL)
+				linkChildAndParent(parent->right, &grandParent);
+		}
+
+		Node *findInsertPlace(const Node *newNode) const {
+			Node *tmp = rootNode;
 
 			while ((tmp->left != NULL || tmp->right != NULL)) {
 				if (newNode->key < tmp->key) {
@@ -176,7 +192,7 @@ namespace ft {
 			return tmp;
 		}
 
-		void deleteSubTreeFrom(Node<TKey, TValue> **localRoot) {
+		void deleteSubTreeFrom(Node **localRoot) {
 			if (localRoot == NULL || *localRoot == NULL)
 				return;
 			deleteSubTreeFrom(&(*localRoot)->left);
@@ -185,11 +201,11 @@ namespace ft {
 			localRoot = NULL;
 		}
 
-		void copySubTree(Node<TKey, TValue> *source, Node<TKey, TValue> **dest) {
-			Node<TKey, TValue> *newNode;
+		void copySubTree(Node *source, Node **dest) {
+			Node *newNode;
 
 			if (source != NULL) {
-				newNode = new Node<TKey, TValue>(*source);
+				newNode = new Node(*source);
 				linkChildAndParent(newNode, dest);
 				if (source->right != NULL)
 					copySubTree(source->right, &newNode);

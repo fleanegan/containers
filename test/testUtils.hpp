@@ -159,23 +159,27 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 }
 
 /*
- * 		1
-	  /	  \
-	2		5
-   /	  /
-  0		 4
- /
--1
+ * 		3
+	   /  \
+	  1	   16
+  		 /   \
+  		 7   19
+		/ \
+	   5   8
+	  / \
+	 4   6
 */
-ft::BinarySearchTree<int, int> createThreeLevelTree() {
-	ft::BinarySearchTree<int, int> result;
-
+ft::BinarySearchTree<int, int, ft::Node> createFiveLevelTree() {
+	ft::BinarySearchTree<int, int, ft::Node> result;
+	result.insert(ft::make_pair(3, 0));
 	result.insert(ft::make_pair(1, 0));
-	result.insert(ft::make_pair(2, 0));
+	result.insert(ft::make_pair(16, 0));
+	result.insert(ft::make_pair(19, 0));
+	result.insert(ft::make_pair(7, 0));
 	result.insert(ft::make_pair(5, 0));
+	result.insert(ft::make_pair(8, 0));
 	result.insert(ft::make_pair(4, 0));
-	result.insert(ft::make_pair(0, 0));
-	result.insert(ft::make_pair(-1, 0));
+	result.insert(ft::make_pair(6, 0));
 	return result;
 }
 

@@ -1,7 +1,7 @@
 #include "testUtils.hpp"
 
 TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturns){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 
 	ft::Node<int, int> *result = bst.findByKey(2);
 
@@ -9,15 +9,15 @@ TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturns){
 }
 
 TEST(BinarySearchTree, searchingANodeOnLevelThree){
-	ft::BinarySearchTree<int, int> bst = createThreeLevelTree();
+	ft::BinarySearchTree<int, int, ft::Node> bst = createFiveLevelTree();
 
-	ft::Node<int, int> *result = bst.findByKey(2);
+	ft::Node<int, int> *result = bst.findByKey(7);
 
 	ASSERT_NE(result, nullptr);
 }
 
 TEST(BinarySearchTree, insertingANodeOnAnEmptyTreeSetsItAsRoot){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 
 	bst.insert(ft::make_pair(1, 2));
 	ft::Node<int, int> *result = bst.root();
@@ -28,7 +28,7 @@ TEST(BinarySearchTree, insertingANodeOnAnEmptyTreeSetsItAsRoot){
 }
 
 TEST(BinarySearchTree, insertingSameKeysTwiceSetsNewNodeToRight){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 
 	bst.insert(ft::make_pair(1, 0));
@@ -39,7 +39,7 @@ TEST(BinarySearchTree, insertingSameKeysTwiceSetsNewNodeToRight){
 }
 
 TEST(BinarySearchTree, insertingNodeWithSmallerKeyAddsToLeft){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 
 	bst.insert(ft::make_pair(0, 0));
@@ -50,7 +50,7 @@ TEST(BinarySearchTree, insertingNodeWithSmallerKeyAddsToLeft){
 }
 
 TEST(BinarySearchTree, insertingMultipleNodesWithAscendingValuesStacksThemOnTheRight){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 
 	bst.insert(ft::make_pair(2, 0));
@@ -61,7 +61,7 @@ TEST(BinarySearchTree, insertingMultipleNodesWithAscendingValuesStacksThemOnTheR
 }
 
 TEST(BinarySearchTree, insertingMultipleNodesWithDescendingValuesStacksThemOnTheLeft){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(3, 0));
 
 	bst.insert(ft::make_pair(2, 0));
@@ -72,8 +72,8 @@ TEST(BinarySearchTree, insertingMultipleNodesWithDescendingValuesStacksThemOnThe
 }
 
 TEST(BinarySearchTree, copyIsDeep){
-	ft::BinarySearchTree<int, int> from;
-	ft::BinarySearchTree<int, int> to;
+	ft::BinarySearchTree<int, int, ft::Node> from;
+	ft::BinarySearchTree<int, int, ft::Node> to;
 	from.insert(ft::make_pair(1, 1));
 	from.insert(ft::make_pair(2, 1));
 	from.insert(ft::make_pair(0, 1));
@@ -91,7 +91,7 @@ TEST(BinarySearchTree, copyIsDeep){
 }
 
 TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 	bst.insert(ft::make_pair(2, 0));
 
@@ -102,7 +102,7 @@ TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
 }
 
 TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 	bst.insert(ft::make_pair(2, 0));
 	bst.insert(ft::make_pair(3, 0));
@@ -114,7 +114,7 @@ TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
-	ft::BinarySearchTree<int, int> bst;
+	ft::BinarySearchTree<int, int, ft::Node> bst;
 	bst.insert(ft::make_pair(1, 0));
 	bst.insert(ft::make_pair(3, 0));
 	bst.insert(ft::make_pair(2, 0));
@@ -130,22 +130,30 @@ TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOnThirdLevel){
-	ft::BinarySearchTree<int, int> bst;
-	bst.insert(ft::make_pair(-3, 0));
-	bst.insert(ft::make_pair(3, 0));
-	bst.insert(ft::make_pair(1, 0));
-	bst.insert(ft::make_pair(16, 0));
-	bst.insert(ft::make_pair(19, 0));
-	bst.insert(ft::make_pair(7, 0));
-	bst.insert(ft::make_pair(5, 0));
-	bst.insert(ft::make_pair(8, 0));
-	bst.insert(ft::make_pair(4, 0));
-	bst.insert(ft::make_pair(6, 0));
-
+	ft::BinarySearchTree<int, int, ft::Node> bst = createFiveLevelTree();
 
 	bst.popNode(3);
 
-	ASSERT_EQ(4, bst.root()->right->key);
+	ASSERT_EQ(4, bst.root()->key);
 }
 
-// removingRootDoesNotAttemptToSetParentNULL
+TEST(BinarySearchTree, leftRotatingTree){
+	ft::BinarySearchTree<int, int, ft::Node> bst = createFiveLevelTree();
+
+	ft::Node<int, int> *pivot = bst.root();
+	bst.leftRotate(pivot);
+
+	ASSERT_EQ(16, bst.root()->key);
+	ASSERT_EQ(pivot, bst.root()->left);
+}
+
+TEST(BinarySearchTree, rightRotatingTree){
+	ft::BinarySearchTree<int, int, ft::Node> bst = createFiveLevelTree();
+
+	ft::Node<int, int> *pivot = bst.root();
+	bst.rightRotate(pivot);
+
+	ASSERT_EQ(1, bst.root()->key);
+	ASSERT_EQ(nullptr, bst.root()->left);
+	ASSERT_EQ(pivot, bst.root()->right);
+}

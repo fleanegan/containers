@@ -11,11 +11,18 @@ namespace ft {
 		Node *left;
 		Node *parent;
 
-		Node(const TKey &key, const TValue &value) : key(key), value(value), right(NULL), left(NULL), parent(NULL) {
+		Node(const TKey &key, const TValue &value, Node<TKey, TValue> *nullNode) : key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
 		}
 
-		Node(const ft::pair<TKey, TValue> &in) : key(in.first), value(in.second), right(NULL), left(NULL),
-												 parent(NULL) {
+		Node(const ft::pair<TKey, TValue> &in, Node<TKey, TValue> *nullNode) : key(in.first), value(in.second), right(nullNode), left(nullNode),
+																			   parent(nullNode) {
+		}
+
+		Node(const Node<TKey, TValue> &rhs, Node<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value), right(nullNode), left(nullNode),
+																			   parent(nullNode) {
+		}
+
+		Node() : left(NULL), right(NULL), parent(NULL){
 		}
 	};
 
@@ -23,9 +30,10 @@ namespace ft {
 	class BinarySearchTree {
 	private:
 		typedef NodeType<TKey, TValue> Node;
+		Node nullNode;
 		Node *rootNode;
 	public:
-		BinarySearchTree() : rootNode() {
+		BinarySearchTree() : nullNode(), rootNode(&nullNode) {
 
 		}
 
@@ -33,7 +41,7 @@ namespace ft {
 			Node *tmp = rhs.rootNode;
 			if (rhs.rootNode == this->rootNode)
 				return *this;
-			copySubTree(rhs.rootNode, &rootNode);
+			copySubTree(rhs.rootNode, &rhs.nullNode, &rootNode);
 			return *this;
 		}
 
@@ -44,20 +52,24 @@ namespace ft {
 		Node *findByKey(TKey &i) {
 			Node *tmp = rootNode;
 
-			while (tmp != NULL) {
+			while (tmp != &nullNode) {
 				if (tmp->key == i)
 					return (tmp);
 				if (tmp->key > i) {
-					if (tmp->left == NULL)
-						return NULL;
+					if (tmp->left == &nullNode)
+						return &nullNode;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == NULL)
-						return NULL;
+					if (tmp->right == &nullNode)
+						return &nullNode;
 					tmp = tmp->right;
 				}
 			}
-			return NULL;
+			return &nullNode;
+		}
+
+		Node *getNullNode() {
+			return &nullNode;
 		}
 
 		void insert(ft::pair<TKey, TValue> in) {
@@ -65,10 +77,10 @@ namespace ft {
 		}
 
 		void insert_ref(ft::pair<TKey, TValue> const &in) {
-			Node *newNode = new Node(in);
+			Node *newNode = new Node(in, &nullNode);
 			Node *newParent = rootNode;
 
-			if (rootNode == NULL)
+			if (rootNode == &nullNode)
 				rootNode = newNode;
 			else {
 				newParent = findInsertPlace(newNode);
@@ -89,9 +101,9 @@ namespace ft {
 			Node *parent = nodeToBeRemoved->parent;
 			Node *tmp;
 
-			if (nodeToBeRemoved == NULL)
+			if (nodeToBeRemoved == &nullNode)
 				return;
-			if (nodeToBeRemoved->left == NULL || nodeToBeRemoved->right == NULL) {
+			if (nodeToBeRemoved->left == &nullNode || nodeToBeRemoved->right == &nullNode) {
 				linkChildrenToGrandParent(nodeToBeRemoved, parent);
 				unlinkChildFromParent(nodeToBeRemoved, parent);
 				delete nodeToBeRemoved;
@@ -129,40 +141,40 @@ namespace ft {
 
 		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
 								  Node *currentOptimum) {
-			Node *leftMinimum = NULL;
-			Node *rightMinimum = NULL;
+			Node *leftMinimum = &nullNode;
+			Node *rightMinimum = &nullNode;
 
-			if (localRoot->right == NULL && localRoot->left == NULL) {
+			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
 				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
 					return localRoot;
 				return currentOptimum;
 			}
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != NULL && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
+			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
 				return leftMinimum;
-			if (rightMinimum != NULL && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key)
+			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key)
 				return rightMinimum;
 			return currentOptimum;
 		}
 
-		void unlinkChildFromParent(const Node *nodeToBeRemoved, Node *parent) const {
-			if (nodeToBeRemoved == NULL)
+		void unlinkChildFromParent(const Node *nodeToBeRemoved, Node *parent) {
+			if (nodeToBeRemoved == &nullNode)
 				return;
 			if (parent->left == nodeToBeRemoved) {
-				parent->left->parent = NULL;
-				parent->left = NULL;
+				parent->left->parent = &nullNode;
+				parent->left = &nullNode;
 			}
 			if (parent->right == nodeToBeRemoved) {
-				parent->right->parent = NULL;
-				parent->right = NULL;
+				parent->right->parent = &nullNode;
+				parent->right = &nullNode;
 			}
 		}
 
 		void linkChildAndParent(Node *newNode, Node **newParent) const {
-			if (newNode == NULL)
+			if (newNode == &nullNode)
 				return;
-			if (*newParent != NULL) {
+			if (*newParent != &nullNode) {
 				if (newNode->key < (*newParent)->key)
 					(*newParent)->left = newNode;
 				else
@@ -173,22 +185,22 @@ namespace ft {
 		}
 
 		void linkChildrenToGrandParent(Node *parent, Node *&grandParent) const {
-			if (parent->left != NULL)
+			if (parent->left != &nullNode)
 				linkChildAndParent(parent->left, &grandParent);
-			if (parent->right != NULL)
+			if (parent->right != &nullNode)
 				linkChildAndParent(parent->right, &grandParent);
 		}
 
 		Node *findInsertPlace(const Node *newNode) const {
 			Node *tmp = rootNode;
 
-			while ((tmp->left != NULL || tmp->right != NULL)) {
+			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
 				if (newNode->key < tmp->key) {
-					if (tmp->left == NULL)
+					if (tmp->left == &nullNode)
 						return tmp;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == NULL)
+					if (tmp->right == &nullNode)
 						return tmp;
 					tmp = tmp->right;
 				}
@@ -197,7 +209,7 @@ namespace ft {
 		}
 
 		void deleteSubTreeFrom(Node **localRoot) {
-			if (localRoot == NULL || *localRoot == NULL)
+			if (localRoot == NULL || *localRoot == &nullNode)
 				return;
 			deleteSubTreeFrom(&(*localRoot)->left);
 			deleteSubTreeFrom(&(*localRoot)->right);
@@ -205,16 +217,16 @@ namespace ft {
 			localRoot = NULL;
 		}
 
-		void copySubTree(Node *source, Node **dest) {
+		void copySubTree(Node *source, const Node *sourceNullNode, Node **dest) {
 			Node *newNode;
 
-			if (source != NULL) {
-				newNode = new Node(*source);
+			if (source != sourceNullNode) {
+				newNode = new Node(*source, &nullNode);
 				linkChildAndParent(newNode, dest);
-				if (source->right != NULL)
-					copySubTree(source->right, &newNode);
-				if (source->left != NULL)
-					copySubTree(source->left, &newNode);
+				if (source->right != &nullNode)
+					copySubTree(source->right, sourceNullNode, &newNode);
+				if (source->left != &nullNode)
+					copySubTree(source->left, sourceNullNode, &newNode);
 			}
 		}
 	};

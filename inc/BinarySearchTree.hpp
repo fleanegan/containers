@@ -41,7 +41,7 @@ namespace ft {
 			deleteSubTreeFrom(&rootNode);
 		}
 
-		Node *findByKey(TKey i) {
+		Node *findByKey(TKey &i) {
 			Node *tmp = rootNode;
 
 			while (tmp != NULL) {
@@ -61,6 +61,10 @@ namespace ft {
 		}
 
 		void insert(ft::pair<TKey, TValue> in) {
+			insert_ref(in);
+		}
+
+		void insert_ref(ft::pair<TKey, TValue> const &in) {
 			Node *newNode = new Node(in);
 			Node *newParent = rootNode;
 

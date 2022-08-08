@@ -2,16 +2,18 @@
 
 TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturns){
 	ft::BinarySearchTree<int, int, ft::Node> bst;
+	int keyToFind = 2;
 
-	ft::Node<int, int> *result = bst.findByKey(2);
+	ft::Node<int, int> *result = bst.findByKey(keyToFind);
 
 	ASSERT_EQ(result, nullptr);
 }
 
 TEST(BinarySearchTree, searchingANodeOnLevelThree){
 	ft::BinarySearchTree<int, int, ft::Node> bst = createFiveLevelTree();
+	int keyToFind = 7;
 
-	ft::Node<int, int> *result = bst.findByKey(7);
+	ft::Node<int, int> *result = bst.findByKey(keyToFind);
 
 	ASSERT_NE(result, nullptr);
 }

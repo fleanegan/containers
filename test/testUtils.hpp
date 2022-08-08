@@ -15,33 +15,54 @@
 struct simpleDummy {
 	int *i = NULL;
 	int moves;
+	bool debug;
 
 	simpleDummy() {
-		_DEBUG_SD && std::cout << "default constructor" << std::endl;
+		debug = false;
+		debug && std::cout << "default constructor" << std::endl;
 		i = new int;
 		moves = 0;
 	}
 
 	explicit simpleDummy(int in) {
-		_DEBUG_SD && std::cout << "argument constructor. i is " << (void *) i << std::endl;
+		debug = false;
+		debug && std::cout << "argument constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = in;
 		moves = 0;
 	}
 
 	simpleDummy(const simpleDummy &other) {
-		_DEBUG_SD && std::cout << "copy constructor. i is " << (void *) i << std::endl;
+		debug = other.debug;
+		debug && std::cout << "copy constructor. i is " << (void *) i << std::endl;
 		i = new int;
 		*i = *(other.i);
 		moves = other.moves + 1;
 	}
 
 	simpleDummy &operator=(const simpleDummy &other) {
-		_DEBUG_SD && std::cout << "assignment start, updating addr: " << (void *) i << " from addr: " << (void *) other.i << std::endl;
+		debug = other.debug;
+		debug && std::cout << "assignment start, updating addr: " << (void *) i << " from addr: " << (void *) other.i << std::endl;
 		*i = *(other.i);
 		moves = other.moves + 1;
-		_DEBUG_SD && std::cout << "assignment end" << std::endl;
+		debug && std::cout << "assignment end" << std::endl;
 		return *this;
+	}
+
+	bool operator<(const simpleDummy &rhs) const {
+		return i < rhs.i;
+	}
+
+	bool operator>(const simpleDummy &rhs) const {
+		return rhs < *this;
+	}
+
+	bool operator<=(const simpleDummy &rhs) const {
+		return !(rhs < *this);
+	}
+
+	bool operator>=(const simpleDummy &rhs) const {
+		return !(*this < rhs);
 	}
 
 	bool operator==(const simpleDummy &rhs) const {
@@ -59,7 +80,7 @@ struct simpleDummy {
 	void dummyFunction() {}
 
 	~simpleDummy() {
-		_DEBUG_SD && std::cout << "destructor" << std::endl;
+		debug && std::cout << "destructor" << std::endl;
 		delete i;
 	}
 };

@@ -4,31 +4,35 @@
 namespace ft {
 
 	template<typename TKey, typename TValue>
-	struct Node {
+	struct SearchTreeStandardNode {
 		TKey key;
 		TValue value;
-		Node *right;
-		Node *left;
-		Node *parent;
+		SearchTreeStandardNode *right;
+		SearchTreeStandardNode *left;
+		SearchTreeStandardNode *parent;
 
-		Node(const TKey &key, const TValue &value, Node<TKey, TValue> *nullNode) : key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
+		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
 		}
 
-		Node(const ft::pair<TKey, TValue> &in, Node<TKey, TValue> *nullNode) : key(in.first), value(in.second), right(nullNode), left(nullNode),
-																			   parent(nullNode) {
+		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(in.first), value(in.second), right(nullNode), left(nullNode),
+																												   parent(nullNode) {
 		}
 
-		Node(const Node<TKey, TValue> &rhs, Node<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value), right(nullNode), left(nullNode),
-																			   parent(nullNode) {
+		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value), right(nullNode), left(nullNode),
+																																  parent(nullNode) {
 		}
 
-		Node() : left(NULL), right(NULL), parent(NULL){
+		SearchTreeStandardNode() : left(NULL), right(NULL), parent(NULL){
+		}
+
+		virtual ~SearchTreeStandardNode(){
+
 		}
 	};
 
 	template<typename TKey, typename TValue, template<typename, typename> class NodeType>
 	class BinarySearchTree {
-	private:
+	protected:
 		typedef NodeType<TKey, TValue> Node;
 		Node nullNode;
 		Node *rootNode;
@@ -46,7 +50,7 @@ namespace ft {
 		}
 
 		virtual ~BinarySearchTree() {
-			deleteSubTreeFrom(&rootNode);
+			deleteSubTreeFrom(rootNode);
 		}
 
 		Node *findByKey(TKey &i) {
@@ -65,18 +69,18 @@ namespace ft {
 					tmp = tmp->right;
 				}
 			}
-			return &nullNode;
+			return NULL;
 		}
 
 		Node *getNullNode() {
 			return &nullNode;
 		}
 
-		void insert(ft::pair<TKey, TValue> in) {
-			insert_ref(in);
+		Node *insertByValue(ft::pair<TKey, TValue> in) {
+			return insert(in);
 		}
 
-		void insert_ref(ft::pair<TKey, TValue> const &in) {
+		Node *insert(ft::pair<TKey, TValue> const &in) {
 			Node *newNode = new Node(in, &nullNode);
 			Node *newParent = rootNode;
 
@@ -86,6 +90,7 @@ namespace ft {
 				newParent = findInsertPlace(newNode);
 				linkChildAndParent(newNode, &newParent);
 			}
+			return newNode;
 		}
 
 		Node *root() {
@@ -116,28 +121,33 @@ namespace ft {
 		}
 
 		void leftRotate(Node *pivot) {
-			Node *parent = pivot->parent;
+			if (pivot->right == &nullNode)
+				return ;
 			Node *nodeToChangePlaceWith = pivot->right;
 
-			if (nodeToChangePlaceWith->parent == rootNode)
-				rootNode = nodeToChangePlaceWith;
 			pivot->right = nodeToChangePlaceWith->left;
-			linkChildAndParent(nodeToChangePlaceWith, &parent);
-			linkChildAndParent(pivot, &nodeToChangePlaceWith);
+			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
 		void rightRotate(Node *pivot) {
-			Node *parent = pivot->parent;
+			if (pivot->left == &nullNode)
+				return ;
 			Node *nodeToChangePlaceWith = pivot->left;
 
-			if (nodeToChangePlaceWith->parent == rootNode)
-				rootNode = nodeToChangePlaceWith;
 			pivot->left = nodeToChangePlaceWith->right;
-			linkChildAndParent(nodeToChangePlaceWith, &parent);
-			linkChildAndParent(pivot, &nodeToChangePlaceWith);
+			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
 	private:
+
+		void updateNodesForRotation(Node *pivot, Node *nodeToChangePlaceWith) {
+			Node *parent = pivot->parent;
+
+			if (nodeToChangePlaceWith->parent == rootNode)
+				rootNode = nodeToChangePlaceWith;
+			linkChildAndParent(nodeToChangePlaceWith, &parent);
+			linkChildAndParent(pivot, &nodeToChangePlaceWith);
+		}
 
 		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
 								  Node *currentOptimum) {
@@ -179,8 +189,7 @@ namespace ft {
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;
-			} else
-				*newParent = newNode;
+			}
 			newNode->parent = *newParent;
 		}
 
@@ -208,13 +217,12 @@ namespace ft {
 			return tmp;
 		}
 
-		void deleteSubTreeFrom(Node **localRoot) {
-			if (localRoot == NULL || *localRoot == &nullNode)
+		void deleteSubTreeFrom(Node *localRoot) {
+			if (localRoot == &nullNode)
 				return;
-			deleteSubTreeFrom(&(*localRoot)->left);
-			deleteSubTreeFrom(&(*localRoot)->right);
-			delete *localRoot;
-			localRoot = NULL;
+			deleteSubTreeFrom((localRoot)->left);
+			deleteSubTreeFrom((localRoot)->right);
+			delete localRoot;
 		}
 
 		void copySubTree(Node *source, const Node *sourceNullNode, Node **dest) {
@@ -222,6 +230,8 @@ namespace ft {
 
 			if (source != sourceNullNode) {
 				newNode = new Node(*source, &nullNode);
+				if (*dest == &nullNode)
+					*dest = newNode;
 				linkChildAndParent(newNode, dest);
 				if (source->right != &nullNode)
 					copySubTree(source->right, sourceNullNode, &newNode);

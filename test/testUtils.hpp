@@ -9,6 +9,7 @@
 #include "../inc/Utils.hpp"
 #include "../inc/Pair.hpp"
 #include "../inc/BinarySearchTree.hpp"
+#include "../inc/RedBlackTree.hpp"
 #include <iostream>
 #define _DEBUG_SD 0
 
@@ -190,8 +191,8 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 	  / \
 	 4   6
 */
-ft::BinarySearchTree<int, int, ft::Node> createFiveLevelTree() {
-	ft::BinarySearchTree<int, int, ft::Node> result;
+ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> createFiveLevelTree() {
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> result;
 	result.insert(ft::make_pair(3, 0));
 	result.insert(ft::make_pair(1, 0));
 	result.insert(ft::make_pair(16, 0));

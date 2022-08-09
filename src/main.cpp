@@ -3,6 +3,7 @@
 #include "../inc/IteratorTraits.hpp"
 #include "../inc/Vector.hpp"
 #include "../inc/VectorIterator.hpp"
+#include "../inc/RedBlackTree.hpp"
 #include "Utils.hpp"
 #include <iterator>
 #include <vector>

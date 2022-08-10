@@ -1,6 +1,8 @@
 #ifndef CONTAINERS_BINARYSEARCHTREE_HPP
 #define CONTAINERS_BINARYSEARCHTREE_HPP
 
+#include "Pair.hpp"
+
 namespace ft {
 
 	template<typename TKey, typename TValue>
@@ -82,7 +84,7 @@ namespace ft {
 
 		Node *insert(ft::pair<TKey, TValue> const &in) {
 			Node *newNode = new Node(in, &nullNode);
-			Node *newParent = rootNode;
+			Node *newParent;
 
 			if (rootNode == &nullNode)
 				rootNode = newNode;
@@ -182,8 +184,6 @@ namespace ft {
 		}
 
 		void linkChildAndParent(Node *newNode, Node **newParent) const {
-			if (newNode == &nullNode)
-				return;
 			if (*newParent != &nullNode) {
 				if (newNode->key < (*newParent)->key)
 					(*newParent)->left = newNode;

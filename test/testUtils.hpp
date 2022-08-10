@@ -51,7 +51,7 @@ struct simpleDummy {
 	}
 
 	bool operator<(const simpleDummy &rhs) const {
-		return i < rhs.i;
+		return *i < *rhs.i;
 	}
 
 	bool operator>(const simpleDummy &rhs) const {

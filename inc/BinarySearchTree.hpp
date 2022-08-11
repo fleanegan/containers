@@ -86,8 +86,11 @@ namespace ft {
 			Node *newNode = new Node(in, &nullNode);
 			Node *newParent;
 
-			if (rootNode == &nullNode)
+			if (rootNode == &nullNode){
 				rootNode = newNode;
+				nullNode.right = newNode;
+				nullNode.left = newNode;
+			}
 			else {
 				newParent = findInsertPlace(newNode);
 				linkChildAndParent(newNode, &newParent);
@@ -115,7 +118,7 @@ namespace ft {
 				unlinkChildFromParent(nodeToBeRemoved, parent);
 				delete nodeToBeRemoved;
 			} else {
-				tmp = getInorderSuccessor(nodeToBeRemoved, nodeToBeRemoved, nodeToBeRemoved->right);
+				tmp = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
 				nodeToBeRemoved->key = tmp->key;
 				nodeToBeRemoved->value = tmp->value;
 				popNodeByPointer(tmp);
@@ -183,21 +186,31 @@ namespace ft {
 			}
 		}
 
-		void linkChildAndParent(Node *newNode, Node **newParent) const {
+		void linkChildAndParent(Node *newNode, Node **newParent) {
 			if (*newParent != &nullNode) {
 				if (newNode->key < (*newParent)->key)
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;
 			}
+			else {
+				nullNode.right = newNode;
+				nullNode.left = newNode;
+			}
 			newNode->parent = *newParent;
 		}
 
-		void linkChildrenToGrandParent(Node *parent, Node *&grandParent) const {
+		Node *linkChildrenToGrandParent(Node *parent, Node *&grandParent) {
+			Node *leftover;
+
 			if (parent->left != &nullNode)
-				linkChildAndParent(parent->left, &grandParent);
-			if (parent->right != &nullNode)
-				linkChildAndParent(parent->right, &grandParent);
+				leftover = parent->right;
+			else if (parent->right != &nullNode)
+				leftover = parent->right;
+			else
+				return &nullNode;
+			linkChildAndParent(leftover, &grandParent);
+			return leftover;
 		}
 
 		Node *findInsertPlace(const Node *newNode) const {

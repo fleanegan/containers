@@ -41,6 +41,15 @@ TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
 	ASSERT_EQ(2, *rbt.root()->right->key);
 }
 
+TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
+	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
+	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
+
+	ASSERT_EQ(rbt.getNullNode()->right, rbt.root());
+}
+
 TEST(RedBlackTree, colourChangeIfUncleHasNotTheSame) {
 	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
 	rbt.insert(ft::make_pair(simpleDummy(5), simpleDummy(0)));
@@ -59,5 +68,4 @@ TEST(RedBlackTree, colourChangeIfUncleHasNotTheSame) {
 	ASSERT_EQ(25, *rbt.root()->right->right->key);
 	ASSERT_FALSE(rbt.root()->right->right->right->black);
 	ASSERT_EQ(11, *rbt.root()->right->left->key);
-
 }

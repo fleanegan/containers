@@ -233,5 +233,12 @@ TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
 	ASSERT_EQ(nullptr, result);
 }
 
+TEST(BinarySearchTree, nullNodePointsToRoot){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+
+	ASSERT_EQ(bst.root(), bst.getNullNode()->right);
+	ASSERT_EQ(bst.root(), bst.getNullNode()->left);
+}
+
 
 // test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode

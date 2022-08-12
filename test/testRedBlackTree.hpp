@@ -118,10 +118,16 @@ TEST(RedBlackTree, variousDeletionsTreeStillValid){
 	ASSERT_TRUE(rbt.isValid());
 
 	rbt.popNodeByPointer(rbt.root()->right->right);
-	rbt.popNodeByPointer(rbt.root()->left->right);
-	rbt.popNodeByPointer(rbt.root()->right->right->right);
-
 	ASSERT_TRUE(rbt.isValid());
+	rbt.popNodeByPointer(rbt.root()->left->right);
+	ASSERT_TRUE(rbt.isValid());
+	rbt.popNodeByPointer(rbt.root()->right->right->right);
+	ASSERT_TRUE(rbt.isValid());
+	while (rbt.root() != rbt.getNullNode()){
+		rbt.popNodeByPointer(rbt.root());
+		ASSERT_TRUE(rbt.isValid());
+	}
+
 }
 
 

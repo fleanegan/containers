@@ -250,6 +250,8 @@ namespace ft {
 			Node *leftMinimum = &nullNode;
 			Node *rightMinimum = &nullNode;
 
+			if (localRoot == &nullNode)
+				return &nullNode;
 			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
 				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
 					return localRoot;

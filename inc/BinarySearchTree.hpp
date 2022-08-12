@@ -102,27 +102,46 @@ namespace ft {
 			return rootNode;
 		}
 
-		void popNode(TKey keyOfNodeToBeRemoved) {
+		virtual void popNode(TKey keyOfNodeToBeRemoved) {
 			Node *nodeToBeRemoved = findByKey(keyOfNodeToBeRemoved);
 			popNodeByPointer(nodeToBeRemoved);
 		}
 
-		void popNodeByPointer(Node *nodeToBeRemoved) {
-			Node *parent = nodeToBeRemoved->parent;
-			Node *tmp;
+		virtual void popNodeByPointer(Node *nodeToBeRemoved) {
+			Node *successor;
 
 			if (nodeToBeRemoved == &nullNode)
 				return;
-			if (nodeToBeRemoved->left == &nullNode || nodeToBeRemoved->right == &nullNode) {
-				linkChildrenToGrandParent(nodeToBeRemoved, parent);
-				unlinkChildFromParent(nodeToBeRemoved, parent);
-				delete nodeToBeRemoved;
-			} else {
-				tmp = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
-				nodeToBeRemoved->key = tmp->key;
-				nodeToBeRemoved->value = tmp->value;
-				popNodeByPointer(tmp);
+			if (nodeToBeRemoved->right == &nullNode)
+				replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
+			else if (nodeToBeRemoved->left == &nullNode) {
+				replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
 			}
+			else {
+				successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
+				if (successor->parent != nodeToBeRemoved){
+					replaceNode(successor, successor->right);
+					successor->right = nodeToBeRemoved->right;
+					successor->right->parent = successor;
+				}
+				replaceNode(nodeToBeRemoved, successor);
+				successor->left = nodeToBeRemoved->left;
+				successor->left->parent = successor;
+			}
+			deleteNodeWithCleanUp(nodeToBeRemoved);
+		}
+
+		void replaceNode(Node *nodeToBeReplaced, Node *replacer) {
+			if (nodeToBeReplaced->parent == &nullNode)
+			{
+				rootNode = &nullNode;
+				linkChildAndParent(replacer, &rootNode);
+			}
+			else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
+				nodeToBeReplaced->parent->left = replacer;
+			else
+				nodeToBeReplaced->parent->right = replacer;
+			replacer->parent = nodeToBeReplaced->parent;
 		}
 
 		void leftRotate(Node *pivot) {
@@ -131,6 +150,7 @@ namespace ft {
 			Node *nodeToChangePlaceWith = pivot->right;
 
 			pivot->right = nodeToChangePlaceWith->left;
+			nodeToChangePlaceWith->left->parent = pivot;
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
@@ -140,10 +160,13 @@ namespace ft {
 			Node *nodeToChangePlaceWith = pivot->left;
 
 			pivot->left = nodeToChangePlaceWith->right;
+			nodeToChangePlaceWith->right->parent = pivot;
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
 	private:
+
+
 
 		void updateNodesForRotation(Node *pivot, Node *nodeToChangePlaceWith) {
 			Node *parent = pivot->parent;
@@ -152,38 +175,6 @@ namespace ft {
 				rootNode = nodeToChangePlaceWith;
 			linkChildAndParent(nodeToChangePlaceWith, &parent);
 			linkChildAndParent(pivot, &nodeToChangePlaceWith);
-		}
-
-		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
-								  Node *currentOptimum) {
-			Node *leftMinimum = &nullNode;
-			Node *rightMinimum = &nullNode;
-
-			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
-				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
-					return localRoot;
-				return currentOptimum;
-			}
-			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
-			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
-				return leftMinimum;
-			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key)
-				return rightMinimum;
-			return currentOptimum;
-		}
-
-		void unlinkChildFromParent(const Node *nodeToBeRemoved, Node *parent) {
-			if (nodeToBeRemoved == &nullNode)
-				return;
-			if (parent->left == nodeToBeRemoved) {
-				parent->left->parent = &nullNode;
-				parent->left = &nullNode;
-			}
-			if (parent->right == nodeToBeRemoved) {
-				parent->right->parent = &nullNode;
-				parent->right = &nullNode;
-			}
 		}
 
 		void linkChildAndParent(Node *newNode, Node **newParent) {
@@ -196,11 +187,12 @@ namespace ft {
 			else {
 				nullNode.right = newNode;
 				nullNode.left = newNode;
+				rootNode = newNode;
 			}
 			newNode->parent = *newParent;
 		}
 
-		Node *linkChildrenToGrandParent(Node *parent, Node *&grandParent) {
+		Node *linkChildToGrandParent(Node *parent, Node *&grandParent) {
 			Node *leftover;
 
 			if (parent->left != &nullNode)
@@ -251,6 +243,34 @@ namespace ft {
 				if (source->left != &nullNode)
 					copySubTree(source->left, sourceNullNode, &newNode);
 			}
+		}
+	protected:
+		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
+								  Node *currentOptimum) {
+			Node *leftMinimum = &nullNode;
+			Node *rightMinimum = &nullNode;
+
+			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
+				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
+					return localRoot;
+				return currentOptimum;
+			}
+			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
+			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
+			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
+				return leftMinimum;
+			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key)
+				return rightMinimum;
+			return currentOptimum;
+		}
+
+		void deleteNodeWithCleanUp(const Node *nodeToBeRemoved) {
+			if (nodeToBeRemoved == rootNode) {
+				rootNode = &nullNode;
+				nullNode.right = &nullNode;
+				nullNode.left = &nullNode;
+			}
+			delete nodeToBeRemoved;
 		}
 	};
 }

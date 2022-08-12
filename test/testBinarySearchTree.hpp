@@ -10,7 +10,7 @@ TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturnsNULL){
 }
 
 TEST(BinarySearchTree, searchingANodeOnLevelThree){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 	int keyToFind = 7;
 
 	ft::SearchTreeStandardNode<int, int> *result = bst.findByKey(keyToFind);
@@ -103,6 +103,18 @@ TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
 	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
 }
 
+TEST(BinarySearchTree, removingNodeWithTwoChildrenAndSuccessorBeingOneOfThem){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 0));
+	bst.insert(ft::make_pair(0, 0));
+	bst.insert(ft::make_pair(2, 0));
+
+	bst.popNode(1);
+
+	ASSERT_EQ(2, bst.root()->key);
+	ASSERT_EQ(0, bst.root()->left->key);
+}
+
 TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
 	bst.insert(ft::make_pair(1, 0));
@@ -113,6 +125,17 @@ TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
 
 	ASSERT_NE(bst.getNullNode(), bst.root()->right);
 	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
+}
+
+TEST(BinarySearchTree, removingRoot){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 0));
+
+	bst.popNode(1);
+
+	ASSERT_EQ(bst.getNullNode(), bst.root());
+	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->left);
+	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->right);
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
@@ -132,7 +155,7 @@ TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOnThirdLevel){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	bst.popNode(3);
 
@@ -140,17 +163,21 @@ TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOn
 }
 
 TEST(BinarySearchTree, leftRotatingTree){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(2, 0));
+	bst.insert(ft::make_pair(6, 0));
+	bst.insert(ft::make_pair(3, 0));
 
-	ft::SearchTreeStandardNode<int, int> *pivot = bst.root();
-	bst.leftRotate(pivot);
+	bst.leftRotate(bst.root());
 
-	ASSERT_EQ(16, bst.root()->key);
-	ASSERT_EQ(pivot, bst.root()->left);
+	ASSERT_EQ(6, bst.root()->key);
+	ASSERT_EQ(2, bst.root()->left->key);
+	ASSERT_EQ(3, bst.root()->left->right->key);
+	ASSERT_EQ(2, bst.root()->left->right->parent->key);
 }
 
 TEST(BinarySearchTree, rightRotatingTree){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	ft::SearchTreeStandardNode<int, int> *pivot = bst.root();
 	bst.rightRotate(pivot);
@@ -161,22 +188,22 @@ TEST(BinarySearchTree, rightRotatingTree){
 }
 
 TEST(BinarySearchTree, leftRotatingNodeWithNoChildDoesNothing){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
-	int pivotKey = 19;
-	int nodeToSwapWithKey = 16;
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
+	int pivotKey = 20;
+	int nodeToSwapWithKey = 19;
 	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
 	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = bst.findByKey(nodeToSwapWithKey);
 
 	bst.leftRotate(pivot);
 
-	ASSERT_EQ(bst.root()->key, nodeToSwapWith->parent->key);
+	ASSERT_EQ(bst.root()->right->key, nodeToSwapWith->parent->key);
 	ASSERT_EQ(bst.getNullNode(), pivot->right);
 	ASSERT_EQ(nodeToSwapWithKey, pivot->parent->key);
-	ASSERT_EQ(nodeToSwapWith->parent->key, bst.root()->key);
+	ASSERT_EQ(nodeToSwapWith->parent->parent->key, bst.root()->key);
 }
 
 TEST(BinarySearchTree, rightRotatingNodeWithNoChildDoesNothing){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 	int pivotKey = 4;
 	int nodeToSwapWithKey = 5;
 	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
@@ -189,7 +216,7 @@ TEST(BinarySearchTree, rightRotatingNodeWithNoChildDoesNothing){
 }
 
 TEST(BinarySearchTree, rotatingRootAwaySetsNullNodeAsParentOfNewRoot){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	bst.leftRotate(bst.root());
 
@@ -197,7 +224,7 @@ TEST(BinarySearchTree, rotatingRootAwaySetsNullNodeAsParentOfNewRoot){
 }
 
 TEST(BinarySearchTree, rightRotatingNodeWithNoRightChildWorks){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 	int pivotKey = 7;
 	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
 	bst.popNodeByPointer(pivot->right);
@@ -212,13 +239,13 @@ TEST(BinarySearchTree, rightRotatingNodeWithNoRightChildWorks){
 }
 
 TEST(BinarySearchTree, theParentOfTheRootIsTheNullnode){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	ASSERT_EQ(bst.getNullNode(), bst.root()->parent);
 }
 
 TEST(BinarySearchTree, theParentOfTheRootsChildIsTheParent) {
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	ASSERT_EQ(bst.root(), bst.root()->right->parent);
 }
@@ -234,7 +261,7 @@ TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
 }
 
 TEST(BinarySearchTree, nullNodePointsToRoot){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = createFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
 	ASSERT_EQ(bst.root(), bst.getNullNode()->right);
 	ASSERT_EQ(bst.root(), bst.getNullNode()->left);

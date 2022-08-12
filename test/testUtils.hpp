@@ -181,17 +181,17 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 }
 
 /*
- * 		3
-	   /  \
-	  1	   16
-  		 /   \
-  		 7   19
-		/ \
-	   5   8
+ * 		      3
+	         / \
+	        1  16
+  		   /    \
+  		 7      19
+		/ \    /  \
+	   5   8  18   20
 	  / \
 	 4   6
 */
-ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> createFiveLevelTree() {
+ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> generateFiveLevelTree() {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> result;
 	result.insert(ft::make_pair(3, 0));
 	result.insert(ft::make_pair(1, 0));
@@ -202,7 +202,75 @@ ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> createFiveLevelTree()
 	result.insert(ft::make_pair(8, 0));
 	result.insert(ft::make_pair(4, 0));
 	result.insert(ft::make_pair(6, 0));
+	result.insert(ft::make_pair(20, 0));
+	result.insert(ft::make_pair(18, 0));
 	return result;
+}
+
+template<typename TKey, typename TValue>
+struct ExposedRedBlackTree : public ft::RedBlackTree<TKey, TValue>{
+	typedef ft::RedBlackNode<TKey, TValue> Node;
+
+	void fixupDeletion(Node *nodeToBeDeleted){
+		ft::RedBlackTree<TKey, TValue>::fixupDeletion(nodeToBeDeleted);
+	}
+};
+
+
+ft::RedBlackTree<int, int> generateBigRbt(){
+	ft::RedBlackTree<int, int> rbt;
+	rbt.insertByValue(ft::make_pair(1, 0));
+	rbt.insertByValue(ft::make_pair(2, 0));
+	rbt.insertByValue(ft::make_pair(3, 0));
+	rbt.insertByValue(ft::make_pair(6, 0));
+	rbt.insertByValue(ft::make_pair(0, 0));
+	rbt.insertByValue(ft::make_pair(10, 0));
+	rbt.insertByValue(ft::make_pair(11, 0));
+	rbt.insertByValue(ft::make_pair(9, 0));
+	rbt.insertByValue(ft::make_pair(13, 0));
+	rbt.insertByValue(ft::make_pair(7, 0));
+	rbt.insertByValue(ft::make_pair(12, 0));
+	rbt.insertByValue(ft::make_pair(14, 0));
+	rbt.insertByValue(ft::make_pair(19, 0));
+	return rbt;
+}
+
+ExposedRedBlackTree<int, int> generateBrokenRbtClassOne() {
+	ExposedRedBlackTree<int, int> rbt;
+	rbt.insert(ft::make_pair(1, 0));
+	rbt.insert(ft::make_pair(2, 0));
+	rbt.insert(ft::make_pair(0, 0));
+	rbt.insert(ft::make_pair(3, 0));
+	rbt.insert(ft::make_pair(4, 0));
+	rbt.root()->right->right->isBlack = true;
+	rbt.root()->right->left->isBlack = true;
+	rbt.root()->right->isBlack = false;
+	return rbt;
+}
+
+ExposedRedBlackTree<int, int> generateBrokenRbtClassTwo() {
+	ExposedRedBlackTree<int, int> rbt = generateBrokenRbtClassOne();
+	rbt.root()->right->isBlack = true;
+	return rbt;
+}
+
+ExposedRedBlackTree<int, int> generateBrokenRbtClassThree() {
+	ExposedRedBlackTree<int, int> rbt = generateBrokenRbtClassTwo();
+	rbt.root()->right->left->isBlack = false;
+	return rbt;
+}
+
+ExposedRedBlackTree<int, int> generateBrokenRbtClassFour() {
+	ExposedRedBlackTree<int, int> rbt;
+	rbt.insert(ft::make_pair(3, 0));
+	rbt.insert(ft::make_pair(4, 0));
+	rbt.insert(ft::make_pair(1, 0));
+	rbt.insert(ft::make_pair(2, 0));
+	rbt.insert(ft::make_pair(0, 0));
+	rbt.root()->left->right->isBlack = true;
+	rbt.root()->left->left->isBlack = true;
+	rbt.root()->right->right->isBlack = false;
+	return rbt;
 }
 
 #endif     // TEST_UTILS_H

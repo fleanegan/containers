@@ -181,7 +181,7 @@ namespace ft {
 
 			sibling->isBlack = true;
 			parent->isBlack = false;
-			if (troubleMaker == parent->left) {
+			if (sibling == parent->left) {
 				this->leftRotate(parent);
 				troubleMaker = sibling->right;
 			} else {

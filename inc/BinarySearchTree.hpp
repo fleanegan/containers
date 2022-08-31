@@ -177,34 +177,6 @@ namespace ft {
 			linkChildAndParent(pivot, &nodeToChangePlaceWith);
 		}
 
-		void linkChildAndParent(Node *newNode, Node **newParent) {
-			if (*newParent != &nullNode) {
-				if (newNode->key < (*newParent)->key)
-					(*newParent)->left = newNode;
-				else
-					(*newParent)->right = newNode;
-			}
-			else {
-				nullNode.right = newNode;
-				nullNode.left = newNode;
-				rootNode = newNode;
-			}
-			newNode->parent = *newParent;
-		}
-
-		Node *linkChildToGrandParent(Node *parent, Node *&grandParent) {
-			Node *leftover;
-
-			if (parent->left != &nullNode)
-				leftover = parent->right;
-			else if (parent->right != &nullNode)
-				leftover = parent->right;
-			else
-				return &nullNode;
-			linkChildAndParent(leftover, &grandParent);
-			return leftover;
-		}
-
 		Node *findInsertPlace(const Node *newNode) const {
 			Node *tmp = rootNode;
 
@@ -245,6 +217,34 @@ namespace ft {
 			}
 		}
 	protected:
+		void linkChildAndParent(Node *newNode, Node **newParent) {
+			if (*newParent != &nullNode) {
+				if (newNode->key < (*newParent)->key)
+					(*newParent)->left = newNode;
+				else
+					(*newParent)->right = newNode;
+			}
+			else {
+				nullNode.right = newNode;
+				nullNode.left = newNode;
+				rootNode = newNode;
+			}
+			newNode->parent = *newParent;
+		}
+
+		Node *linkChildToGrandParent(Node *parent, Node *&grandParent) {
+			Node *leftover;
+
+			if (parent->left != &nullNode)
+				leftover = parent->right;
+			else if (parent->right != &nullNode)
+				leftover = parent->right;
+			else
+				return &nullNode;
+			linkChildAndParent(leftover, &grandParent);
+			return leftover;
+		}
+
 		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
 								  Node *currentOptimum) {
 			Node *leftMinimum = &nullNode;
@@ -260,9 +260,16 @@ namespace ft {
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
 			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
-				return leftMinimum;
-			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key)
-				return rightMinimum;
+			{
+				if (leftMinimum->key < localRoot->key)
+					return leftMinimum;
+				return localRoot;
+			}
+			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key) {
+				if (rightMinimum->key < localRoot->key)
+					return rightMinimum;
+				return localRoot;
+			}
 			return currentOptimum;
 		}
 

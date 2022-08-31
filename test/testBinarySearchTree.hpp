@@ -141,17 +141,16 @@ TEST(BinarySearchTree, removingRoot){
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
 	bst.insert(ft::make_pair(1, 0));
-	bst.insert(ft::make_pair(3, 0));
-	bst.insert(ft::make_pair(2, 0));
 	bst.insert(ft::make_pair(4, 0));
+	bst.insert(ft::make_pair(0, 0));
+	bst.insert(ft::make_pair(2, 0));
+	bst.insert(ft::make_pair(3, 0));
 
-	bst.popNode(3);
+	bst.popNode(1);
 
+	ASSERT_EQ(2, bst.root()->key);
 	ASSERT_EQ(4, bst.root()->right->key);
-	ASSERT_EQ(2, bst.root()->right->left->key);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->right->right);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->right->left->right);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->right->left->left);
+	ASSERT_EQ(3, bst.root()->right->left->key);
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOnThirdLevel){

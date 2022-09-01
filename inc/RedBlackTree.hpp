@@ -251,7 +251,7 @@ namespace ft {
 			Node *parent = troubleMaker->parent;
 			Node *sibling;
 
-			while (troubleMaker != this->rootNode && troubleMaker->isBlack) {
+			while (troubleMaker != this->rootNode && troubleMaker->isBlack  && troubleMaker != &this->nullNode) {
 				sibling = getSibling(troubleMaker, parent);
 				if (sibling->isBlack == false)
 					troubleMaker = fixupDeletionCaseOne(parent, sibling);

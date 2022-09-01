@@ -70,6 +70,63 @@ namespace ft {
 			return newNode;
 		}
 
+		void popNodeByPointer(Node *nodeToBeRemoved) {
+			Node *successor;
+			Node *potentialColourTrouble;
+			bool isNodeToBeRemovedBlack = nodeToBeRemoved->isBlack;
+
+			if (nodeToBeRemoved == &this->nullNode)
+				return;
+			if (nodeToBeRemoved->right == &this->nullNode) {
+				potentialColourTrouble = nodeToBeRemoved->left;
+				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
+			} else if (nodeToBeRemoved->left == &this->nullNode) {
+				potentialColourTrouble = nodeToBeRemoved->right;
+				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
+			} else {
+				successor = this->getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
+				isNodeToBeRemovedBlack = successor->isBlack;
+				potentialColourTrouble = successor->right;
+				replaceNodeBySuccessor(nodeToBeRemoved, successor);
+				successor->isBlack = nodeToBeRemoved->isBlack;
+			}
+			this->deleteNodeWithCleanUp(nodeToBeRemoved);
+			if (isNodeToBeRemovedBlack) {
+				fixupDeletion(potentialColourTrouble);
+			}
+		}
+
+		bool isValid() {
+			ft::vector<int> blackNodeCountPerBranch;
+			countBranches(this->rootNode, 0, blackNodeCountPerBranch);
+			if (!this->rootNode->isBlack)
+				return false;
+			if (!isBlackCountSameInAllBranches(blackNodeCountPerBranch))
+				return false;
+			if (isContainingDoubleRed(this->rootNode))
+				return false;
+			return true;
+		}
+
+	protected:
+		virtual void fixupDeletion(Node *troubleMaker) {
+			Node *parent = troubleMaker->parent;
+			Node *sibling;
+
+			while (troubleMaker != this->rootNode && troubleMaker->isBlack  && troubleMaker != &this->nullNode) {
+				sibling = getSibling(troubleMaker, parent);
+				if (sibling->isBlack == false)
+					troubleMaker = fixupDeletionCaseOne(parent, sibling);
+				if (sibling->left->isBlack && sibling->right->isBlack)
+					troubleMaker = fixupDeletionCaseTwo(parent, sibling);
+				else if (isOuterChildBlack(sibling))
+					fixupDeletionCaseThree(parent, &sibling);
+				else
+					troubleMaker = fixupDeletionCaseFour(parent, sibling);
+			}
+			troubleMaker->isBlack = true;
+		}
+
 		void fixupInsertion(Node *currentNode, Node *parent, Node *grandParent) {
 			Node *uncle;
 
@@ -87,6 +144,7 @@ namespace ft {
 			this->rootNode->isBlack = true;
 		}
 
+	private:
 		Node *fixupRotate(Node *currentNode, Node *parent, Node *grandParent) {
 			if (parent == grandParent->right)
 				return fixupRotateRightBranch(currentNode, parent, grandParent);
@@ -131,54 +189,17 @@ namespace ft {
 			grandParent->isBlack = false;
 		}
 
-		void popNodeByPointer(Node *nodeToBeRemoved) {
-			Node *successor;
-			Node *potentialColourTrouble;
-			bool isNodeToBeRemovedBlack = nodeToBeRemoved->isBlack;
-
-			if (nodeToBeRemoved == &this->nullNode)
-				return;
-			if (nodeToBeRemoved->right == &this->nullNode) {
-				potentialColourTrouble = nodeToBeRemoved->left;
-				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			} else if (nodeToBeRemoved->left == &this->nullNode) {
-				potentialColourTrouble = nodeToBeRemoved->right;
-				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
-			} else {
-				successor = this->getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
-				isNodeToBeRemovedBlack = successor->isBlack;
-				potentialColourTrouble = successor->right;
-				if (successor->parent != nodeToBeRemoved) {
-					this->replaceNode(successor, successor->right);
-					successor->right = nodeToBeRemoved->right;
-					successor->right->parent = successor;
-				} else
-					potentialColourTrouble->parent = successor;
-				this->replaceNode(nodeToBeRemoved, successor);
-				successor->left = nodeToBeRemoved->left;
-				successor->left->parent = successor;
-				successor->isBlack = nodeToBeRemoved->isBlack;
-			}
-			this->deleteNodeWithCleanUp(nodeToBeRemoved);
-			if (isNodeToBeRemovedBlack) {
-				fixupDeletion(potentialColourTrouble);
-			}
+		void replaceNodeBySuccessor(Node *nodeToBeRemoved, Node *successor) {
+			if (successor->parent != nodeToBeRemoved) {
+				this->replaceNode(successor, successor->right);
+				successor->right = nodeToBeRemoved->right;
+				successor->right->parent = successor;
+			} else
+				successor->right->parent = successor;
+			this->replaceNode(nodeToBeRemoved, successor);
+			successor->left = nodeToBeRemoved->left;
+			successor->left->parent = successor;
 		}
-
-		bool isValid() {
-			ft::vector<int> blackNodeCountPerBranch;
-			countBranches(this->rootNode, 0, blackNodeCountPerBranch);
-			if (!this->rootNode->isBlack)
-				return false;
-			if (!isBlackCountSameInAllBranches(blackNodeCountPerBranch))
-				return false;
-			if (isContainingDoubleRed(this->rootNode))
-				return false;
-			return true;
-		}
-
-	private:
-	protected:
 		Node *fixupDeletionCaseOne(Node *parent, Node *sibling) {
 			Node *troubleMaker;
 
@@ -245,24 +266,6 @@ namespace ft {
 			else
 				sibling = parent->left;
 			return sibling;
-		}
-
-		virtual void fixupDeletion(Node *troubleMaker) {
-			Node *parent = troubleMaker->parent;
-			Node *sibling;
-
-			while (troubleMaker != this->rootNode && troubleMaker->isBlack  && troubleMaker != &this->nullNode) {
-				sibling = getSibling(troubleMaker, parent);
-				if (sibling->isBlack == false)
-					troubleMaker = fixupDeletionCaseOne(parent, sibling);
-				if (sibling->left->isBlack && sibling->right->isBlack)
-					troubleMaker = fixupDeletionCaseTwo(parent, sibling);
-				else if (isOuterChildBlack(sibling))
-					fixupDeletionCaseThree(parent, &sibling);
-				else
-					troubleMaker = fixupDeletionCaseFour(parent, sibling);
-			}
-			troubleMaker->isBlack = true;
 		}
 
 		void countBranches(Node *current, int sum, ft::vector<int> &result) {

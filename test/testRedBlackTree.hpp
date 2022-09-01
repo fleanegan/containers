@@ -81,20 +81,20 @@ TEST(RedBlackTree, removeRootWithOneChild) {
 }
 
 TEST(RedBlackTree, multipleInsertionsAlwaysCreateAValidTree){
-	ft::RedBlackTree<int, int> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
 
 	ASSERT_TRUE(rbt.isValid());
 }
 
 TEST(RedBlackTree, notTheSameBlackCountIsInvalidTree){
-	ft::RedBlackTree<int, int> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
 	rbt.root()->left->left->left->isBlack = true;
 
 	ASSERT_FALSE(rbt.isValid());
 }
 
 TEST(RedBlackTree, redRootIsIllegal){
-	ft::RedBlackTree<int, int> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
 	rbt.root()->isBlack = false;
 
 	ASSERT_FALSE(rbt.isValid());
@@ -114,7 +114,7 @@ TEST(RedBlackTree, doubleRedIsIllegal){
 }
 
 TEST(RedBlackTree, variousDeletionsTreeStillValid){
-	ft::RedBlackTree<int, int> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
 	ASSERT_TRUE(rbt.isValid());
 
 	rbt.popNodeByPointer(rbt.root()->right->right);

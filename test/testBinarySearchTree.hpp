@@ -266,5 +266,14 @@ TEST(BinarySearchTree, nullNodePointsToRoot){
 	ASSERT_EQ(bst.root(), bst.getNullNode()->left);
 }
 
+TEST(BinarySearchTree, copyConstructor){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insertByValue(ft::make_pair(1, 0));
+	bst.insertByValue(ft::make_pair(2, 0));
+
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> reproduction(bst);
+
+	ASSERT_EQ(1, reproduction.root()->key);
+}
 
 // test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode

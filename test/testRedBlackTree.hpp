@@ -127,8 +127,27 @@ TEST(RedBlackTree, variousDeletionsTreeStillValid){
 		rbt.popNodeByPointer(rbt.root());
 		ASSERT_TRUE(rbt.isValid());
 	}
-
 }
 
+TEST(RedBlackTree, assign){
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	rbt.insertByValue(ft::make_pair(1, 0));
+	rbt.insertByValue(ft::make_pair(2, 0));
+	ft::RedBlackTree<simpleDummy, simpleDummy> reproduction;
+
+	reproduction = rbt;
+
+	ASSERT_EQ(1, *reproduction.root()->key);
+}
+
+TEST(RedBlackTree, copyConstructor){
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	rbt.insertByValue(ft::make_pair(1, 0));
+	rbt.insertByValue(ft::make_pair(2, 0));
+
+	ft::RedBlackTree<simpleDummy, simpleDummy> reproduction(rbt);
+
+	ASSERT_EQ(1, *reproduction.root()->key);
+}
 
 // removingRootWithOneChildKeepsNewRootBlack

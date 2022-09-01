@@ -43,6 +43,10 @@ namespace ft {
 
 		}
 
+		BinarySearchTree(const BinarySearchTree &rhs) : nullNode(), rootNode(&nullNode) {
+			*this = rhs;
+		}
+
 		BinarySearchTree &operator=(const BinarySearchTree &rhs) {
 			Node *tmp = rhs.rootNode;
 			if (rhs.rootNode == this->rootNode)

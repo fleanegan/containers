@@ -56,6 +56,17 @@ namespace ft {
 			this->nullNode.isBlack = true;
 		}
 
+		RedBlackTree(const RedBlackTree<TKey, TValue> &rhs) : BinarySearchTree<TKey, TValue, ft::RedBlackNode>() {
+			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
+			this->nullNode.isBlack = true;
+		}
+
+		RedBlackTree<TKey,TValue>&
+		operator=(const RedBlackTree<TKey,TValue>& rhs) {
+			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
+			return *this;
+		}
+
 		Node *insertByValue(ft::pair<TKey, TValue> const &in) {
 			return insert(in);
 		}

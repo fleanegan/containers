@@ -81,18 +81,17 @@ namespace ft {
 					fixupColourChange(parent, grandParent, uncle);
 					currentNode = grandParent;
 				} else {
-					fixupRotate(currentNode, parent, grandParent);
-					currentNode = parent;
+					currentNode = fixupRotate(currentNode, parent, grandParent);
 				}
 			}
 			this->rootNode->isBlack = true;
 		}
 
-		void fixupRotate(const Node *currentNode, Node *parent, Node *grandParent) {
+		Node *fixupRotate(Node *currentNode, Node *parent, Node *grandParent) {
 			if (parent == grandParent->right)
-				fixupRotateRightBranch(currentNode, parent, grandParent);
+				return fixupRotateRightBranch(currentNode, parent, grandParent);
 			else
-				fixupRotateLeftBranch(currentNode, parent, grandParent);
+				return fixupRotateLeftBranch(currentNode, parent, grandParent);
 		}
 
 		Node *getUncle(Node *grandParent, Node *parent) const {
@@ -101,20 +100,24 @@ namespace ft {
 			return grandParent->right;
 		}
 
-		void fixupRotateRightBranch(const Node *currentNode, Node *parent, Node *grandParent) {
+		Node *fixupRotateRightBranch(Node *currentNode, Node *parent, Node *grandParent) {
 			if (currentNode == parent->right) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->leftRotate(grandParent);
-			} else
-				this->rightRotate(parent);
+				return grandParent;
+			}
+			this->rightRotate(parent);
+			return parent;
 		}
 
-		void fixupRotateLeftBranch(const Node *currentNode, Node *parent, Node *grandParent) {
+		Node *fixupRotateLeftBranch(Node *currentNode, Node *parent, Node *grandParent) {
 			if (currentNode == parent->left) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->rightRotate(grandParent);
-			} else
-				this->leftRotate(parent);
+				return grandParent;
+			}
+			this->leftRotate(parent);
+			return parent;
 		}
 
 		void fixupInnerRotationReColour(Node *parent, Node *grandParent) {

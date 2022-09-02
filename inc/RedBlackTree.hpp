@@ -47,22 +47,33 @@ namespace ft {
 		}
 	};
 
-	template<typename TKey, typename TValue>
-	class RedBlackTree : public BinarySearchTree<TKey, TValue, RedBlackNode> {
+	template<typename TKey, typename TValue, template<typename, typename> class NodeType = ft::RedBlackNode, typename Allocator = std::allocator<NodeType<TKey, TValue> > >
+	class RedBlackTree : public BinarySearchTree<TKey, TValue, ft::RedBlackNode> {
 	public:
+		typedef TKey key_type;
+		typedef TValue mapped_type;
+		typedef ft::pair<const TKey, TValue> value_type;
+//		typedef Compare key_compare;
+		typedef Allocator allocator_type;
+//		typedef typename Allocator::reference reference;
+//		typedef typename Allocator::const_reference const_reference;
 		typedef RedBlackNode<TKey, TValue> Node;
 
-		RedBlackTree() : BinarySearchTree<TKey, TValue, ft::RedBlackNode>() {
+	public:
+
+		RedBlackTree(const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode, allocator_type>(alloc) {
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree(const RedBlackTree<TKey, TValue> &rhs) : BinarySearchTree<TKey, TValue, ft::RedBlackNode>() {
+		RedBlackTree(const RedBlackTree<TKey, TValue> &rhs, const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode, allocator_type>(alloc) {
 			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree<TKey,TValue>&
-		operator=(const RedBlackTree<TKey,TValue>& rhs) {
+		RedBlackTree<TKey, TValue> &
+		operator=(const RedBlackTree<TKey, TValue> &rhs) {
 			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
 			return *this;
 		}
@@ -124,7 +135,7 @@ namespace ft {
 			Node *parent = troubleMaker->parent;
 			Node *sibling;
 
-			while (troubleMaker != this->rootNode && troubleMaker->isBlack  && troubleMaker != &this->nullNode) {
+			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker != &this->nullNode) {
 				sibling = getSibling(troubleMaker, parent);
 				if (sibling->isBlack == false)
 					troubleMaker = fixupDeletionCaseOne(parent, sibling);
@@ -211,6 +222,7 @@ namespace ft {
 			successor->left = nodeToBeRemoved->left;
 			successor->left->parent = successor;
 		}
+
 		Node *fixupDeletionCaseOne(Node *parent, Node *sibling) {
 			Node *troubleMaker;
 
@@ -261,7 +273,7 @@ namespace ft {
 			if (sibling == parent->right) {
 				sibling->right->isBlack = true;
 				this->leftRotate(parent);
-			} else{
+			} else {
 				sibling->left->isBlack = true;
 				this->rightRotate(parent);
 			}

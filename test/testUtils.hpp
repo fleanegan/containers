@@ -8,6 +8,7 @@
 #include "../inc/Stack.hpp"
 #include "../inc/Utils.hpp"
 #include "../inc/Pair.hpp"
+#include "../inc/Map.hpp"
 #include "../inc/BinarySearchTree.hpp"
 #include "../inc/RedBlackTree.hpp"
 #include <iostream>
@@ -217,21 +218,21 @@ struct ExposedRedBlackTree : public ft::RedBlackTree<TKey, TValue>{
 };
 
 
-ft::RedBlackTree<int, int> generateBigRbt(){
-	ft::RedBlackTree<int, int> rbt;
-	rbt.insertByValue(ft::make_pair(1, 0));
-	rbt.insertByValue(ft::make_pair(2, 0));
-	rbt.insertByValue(ft::make_pair(3, 0));
-	rbt.insertByValue(ft::make_pair(6, 0));
-	rbt.insertByValue(ft::make_pair(0, 0));
-	rbt.insertByValue(ft::make_pair(10, 0));
-	rbt.insertByValue(ft::make_pair(11, 0));
-	rbt.insertByValue(ft::make_pair(9, 0));
-	rbt.insertByValue(ft::make_pair(13, 0));
-	rbt.insertByValue(ft::make_pair(7, 0));
-	rbt.insertByValue(ft::make_pair(12, 0));
-	rbt.insertByValue(ft::make_pair(14, 0));
-	rbt.insertByValue(ft::make_pair(19, 0));
+ft::RedBlackTree<simpleDummy, simpleDummy> generateBigRbt(){
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	rbt.insertByValue(ft::make_pair(simpleDummy(1), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(2), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(3), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(6), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(0), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(10), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(11), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(9), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(13), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(7), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(12), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(14), simpleDummy(0)));
+	rbt.insertByValue(ft::make_pair(simpleDummy(19), simpleDummy(0)));
 	return rbt;
 }
 

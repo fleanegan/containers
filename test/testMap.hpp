@@ -1,8 +1,12 @@
-//
-// Created by fleanegan on 30.08.22.
-//
+#include "testUtils.hpp"
 
-#ifndef CONTAINERS_TESTMAP_HPP
-#define CONTAINERS_TESTMAP_HPP
+TEST(Map, insertingElementWithKeyAlreadyPresent){
+	ft::map<int, int> map;
 
-#endif //CONTAINERS_TESTMAP_HPP
+	map.insert(ft::make_pair(1, 0));
+
+	ASSERT_EQ(1, map.size());
+}
+
+//insertingElementWithKeyAlreadyPresentHasSizeOne
+//returnValueStatesFalseSinceKeyAlreadyPresent

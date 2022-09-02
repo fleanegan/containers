@@ -29,17 +29,6 @@ TEST(BinarySearchTree, insertingANodeOnAnEmptyTreeSetsItAsRoot){
 	ASSERT_EQ(2, result->value);
 }
 
-TEST(BinarySearchTree, insertingSameKeysTwiceSetsNewNodeToRight){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
-	bst.insert(ft::make_pair(1, 0));
-
-	bst.insert(ft::make_pair(1, 0));
-
-	ASSERT_NE(nullptr, bst.root()->right);
-	ASSERT_EQ(1, bst.root()->right->key);
-	ASSERT_EQ(0, bst.root()->right->value);
-}
-
 TEST(BinarySearchTree, insertingNodeWithSmallerKeyAddsToLeft){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
 	bst.insert(ft::make_pair(1, 0));
@@ -274,6 +263,54 @@ TEST(BinarySearchTree, copyConstructor){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> reproduction(bst);
 
 	ASSERT_EQ(1, reproduction.root()->key);
+	//todo: add size == newSize
 }
 
-// test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode
+TEST(BinarySearchTree, noItemsSizeIsZero){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode>::size_type size = bst.size();
+
+	ASSERT_EQ(0, size);
+}
+
+TEST(BinarySearchTree, addingIncrementsSize){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode>::size_type size = bst.size();
+
+	ASSERT_EQ(1, size);
+}
+
+TEST(BinarySearchTree, assigningTakesSize){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> copy;
+	copy = bst;
+	copy.insert(ft::make_pair(2, 2));
+
+	ASSERT_NE(bst.size(), copy.size());
+	ASSERT_EQ(2, copy.size());
+}
+
+TEST(BinarySearchTree, addingAlreadyExistingDoesNotIncrementsSize){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	bst.insert(ft::make_pair(1, 2));
+
+	ASSERT_EQ(1, bst.size());
+}
+
+TEST(BinarySearchTree, poppingNodeDecrementsSize){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	bst.popNode(1);
+
+	ASSERT_EQ(0, bst.size());
+}
+
+ //test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode

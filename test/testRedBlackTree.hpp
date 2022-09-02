@@ -150,4 +150,20 @@ TEST(RedBlackTree, copyConstructor){
 	ASSERT_EQ(1, *reproduction.root()->key);
 }
 
+TEST(RedBlackTree, sizeBehavesLikeInParent){
+	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+
+	rbt.insertByValue(ft::make_pair(1, 0));
+	rbt.insertByValue(ft::make_pair(2, 0));
+	ASSERT_EQ(2, rbt.size());
+
+	rbt.popNodeByPointer(rbt.root());
+	ASSERT_EQ(1, rbt.size());
+
+	rbt.popNodeByPointer(rbt.root());
+	rbt.popNodeByPointer(rbt.root());
+	rbt.popNodeByPointer(rbt.root());
+	ASSERT_EQ(0, rbt.size());
+}
+
 // removingRootWithOneChildKeepsNewRootBlack

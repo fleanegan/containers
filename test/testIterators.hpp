@@ -122,13 +122,13 @@ TEST(ftDistance, useRandomAccessIterator){
 	ASSERT_EQ(5, result);
 }
 
-TEST(ftDistance, useInputIterator){
-	ft::vector<simpleDummy> vec = createTestDummyVector();
-
-	ft::ptrdiff_t result = std::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
-
-	ASSERT_EQ(5, result);
-}
+//TEST(ftDistance, useInputIterator){
+//	ft::vector<simpleDummy> vec = createTestDummyVector();
+//
+//	ft::ptrdiff_t result = std::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
+//
+//	ASSERT_EQ(5, result);
+//}
 
 template<typename T, typename U>
 void foo(T it, U ite){

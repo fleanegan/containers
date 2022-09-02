@@ -13,44 +13,62 @@ namespace ft {
 		SearchTreeStandardNode *left;
 		SearchTreeStandardNode *parent;
 
-		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
+		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode)
+				: key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
 		}
 
-		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(in.first), value(in.second), right(nullNode), left(nullNode),
+		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(
+				in.first), value(in.second), right(nullNode), left(nullNode),
 																												   parent(nullNode) {
 		}
 
-		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value), right(nullNode), left(nullNode),
-																																  parent(nullNode) {
+		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs,
+							   SearchTreeStandardNode<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value),
+																				 right(nullNode), left(nullNode),
+																				 parent(nullNode) {
 		}
 
-		SearchTreeStandardNode() : left(NULL), right(NULL), parent(NULL){
+		SearchTreeStandardNode() : left(NULL), right(NULL), parent(NULL) {
 		}
 
-		virtual ~SearchTreeStandardNode(){
+		virtual ~SearchTreeStandardNode() {
 
 		}
 	};
 
-	template<typename TKey, typename TValue, template<typename, typename> class NodeType>
+	template<typename TKey, typename TValue, template<typename, typename> class NodeType, class Allocator = std::allocator<NodeType<TKey, TValue> > >
 	class BinarySearchTree {
+	public:
+		typedef Allocator allocator_type;
+		typedef size_t size_type;
+
 	protected:
 		typedef NodeType<TKey, TValue> Node;
 		Node nullNode;
 		Node *rootNode;
+	private:
+		allocator_type _allocator;
+		size_type current_size;
 	public:
-		BinarySearchTree() : nullNode(), rootNode(&nullNode) {
+		BinarySearchTree(const allocator_type &alloc = allocator_type()) :
+				nullNode(),
+				rootNode(&nullNode),
+				_allocator(alloc),
+				current_size(0) {
 
 		}
 
-		BinarySearchTree(const BinarySearchTree &rhs) : nullNode(), rootNode(&nullNode) {
+		BinarySearchTree(const BinarySearchTree &rhs) :
+				nullNode(),
+				rootNode(&nullNode),
+				_allocator(rhs._allocator) {
 			*this = rhs;
 		}
 
 		BinarySearchTree &operator=(const BinarySearchTree &rhs) {
-			Node *tmp = rhs.rootNode;
 			if (rhs.rootNode == this->rootNode)
 				return *this;
+			current_size = rhs.current_size;
 			copySubTree(rhs.rootNode, &rhs.nullNode, &rootNode);
 			return *this;
 		}
@@ -87,19 +105,14 @@ namespace ft {
 		}
 
 		Node *insert(ft::pair<TKey, TValue> const &in) {
-			Node *newNode = new Node(in, &nullNode);
-			Node *newParent;
+			Node *newParent = &nullNode;
 
-			if (rootNode == &nullNode){
-				rootNode = newNode;
-				nullNode.right = newNode;
-				nullNode.left = newNode;
+			if (rootNode != &nullNode) {
+				newParent = findInsertPlace(&in.first);
+				if (newParent->key == in.first)
+					return newParent;
 			}
-			else {
-				newParent = findInsertPlace(newNode);
-				linkChildAndParent(newNode, &newParent);
-			}
-			return newNode;
+			return pairToChildOf(in, newParent);
 		}
 
 		Node *root() {
@@ -112,36 +125,36 @@ namespace ft {
 		}
 
 		virtual void popNodeByPointer(Node *nodeToBeRemoved) {
-			Node *successor;
-
 			if (nodeToBeRemoved == &nullNode)
 				return;
 			if (nodeToBeRemoved->right == &nullNode)
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			else if (nodeToBeRemoved->left == &nullNode) {
+			else if (nodeToBeRemoved->left == &nullNode)
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
-			}
-			else {
-				successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
-				if (successor->parent != nodeToBeRemoved){
-					replaceNode(successor, successor->right);
-					successor->right = nodeToBeRemoved->right;
-					successor->right->parent = successor;
-				}
-				replaceNode(nodeToBeRemoved, successor);
-				successor->left = nodeToBeRemoved->left;
-				successor->left->parent = successor;
-			}
+			else
+				substituteNodeWithSuccessor(nodeToBeRemoved);
 			deleteNodeWithCleanUp(nodeToBeRemoved);
 		}
 
+		void substituteNodeWithSuccessor(Node *nodeToBeRemoved) {
+			Node *successor;
+
+			successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
+			if (successor->parent != nodeToBeRemoved) {
+				replaceNode(successor, successor->right);
+				successor->right = nodeToBeRemoved->right;
+				successor->right->parent = successor;
+			}
+			replaceNode(nodeToBeRemoved, successor);
+			successor->left = nodeToBeRemoved->left;
+			successor->left->parent = successor;
+		}
+
 		void replaceNode(Node *nodeToBeReplaced, Node *replacer) {
-			if (nodeToBeReplaced->parent == &nullNode)
-			{
+			if (nodeToBeReplaced->parent == &nullNode) {
 				rootNode = &nullNode;
 				linkChildAndParent(replacer, &rootNode);
-			}
-			else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
+			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
 				nodeToBeReplaced->parent->left = replacer;
 			else
 				nodeToBeReplaced->parent->right = replacer;
@@ -150,7 +163,7 @@ namespace ft {
 
 		void leftRotate(Node *pivot) {
 			if (pivot->right == &nullNode)
-				return ;
+				return;
 			Node *nodeToChangePlaceWith = pivot->right;
 
 			pivot->right = nodeToChangePlaceWith->left;
@@ -160,7 +173,7 @@ namespace ft {
 
 		void rightRotate(Node *pivot) {
 			if (pivot->left == &nullNode)
-				return ;
+				return;
 			Node *nodeToChangePlaceWith = pivot->left;
 
 			pivot->left = nodeToChangePlaceWith->right;
@@ -168,10 +181,11 @@ namespace ft {
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
+		size_type size() {
+			return current_size;
+		}
+
 	private:
-
-
-
 		void updateNodesForRotation(Node *pivot, Node *nodeToChangePlaceWith) {
 			Node *parent = pivot->parent;
 
@@ -181,11 +195,11 @@ namespace ft {
 			linkChildAndParent(pivot, &nodeToChangePlaceWith);
 		}
 
-		Node *findInsertPlace(const Node *newNode) const {
+		Node *findInsertPlace(const TKey *keyOfNewNode) const {
 			Node *tmp = rootNode;
 
 			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
-				if (newNode->key < tmp->key) {
+				if (*keyOfNewNode < tmp->key) {
 					if (tmp->left == &nullNode)
 						return tmp;
 					tmp = tmp->left;
@@ -210,25 +224,64 @@ namespace ft {
 			Node *newNode;
 
 			if (source != sourceNullNode) {
-				newNode = new Node(*source, &nullNode);
-				if (*dest == &nullNode)
-					*dest = newNode;
+				newNode = _allocator.allocate(1);
+				_allocator.construct(newNode, *source, &nullNode);
 				linkChildAndParent(newNode, dest);
-				if (source->right != &nullNode)
+				if (source->right != sourceNullNode)
 					copySubTree(source->right, sourceNullNode, &newNode);
-				if (source->left != &nullNode)
+				if (source->left != sourceNullNode)
 					copySubTree(source->left, sourceNullNode, &newNode);
 			}
 		}
+
 	protected:
+		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
+								  Node *currentOptimum) {
+			Node *leftMinimum = &nullNode;
+			Node *rightMinimum = &nullNode;
+
+			if (localRoot == &nullNode)
+				return &nullNode;
+			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
+				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
+					return localRoot;
+				return currentOptimum;
+			}
+			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
+			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
+			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key &&
+				leftMinimum->key < currentOptimum->key) {
+				if (leftMinimum->key < localRoot->key)
+					return leftMinimum;
+				return localRoot;
+			}
+			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key &&
+				rightMinimum->key < currentOptimum->key) {
+				if (rightMinimum->key < localRoot->key)
+					return rightMinimum;
+				return localRoot;
+			}
+			return currentOptimum;
+		}
+
+		void deleteNodeWithCleanUp(const Node *nodeToBeRemoved) {
+			if (nodeToBeRemoved == rootNode) {
+				rootNode = &nullNode;
+				nullNode.right = &nullNode;
+				nullNode.left = &nullNode;
+			}
+			--current_size;
+			delete nodeToBeRemoved;
+		}
+
+	private:
 		void linkChildAndParent(Node *newNode, Node **newParent) {
 			if (*newParent != &nullNode) {
 				if (newNode->key < (*newParent)->key)
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;
-			}
-			else {
+			} else {
 				nullNode.right = newNode;
 				nullNode.left = newNode;
 				rootNode = newNode;
@@ -249,41 +302,15 @@ namespace ft {
 			return leftover;
 		}
 
-		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
-								  Node *currentOptimum) {
-			Node *leftMinimum = &nullNode;
-			Node *rightMinimum = &nullNode;
 
-			if (localRoot == &nullNode)
-				return &nullNode;
-			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
-				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
-					return localRoot;
-				return currentOptimum;
-			}
-			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
-			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key && leftMinimum->key < currentOptimum->key)
-			{
-				if (leftMinimum->key < localRoot->key)
-					return leftMinimum;
-				return localRoot;
-			}
-			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key && rightMinimum->key < currentOptimum->key) {
-				if (rightMinimum->key < localRoot->key)
-					return rightMinimum;
-				return localRoot;
-			}
-			return currentOptimum;
-		}
 
-		void deleteNodeWithCleanUp(const Node *nodeToBeRemoved) {
-			if (nodeToBeRemoved == rootNode) {
-				rootNode = &nullNode;
-				nullNode.right = &nullNode;
-				nullNode.left = &nullNode;
-			}
-			delete nodeToBeRemoved;
+		Node *pairToChildOf(const pair <TKey, TValue> &in, Node *&newParent) {
+			Node *newNode;
+			newNode = _allocator.allocate(1);
+			_allocator.construct(newNode, in, &nullNode);
+			linkChildAndParent(newNode, &newParent);
+			++current_size;
+			return newNode;
 		}
 	};
 }

@@ -25,9 +25,9 @@ TEST(RedBlackTree, threeConsecutivelyBiggerNodesCauseLeftRotation) {
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 
-	ASSERT_EQ(1, *rbt.root()->key);
-	ASSERT_EQ(0, *rbt.root()->left->key);
-	ASSERT_EQ(2, *rbt.root()->right->key);
+	ASSERT_EQ(1, *rbt.root()->content.first);
+	ASSERT_EQ(0, *rbt.root()->left->content.first);
+	ASSERT_EQ(2, *rbt.root()->right->content.first);
 }
 
 TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
@@ -36,9 +36,9 @@ TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 
-	ASSERT_EQ(1, *rbt.root()->key);
-	ASSERT_EQ(0, *rbt.root()->left->key);
-	ASSERT_EQ(2, *rbt.root()->right->key);
+	ASSERT_EQ(1, *rbt.root()->content.first);
+	ASSERT_EQ(0, *rbt.root()->left->content.first);
+	ASSERT_EQ(2, *rbt.root()->right->content.first);
 }
 
 TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
@@ -60,14 +60,14 @@ TEST(RedBlackTree, insertColourChangeIfUncleHasNotTheSame) {
 	rbt.insert(ft::make_pair(simpleDummy(24), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(26), simpleDummy(0)));
 
-	ASSERT_EQ(9, *rbt.root()->key);
-	ASSERT_EQ(5, *rbt.root()->left->key);
+	ASSERT_EQ(9, *rbt.root()->content.first);
+	ASSERT_EQ(5, *rbt.root()->left->content.first);
 	ASSERT_TRUE(rbt.root()->left->isBlack);
-	ASSERT_EQ(24, *rbt.root()->right->key);
+	ASSERT_EQ(24, *rbt.root()->right->content.first);
 	ASSERT_FALSE(rbt.root()->right->isBlack);
-	ASSERT_EQ(25, *rbt.root()->right->right->key);
+	ASSERT_EQ(25, *rbt.root()->right->right->content.first);
 	ASSERT_FALSE(rbt.root()->right->right->right->isBlack);
-	ASSERT_EQ(11, *rbt.root()->right->left->key);
+	ASSERT_EQ(11, *rbt.root()->right->left->content.first);
 }
 
 TEST(RedBlackTree, removeRootWithOneChild) {
@@ -77,7 +77,7 @@ TEST(RedBlackTree, removeRootWithOneChild) {
 
 	rbt.popNodeByPointer(rbt.root());
 
-	ASSERT_EQ(9, *rbt.root()->key);
+	ASSERT_EQ(9, *rbt.root()->content.first);
 }
 
 TEST(RedBlackTree, multipleInsertionsAlwaysCreateAValidTree){
@@ -137,7 +137,7 @@ TEST(RedBlackTree, assign){
 
 	reproduction = rbt;
 
-	ASSERT_EQ(1, *reproduction.root()->key);
+	ASSERT_EQ(1, *reproduction.root()->content.first);
 }
 
 TEST(RedBlackTree, copyConstructor){
@@ -147,7 +147,7 @@ TEST(RedBlackTree, copyConstructor){
 
 	ft::RedBlackTree<simpleDummy, simpleDummy> reproduction(rbt);
 
-	ASSERT_EQ(1, *reproduction.root()->key);
+	ASSERT_EQ(1, *reproduction.root()->content.first);
 }
 
 TEST(RedBlackTree, sizeBehavesLikeInParent){

@@ -6,6 +6,7 @@
 #define CONTAINERS_MAP_HPP
 
 #include "RedBlackTree.hpp"
+#include "MapIterator.hpp"
 
 namespace ft {
 	template<class Key, class T, class Compare = std::less<Key>,
@@ -25,7 +26,7 @@ namespace ft {
 		typedef ft::RedBlackTree<key_type, mapped_type, ft::RedBlackNode, rb_allocator_type> RbTree;
 
 	public:
-		//typedef iterator;
+		typedef MapIterator<key_type, mapped_type, ft::RedBlackNode<key_type, mapped_type> > iterator;
 		//typedef const_iterator;
 		typedef typename RbTree::size_type size_type;
 		//typedef difference_type;
@@ -54,6 +55,14 @@ namespace ft {
 					 const allocator_type & alloc = allocator_type())
 					 : rbTree(RbTree(rb_allocator_type(alloc))){
 
+		}
+
+//		const_iterator begin() const {
+//			return const_iterator(_arr);
+//		}
+
+		iterator begin() {
+			return iterator(rbTree.getLowest());
 		}
 
 		void insert(const value_type &in){

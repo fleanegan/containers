@@ -9,6 +9,7 @@
 #include "../inc/Utils.hpp"
 #include "../inc/Pair.hpp"
 #include "../inc/Map.hpp"
+#include "../inc/MapIterator.hpp"
 #include "../inc/BinarySearchTree.hpp"
 #include "../inc/RedBlackTree.hpp"
 #include <iostream>
@@ -76,6 +77,10 @@ struct simpleDummy {
 	}
 
 	int &operator*() {
+		return *i;
+	}
+
+	int &operator*() const {
 		return *i;
 	}
 

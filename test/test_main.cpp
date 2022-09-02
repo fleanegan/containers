@@ -9,6 +9,7 @@
 #include "testBinarySearchTree.hpp"
 #include "testRedBlackTree.hpp"
 #include "testMap.hpp"
+#include "testMapIterator.hpp"
 
 GTEST_API_ int main(int argc, char **argv) {
 	std::cout << "Running main() from " << __FILE__ << std::endl;

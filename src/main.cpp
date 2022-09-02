@@ -12,6 +12,7 @@
 #include "Pair.hpp"
 #include "BinarySearchTree.hpp"
 #include "Map.hpp"
+#include "MapIterator.hpp"
 
 //#define TESTED_TYPE int
 //#ifndef TESTED_NAMESPACE

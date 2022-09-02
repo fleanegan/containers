@@ -23,11 +23,11 @@ namespace ft {
 	public:
 		VectorIterator() : _ptr() {}
 
-		VectorIterator(pointer ptr) : _ptr(ptr) {
+		VectorIterator(const pointer ptr) : _ptr(ptr) {
 		}
 
 		template<class U>
-		VectorIterator(VectorIterator<U> it) : _ptr(it.current()) {
+		VectorIterator(const VectorIterator<U> it) : _ptr(it.current()) {
 		}
 
 		VectorIterator(const VectorIterator &rhs) : _ptr(rhs._ptr) {}

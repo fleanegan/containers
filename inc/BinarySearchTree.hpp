@@ -7,24 +7,26 @@ namespace ft {
 
 	template<typename TKey, typename TValue>
 	struct SearchTreeStandardNode {
-		TKey key;
-		TValue value;
+		ft::pair<const TKey, TValue> content;
 		SearchTreeStandardNode *right;
 		SearchTreeStandardNode *left;
 		SearchTreeStandardNode *parent;
 
-		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode)
-				: key(key), value(value), right(nullNode), left(nullNode), parent(nullNode) {
+		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode) :content(key, value),
+																													right(nullNode),
+																													left(nullNode),
+																													parent(nullNode) {
 		}
 
-		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : key(
-				in.first), value(in.second), right(nullNode), left(nullNode),
-																												   parent(nullNode) {
+		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : content(in),
+																													right(nullNode),
+																													left(nullNode),
+																													parent(nullNode) {
 		}
 
-		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs,
-							   SearchTreeStandardNode<TKey, TValue> *nullNode) : key(rhs.key), value(rhs.value),
-																				 right(nullNode), left(nullNode),
+		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs, SearchTreeStandardNode<TKey, TValue> *nullNode) : content(rhs.content),
+																				 right(nullNode),
+																				 left(nullNode),
 																				 parent(nullNode) {
 		}
 
@@ -81,9 +83,9 @@ namespace ft {
 			Node *tmp = rootNode;
 
 			while (tmp != &nullNode) {
-				if (tmp->key == i)
+				if (tmp->content.first == i)
 					return (tmp);
-				if (tmp->key > i) {
+				if (tmp->content.first > i) {
 					if (tmp->left == &nullNode)
 						return &nullNode;
 					tmp = tmp->left;
@@ -109,13 +111,17 @@ namespace ft {
 
 			if (rootNode != &nullNode) {
 				newParent = findInsertPlace(&in.first);
-				if (newParent->key == in.first)
+				if (newParent->content.first == in.first)
 					return newParent;
 			}
 			return pairToChildOf(in, newParent);
 		}
 
 		Node *root() {
+			return rootNode;
+		}
+
+		Node *root() const {
 			return rootNode;
 		}
 
@@ -185,6 +191,15 @@ namespace ft {
 			return current_size;
 		}
 
+		Node* getLowest() {
+			Node *tmp = rootNode;
+
+			while (tmp->left != &nullNode)
+				tmp = tmp->left;
+			return tmp;
+		}
+
+
 	private:
 		void updateNodesForRotation(Node *pivot, Node *nodeToChangePlaceWith) {
 			Node *parent = pivot->parent;
@@ -199,7 +214,7 @@ namespace ft {
 			Node *tmp = rootNode;
 
 			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
-				if (*keyOfNewNode < tmp->key) {
+				if (*keyOfNewNode < tmp->content.first) {
 					if (tmp->left == &nullNode)
 						return tmp;
 					tmp = tmp->left;
@@ -243,21 +258,21 @@ namespace ft {
 			if (localRoot == &nullNode)
 				return &nullNode;
 			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
-				if (localRoot->key < currentOptimum->key && localRoot->key > biggerThan->key)
+				if (localRoot->content.first < currentOptimum->content.first && localRoot->content.first > biggerThan->content.first)
 					return localRoot;
 				return currentOptimum;
 			}
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != &nullNode && leftMinimum->key > biggerThan->key &&
-				leftMinimum->key < currentOptimum->key) {
-				if (leftMinimum->key < localRoot->key)
+			if (leftMinimum != &nullNode && leftMinimum->content.first > biggerThan->content.first &&
+				leftMinimum->content.first < currentOptimum->content.first) {
+				if (leftMinimum->content.first < localRoot->content.first)
 					return leftMinimum;
 				return localRoot;
 			}
-			if (rightMinimum != &nullNode && rightMinimum->key > biggerThan->key &&
-				rightMinimum->key < currentOptimum->key) {
-				if (rightMinimum->key < localRoot->key)
+			if (rightMinimum != &nullNode && rightMinimum->content.first > biggerThan->content.first &&
+				rightMinimum->content.first < currentOptimum->content.first) {
+				if (rightMinimum->content.first < localRoot->content.first)
 					return rightMinimum;
 				return localRoot;
 			}
@@ -277,7 +292,7 @@ namespace ft {
 	private:
 		void linkChildAndParent(Node *newNode, Node **newParent) {
 			if (*newParent != &nullNode) {
-				if (newNode->key < (*newParent)->key)
+				if (newNode->content.first < (*newParent)->content.first)
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;

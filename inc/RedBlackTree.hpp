@@ -8,36 +8,40 @@ namespace ft {
 
 	template<typename TKey, typename TValue>
 	struct RedBlackNode {
-		TKey key;
-		TValue value;
+		ft::pair<const TKey, TValue> content;
 		RedBlackNode *right;
 		RedBlackNode *left;
 		RedBlackNode *parent;
 		bool isBlack;
 
-		RedBlackNode(const TKey &key, const TValue &value, RedBlackNode<TKey, TValue> *nullNode) : key(key),
-																								   value(value),
+		RedBlackNode(const TKey &key, const TValue &value, RedBlackNode<TKey, TValue> *nullNode) : content(key, value),
 																								   right(nullNode),
 																								   left(nullNode),
 																								   parent(nullNode),
 																								   isBlack(false) {
 		}
 
-		RedBlackNode(const ft::pair<TKey, TValue> &in, RedBlackNode<TKey, TValue> *nullNode) : key(in.first),
-																							   value(in.second),
+		RedBlackNode(const ft::pair<TKey, TValue> &in, RedBlackNode<TKey, TValue> *nullNode) : content(in),
 																							   right(nullNode),
 																							   left(nullNode),
 																							   parent(nullNode),
 																							   isBlack(false) {
 		}
 
-		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs, RedBlackNode<TKey, TValue> *nullNode) : key(rhs.key),
-																									value(rhs.value),
+		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs, RedBlackNode<TKey, TValue> *nullNode) : content(rhs.content),
 																									right(nullNode),
 																									left(nullNode),
 																									parent(nullNode),
 																									isBlack(false) {
 		}
+
+		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs) :	content(rhs.content),
+																right(rhs.right),
+																left(rhs.left),
+																parent(rhs.parent),
+																isBlack(rhs.isBlack) {
+		}
+
 
 		RedBlackNode() : left(NULL), right(NULL), parent(NULL), isBlack(false) {
 		}

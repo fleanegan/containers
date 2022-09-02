@@ -314,9 +314,17 @@ TEST(BinarySearchTree, poppingNodeDecrementsSize){
 TEST(BinarySearchTree, getLowestItem){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.getLowest();
+	ft::SearchTreeStandardNode<int, int> *result = bst.getLowest(bst.root(), bst.getNullNode());
 
 	ASSERT_EQ(1, result->content.first);
+}
+
+TEST(BinarySearchTree, getHighestItem){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> bst = generateFiveLevelTree();
+
+	ft::SearchTreeStandardNode<int, int> *result = bst.getHighest(bst.root(), bst.getNullNode());
+
+	ASSERT_EQ(20, result->content.first);
 }
 
  //test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode

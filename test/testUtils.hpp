@@ -279,4 +279,17 @@ ExposedRedBlackTree<int, int> generateBrokenRbtClassFour() {
 	return rbt;
 }
 
+//		 3
+//	  1     4
+//  0  2
+ft::map<simpleDummy, simpleDummy> generateTestMap() {
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(3, 0));
+	map.insert(ft::make_pair(4, 0));
+	map.insert(ft::make_pair(1, 0));
+	map.insert(ft::make_pair(2, 0));
+	map.insert(ft::make_pair(0, 0));
+	return map;
+}
+
 #endif     // TEST_UTILS_H

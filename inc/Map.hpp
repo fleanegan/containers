@@ -26,7 +26,7 @@ namespace ft {
 		typedef ft::RedBlackTree<key_type, mapped_type, ft::RedBlackNode, rb_allocator_type> RbTree;
 
 	public:
-		typedef MapIterator<key_type, mapped_type, ft::RedBlackNode<key_type, mapped_type> > iterator;
+		typedef MapIterator<key_type, mapped_type, ft::RedBlackNode> iterator;
 		//typedef const_iterator;
 		typedef typename RbTree::size_type size_type;
 		//typedef difference_type;
@@ -62,7 +62,15 @@ namespace ft {
 //		}
 
 		iterator begin() {
-			return iterator(rbTree.getLowest());
+			return iterator(rbTree.getLowest(rbTree.root(), rbTree.getNullNode()), rbTree.getNullNode());
+		}
+
+//		const_iterator end() const {
+//			return const_iterator(_arr);
+//		}
+
+		iterator end() {
+			return iterator(rbTree.getNullNode(), rbTree.getNullNode());
 		}
 
 		void insert(const value_type &in){

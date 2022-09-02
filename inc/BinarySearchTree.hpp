@@ -191,11 +191,19 @@ namespace ft {
 			return current_size;
 		}
 
-		Node* getLowest() {
-			Node *tmp = rootNode;
+		static Node* getLowest(Node *startingPoint, Node *nullNode) {
+			Node *tmp = startingPoint;
 
-			while (tmp->left != &nullNode)
+			while (tmp->left != nullNode)
 				tmp = tmp->left;
+			return tmp;
+		}
+
+		static Node *getHighest(Node *startingPoint, Node *nullNode) {
+			Node *tmp = startingPoint;
+
+			while (tmp->right != nullNode)
+				tmp = tmp->right;
 			return tmp;
 		}
 

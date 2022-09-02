@@ -27,7 +27,7 @@ namespace ft {
 		}
 
 		template<class U>
-		VectorIterator(const VectorIterator<U> it) : _ptr(it.current()) {
+		VectorIterator(const VectorIterator<U> &it) : _ptr(it.current()) {
 		}
 
 		VectorIterator(const VectorIterator &rhs) : _ptr(rhs._ptr) {}

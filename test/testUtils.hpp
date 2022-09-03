@@ -292,4 +292,23 @@ ft::map<simpleDummy, simpleDummy> generateTestMap() {
 	return map;
 }
 
+/*
+			3
+	  1				10
+    0   2	      9	  11
+ 				8
+ */
+ft::map<simpleDummy, simpleDummy> generateMapWithIsolatedKey(){
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(0, 0));
+	map.insert(ft::make_pair(1, 0));
+	map.insert(ft::make_pair(2, 0));
+	map.insert(ft::make_pair(3, 0));
+	map.insert(ft::make_pair(10, 0));
+	map.insert(ft::make_pair(11, 0));
+	map.insert(ft::make_pair(9, 0));
+	map.insert(ft::make_pair(8, 0));
+	return map;
+}
+
 #endif     // TEST_UTILS_H

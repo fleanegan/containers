@@ -58,6 +58,14 @@ namespace ft {
 			return result;
 		}
 
+		value_type *operator->() {
+			return &currentNode->content;
+		}
+
+		value_type *operator->() const{
+			return &currentNode->content;
+		}
+
 		value_type &operator*() {
 			return currentNode->content;
 		}

@@ -28,7 +28,7 @@ namespace ft {
 
 	public:
 		typedef MapIterator<key_type, mapped_type, NodeType> iterator;
-		//typedef const_iterator;
+		typedef MapIterator<key_type, mapped_type, const NodeType> const_iterator;
 		typedef typename RbTree::size_type size_type;
 		//typedef difference_type;
 		typedef typename Allocator::pointer pointer;

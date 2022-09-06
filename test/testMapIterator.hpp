@@ -109,37 +109,38 @@ TEST(MapIterator, Two_iterators_that_compare_equal_keep_comparing_equal_after_be
 TEST(MapIterator, dereferencingOperator) {
 	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
 	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+	ft::pair<simpleDummy, simpleDummy> b = *a;
 
 	ASSERT_EQ(0, *(a->first));
+	ASSERT_EQ(0, *b.first);
 }
 
-/*TEST(MapIterator, constIteratorFromNonConst) {
+TEST(MapIterator, constIteratorFromNonConst) {
 	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
 	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
 
-	ft::MapIterator<simpleDummy, simpleDummy, const ft::RedBlackNode<simpleDummy, simpleDummy>> aee = a;
+	ft::map<simpleDummy, simpleDummy>::const_iterator aee = a;
+}
+
+TEST(MapIterator, dereferenceConstIterator) {
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+	ft::map<simpleDummy, simpleDummy>::const_iterator aee = map.begin();
+
 	aee++;
 	*aee;
 
 	ASSERT_EQ(0, *(a->first));
-}*/
-
-template <typename T, typename Y>
-typename ft::enable_if<true, typename ft::is_const<T, Y>::Y_>::type
-foo(){
-	std::cout << "this is const" << std::endl;
-	return Y();
 }
 
-//template <typename T, typename Y>
-//typename ft::enable_if<true, typename ft::is_const<T, Y>::Y_>::type
-//foo(){
-//	std::cout << "this is const" << std::endl;
-//	return Y();
-//}
-
-
-TEST(MapIterator, testDisableFunction) {
-	foo<const int, int>();
-}
-
+template <typename Q>
+struct bar{
+	template<typename T = Q, typename ft::enable_if<ft::is_const<T>::value>::type* = nullptr>
+	void foo() {
+		std::cout << "is const " << std::endl;
+	}
+	template<typename T = Q, typename ft::enable_if<!ft::is_const<T>::value>::type* = nullptr>
+	void foo() {
+		std::cout << "is not const " << std::endl;
+	}
+};

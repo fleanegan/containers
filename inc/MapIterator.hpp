@@ -84,22 +84,21 @@ namespace ft {
 			return &currentNode->content;
 		}
 
+
 		const_pointer operator->() const{
 			return &currentNode->content;
 		}
 
+		template<typename Disabler = Node , typename ft::enable_if<!ft::is_const<Disabler>::value>::type* = nullptr>
 		reference operator*() {
 			return currentNode->content;
 		}
 
-//		typename ft::enable_if<true, typename ft::is_const<NodeType, const_reference>::Y_>::type
-//		foo(){
-//			return Y();
-//		}
-
+		template<typename Disabler = Node , typename ft::enable_if<ft::is_const<Disabler>::value>::type* = nullptr>
 		const_reference operator*() const {
 			return currentNode->content;
 		}
+
 	private:
 		void moveToNextNode() {
 			Key originalKey;

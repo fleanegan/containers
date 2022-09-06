@@ -52,15 +52,8 @@ namespace ft{
 		typedef T type;
 	};
 
-	template<class T, class N>
-	struct is_const          : std::false_type {
-		typedef N N_;
-	};
-
-	template<class T, class Y>
-	struct is_const<const T, Y> : std::true_type {
-		typedef Y Y_;
-	};
+	template<class T> struct is_const          : std::false_type {};
+	template<class T> struct is_const<const T> : std::true_type {};
 
 	template <typename T>
 	struct is_integral

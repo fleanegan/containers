@@ -102,6 +102,10 @@ namespace ft {
 			return &nullNode;
 		}
 
+		Node *getNullNode() const {
+			return &nullNode;
+		}
+
 		Node *insertByValue(ft::pair<TKey, TValue> in) {
 			return insert(in);
 		}
@@ -142,31 +146,6 @@ namespace ft {
 			deleteNodeWithCleanUp(nodeToBeRemoved);
 		}
 
-		void substituteNodeWithSuccessor(Node *nodeToBeRemoved) {
-			Node *successor;
-
-			successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
-			if (successor->parent != nodeToBeRemoved) {
-				replaceNode(successor, successor->right);
-				successor->right = nodeToBeRemoved->right;
-				successor->right->parent = successor;
-			}
-			replaceNode(nodeToBeRemoved, successor);
-			successor->left = nodeToBeRemoved->left;
-			successor->left->parent = successor;
-		}
-
-		void replaceNode(Node *nodeToBeReplaced, Node *replacer) {
-			if (nodeToBeReplaced->parent == &nullNode) {
-				rootNode = &nullNode;
-				linkChildAndParent(replacer, &rootNode);
-			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
-				nodeToBeReplaced->parent->left = replacer;
-			else
-				nodeToBeReplaced->parent->right = replacer;
-			replacer->parent = nodeToBeReplaced->parent;
-		}
-
 		void leftRotate(Node *pivot) {
 			if (pivot->right == &nullNode)
 				return;
@@ -187,7 +166,7 @@ namespace ft {
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
-		size_type size() {
+		size_type size() const{
 			return current_size;
 		}
 
@@ -287,6 +266,31 @@ namespace ft {
 			return currentOptimum;
 		}
 
+		void substituteNodeWithSuccessor(Node *nodeToBeRemoved) {
+			Node *successor;
+
+			successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
+			if (successor->parent != nodeToBeRemoved) {
+				replaceNode(successor, successor->right);
+				successor->right = nodeToBeRemoved->right;
+				successor->right->parent = successor;
+			}
+			replaceNode(nodeToBeRemoved, successor);
+			successor->left = nodeToBeRemoved->left;
+			successor->left->parent = successor;
+		}
+
+		void replaceNode(Node *nodeToBeReplaced, Node *replacer) {
+			if (nodeToBeReplaced->parent == &nullNode) {
+				rootNode = &nullNode;
+				linkChildAndParent(replacer, &rootNode);
+			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
+				nodeToBeReplaced->parent->left = replacer;
+			else
+				nodeToBeReplaced->parent->right = replacer;
+			replacer->parent = nodeToBeReplaced->parent;
+		}
+
 		void deleteNodeWithCleanUp(const Node *nodeToBeRemoved) {
 			if (nodeToBeRemoved == rootNode) {
 				rootNode = &nullNode;
@@ -324,8 +328,6 @@ namespace ft {
 			linkChildAndParent(leftover, &grandParent);
 			return leftover;
 		}
-
-
 
 		Node *pairToChildOf(const pair <TKey, TValue> &in, Node *&newParent) {
 			Node *newNode;

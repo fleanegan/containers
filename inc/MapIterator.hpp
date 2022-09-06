@@ -25,8 +25,8 @@ namespace ft {
 		}
 
 		template<class UKey, class UValue, class UNode = ft::RedBlackNode<UKey, UValue> >
-		MapIterator(const MapIterator<UKey, UValue, UNode> &it) : currentNode(it.currentNode),
-														   nullNode(it.nullNode) {
+		MapIterator(const MapIterator<UKey, UValue, UNode> &it) : currentNode(it.current()),
+														   nullNode(it.null()) {
 		}
 
 		MapIterator(const MapIterator &rhs) : currentNode(rhs.currentNode),
@@ -40,6 +40,24 @@ namespace ft {
 		MapIterator &operator++() {
 			moveToNextNode();
 			return *this;
+		}
+
+		Node *current() {
+			return currentNode;
+		}
+
+
+		Node *current() const {
+			return currentNode;
+		}
+
+		Node *null() {
+			return nullNode;
+		}
+
+
+		Node *null() const {
+			return nullNode;
 		}
 
 		MapIterator operator--(int i) {

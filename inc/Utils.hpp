@@ -32,6 +32,17 @@ namespace ft{
 		return ft::distance<It>(first, last, typename ft::iterator_traits<It>::iterator_category());
 	}
 
+	template <class T, T v>
+	struct integral_constant {
+		static constexpr T value = v;
+		typedef T value_type;
+		typedef integral_constant<T,v> type;
+		constexpr operator T() { return v; }
+	};
+
+	typedef integral_constant<bool, true> true_type;
+	typedef integral_constant<bool, false> false_type;
+
 	template <bool, typename T = void>
 	struct enable_if
 	{};
@@ -39,6 +50,16 @@ namespace ft{
 	template <typename T>
 	struct enable_if<true, T> {
 		typedef T type;
+	};
+
+	template<class T, class N>
+	struct is_const          : std::false_type {
+		typedef N N_;
+	};
+
+	template<class T, class Y>
+	struct is_const<const T, Y> : std::true_type {
+		typedef Y Y_;
 	};
 
 	template <typename T>

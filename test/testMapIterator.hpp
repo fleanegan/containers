@@ -110,9 +110,36 @@ TEST(MapIterator, dereferencingOperator) {
 	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
 	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
 
-	ft::MapIterator<simpleDummy, simpleDummy, const ft::RedBlackNode<simpleDummy, simpleDummy>> aee = a;
-
 	ASSERT_EQ(0, *(a->first));
 }
 
+/*TEST(MapIterator, constIteratorFromNonConst) {
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+
+	ft::MapIterator<simpleDummy, simpleDummy, const ft::RedBlackNode<simpleDummy, simpleDummy>> aee = a;
+	aee++;
+	*aee;
+
+	ASSERT_EQ(0, *(a->first));
+}*/
+
+template <typename T, typename Y>
+typename ft::enable_if<true, typename ft::is_const<T, Y>::Y_>::type
+foo(){
+	std::cout << "this is const" << std::endl;
+	return Y();
+}
+
+//template <typename T, typename Y>
+//typename ft::enable_if<true, typename ft::is_const<T, Y>::Y_>::type
+//foo(){
+//	std::cout << "this is const" << std::endl;
+//	return Y();
+//}
+
+
+TEST(MapIterator, testDisableFunction) {
+	foo<const int, int>();
+}
 

@@ -42,7 +42,7 @@ TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
 }
 
 TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
-	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));

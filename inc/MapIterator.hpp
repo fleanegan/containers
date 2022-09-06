@@ -14,6 +14,10 @@ namespace ft {
 		typedef T mapped_type;
 		typedef ft::pair<const Key, T> value_type;
 		typedef NodeType Node;
+		typedef value_type* pointer;
+		typedef value_type const * const_pointer;
+		typedef value_type& reference;
+		typedef value_type const & const_reference;
 	private:
 		Node *currentNode;
 		Node *nullNode;
@@ -76,19 +80,24 @@ namespace ft {
 			return result;
 		}
 
-		value_type *operator->() {
+		pointer operator->() {
 			return &currentNode->content;
 		}
 
-		value_type *operator->() const{
+		const_pointer operator->() const{
 			return &currentNode->content;
 		}
 
-		value_type &operator*() {
+		reference operator*() {
 			return currentNode->content;
 		}
 
-		value_type &operator*() const {
+//		typename ft::enable_if<true, typename ft::is_const<NodeType, const_reference>::Y_>::type
+//		foo(){
+//			return Y();
+//		}
+
+		const_reference operator*() const {
 			return currentNode->content;
 		}
 	private:

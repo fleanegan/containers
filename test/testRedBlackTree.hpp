@@ -7,20 +7,20 @@ TEST(RedBlackTree, freshNodeIsAlwaysRed){
 }
 
 TEST(RedBlackTree, nullNodeIsAlwaysBlack){
-	ft::RedBlackTree<int, int> rbt;
+	ft::RedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt;
 
 	ASSERT_TRUE(rbt.getNullNode()->isBlack);
 }
 
 TEST(RedBlackTree, rootIsBlackAfterInsert){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(1)));
 
 	ASSERT_TRUE(rbt.root()->isBlack);
 }
 
 TEST(RedBlackTree, threeConsecutivelyBiggerNodesCauseLeftRotation) {
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
@@ -31,7 +31,7 @@ TEST(RedBlackTree, threeConsecutivelyBiggerNodesCauseLeftRotation) {
 }
 
 TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
@@ -42,7 +42,7 @@ TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
 }
 
 TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
@@ -51,7 +51,7 @@ TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
 }
 
 TEST(RedBlackTree, insertColourChangeIfUncleHasNotTheSame) {
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insert(ft::make_pair(simpleDummy(5), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(9), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(11), simpleDummy(0)));
@@ -71,7 +71,7 @@ TEST(RedBlackTree, insertColourChangeIfUncleHasNotTheSame) {
 }
 
 TEST(RedBlackTree, removeRootWithOneChild) {
-	ft::RedBlackTree <simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> > rbt;
 	rbt.insert(ft::make_pair(simpleDummy(5), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(9), simpleDummy(0)));
 
@@ -81,27 +81,27 @@ TEST(RedBlackTree, removeRootWithOneChild) {
 }
 
 TEST(RedBlackTree, multipleInsertionsAlwaysCreateAValidTree){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
 
 	ASSERT_TRUE(rbt.isValid());
 }
 
 TEST(RedBlackTree, notTheSameBlackCountIsInvalidTree){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
 	rbt.root()->left->left->left->isBlack = true;
 
 	ASSERT_FALSE(rbt.isValid());
 }
 
 TEST(RedBlackTree, redRootIsIllegal){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
 	rbt.root()->isBlack = false;
 
 	ASSERT_FALSE(rbt.isValid());
 }
 
 TEST(RedBlackTree, doubleRedIsIllegal){
-	ft::RedBlackTree<int, int> rbt;
+	ft::RedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt;
 	rbt.insertByValue(ft::make_pair(3, 0));
 	rbt.insertByValue(ft::make_pair(4, 0));
 	rbt.insertByValue(ft::make_pair(1, 0));
@@ -114,7 +114,7 @@ TEST(RedBlackTree, doubleRedIsIllegal){
 }
 
 TEST(RedBlackTree, variousDeletionsTreeStillValid){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt = generateBigRbt();
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
 	ASSERT_TRUE(rbt.isValid());
 
 	rbt.popNodeByPointer(rbt.root()->right->right);
@@ -130,10 +130,10 @@ TEST(RedBlackTree, variousDeletionsTreeStillValid){
 }
 
 TEST(RedBlackTree, assign){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insertByValue(ft::make_pair(1, 0));
 	rbt.insertByValue(ft::make_pair(2, 0));
-	ft::RedBlackTree<simpleDummy, simpleDummy> reproduction;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >reproduction;
 
 	reproduction = rbt;
 
@@ -141,17 +141,17 @@ TEST(RedBlackTree, assign){
 }
 
 TEST(RedBlackTree, copyConstructor){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 	rbt.insertByValue(ft::make_pair(1, 0));
 	rbt.insertByValue(ft::make_pair(2, 0));
 
-	ft::RedBlackTree<simpleDummy, simpleDummy> reproduction(rbt);
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >reproduction(rbt);
 
 	ASSERT_EQ(1, *reproduction.root()->content.first);
 }
 
 TEST(RedBlackTree, sizeBehavesLikeInParent){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt;
 
 	rbt.insertByValue(ft::make_pair(1, 0));
 	rbt.insertByValue(ft::make_pair(2, 0));

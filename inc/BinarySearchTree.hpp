@@ -38,14 +38,14 @@ namespace ft {
 		}
 	};
 
-	template<typename TKey, typename TValue, template<typename, typename> class NodeType, class Allocator = std::allocator<NodeType<TKey, TValue> > >
+	template <typename TKey, typename TValue, typename NodeType, typename Allocator = std::allocator<NodeType> >
 	class BinarySearchTree {
 	public:
 		typedef Allocator allocator_type;
 		typedef size_t size_type;
 
 	protected:
-		typedef NodeType<TKey, TValue> Node;
+		typedef NodeType Node;
 		Node nullNode;
 		Node *rootNode;
 	private:

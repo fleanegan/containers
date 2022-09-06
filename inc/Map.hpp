@@ -20,13 +20,14 @@ namespace ft {
 		typedef Allocator allocator_type;
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
+		typedef ft::RedBlackNode<key_type, mapped_type> NodeType;
 
 	private:
-		typedef typename allocator_type::template rebind<ft::RedBlackNode<key_type, mapped_type> >::other rb_allocator_type;
-		typedef ft::RedBlackTree<key_type, mapped_type, ft::RedBlackNode, rb_allocator_type> RbTree;
+		typedef typename allocator_type::template rebind<NodeType>::other rb_allocator_type;
+		typedef ft::RedBlackTree<key_type, mapped_type, NodeType, rb_allocator_type> RbTree;
 
 	public:
-		typedef MapIterator<key_type, mapped_type, ft::RedBlackNode> iterator;
+		typedef MapIterator<key_type, mapped_type, NodeType> iterator;
 		//typedef const_iterator;
 		typedef typename RbTree::size_type size_type;
 		//typedef difference_type;

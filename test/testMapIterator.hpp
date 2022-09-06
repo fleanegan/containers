@@ -110,6 +110,8 @@ TEST(MapIterator, dereferencingOperator) {
 	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
 	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
 
+//	ft::MapIterator<simpleDummy, simpleDummy, const ft::RedBlackNode<simpleDummy, simpleDummy>> aee = a;
+
 	ASSERT_EQ(0, *(a->first));
 }
 

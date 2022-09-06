@@ -7,13 +7,13 @@
 
 namespace ft {
 
-	template<typename Key, typename T, template<typename, typename> class NodeType = ft::RedBlackNode>
+	template<typename Key, typename T, typename NodeType>
 	class MapIterator {
 	public:
 		typedef Key key_type;
 		typedef T mapped_type;
 		typedef ft::pair<const Key, T> value_type;
-		typedef NodeType<key_type, mapped_type> Node;
+		typedef NodeType Node;
 	private:
 		Node *currentNode;
 		Node *nullNode;
@@ -25,7 +25,7 @@ namespace ft {
 		}
 
 		template<class UKey, class UValue, class UNode = ft::RedBlackNode<UKey, UValue> >
-		MapIterator(const MapIterator<UKey, UValue> &it) : currentNode(it.currentNode),
+		MapIterator(const MapIterator<UKey, UValue, UNode> &it) : currentNode(it.currentNode),
 														   nullNode(it.nullNode) {
 		}
 
@@ -79,7 +79,7 @@ namespace ft {
 
 			if (currentNode == nullNode)
 				currentNode =
-						BinarySearchTree<key_type, mapped_type, NodeType>::getLowest(currentNode, nullNode);
+						BinarySearchTree<key_type, mapped_type, Node>::getLowest(currentNode, nullNode);
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->right != nullNode) {
@@ -103,7 +103,7 @@ namespace ft {
 
 			if (currentNode == nullNode)
 				currentNode =
-						BinarySearchTree<key_type, mapped_type, NodeType>::getHighest(currentNode, nullNode);
+						BinarySearchTree<key_type, mapped_type, Node>::getHighest(currentNode, nullNode);
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->left != nullNode) {

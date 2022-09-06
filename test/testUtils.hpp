@@ -197,8 +197,8 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 	  / \
 	 4   6
 */
-ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> generateFiveLevelTree() {
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> result;
+ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> generateFiveLevelTree() {
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> result;
 	result.insert(ft::make_pair(3, 0));
 	result.insert(ft::make_pair(1, 0));
 	result.insert(ft::make_pair(16, 0));
@@ -213,18 +213,18 @@ ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode> generateFiveLevelTree
 	return result;
 }
 
-template<typename TKey, typename TValue>
-struct ExposedRedBlackTree : public ft::RedBlackTree<TKey, TValue>{
-	typedef ft::RedBlackNode<TKey, TValue> Node;
+template<typename TKey, typename TValue, typename NodeType>
+struct ExposedRedBlackTree : public ft::RedBlackTree<TKey, TValue, NodeType>{
+	typedef NodeType Node;
 
 	void fixupDeletion(Node *nodeToBeDeleted){
-		ft::RedBlackTree<TKey, TValue>::fixupDeletion(nodeToBeDeleted);
+		ft::RedBlackTree<TKey, TValue, Node>::fixupDeletion(nodeToBeDeleted);
 	}
 };
 
 
-ft::RedBlackTree<simpleDummy, simpleDummy> generateBigRbt(){
-	ft::RedBlackTree<simpleDummy, simpleDummy> rbt;
+ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> > generateBigRbt(){
+	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> > rbt;
 	rbt.insertByValue(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 	rbt.insertByValue(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 	rbt.insertByValue(ft::make_pair(simpleDummy(3), simpleDummy(0)));
@@ -241,8 +241,8 @@ ft::RedBlackTree<simpleDummy, simpleDummy> generateBigRbt(){
 	return rbt;
 }
 
-ExposedRedBlackTree<int, int> generateBrokenRbtClassOne() {
-	ExposedRedBlackTree<int, int> rbt;
+ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassOne() {
+	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt;
 	rbt.insert(ft::make_pair(1, 0));
 	rbt.insert(ft::make_pair(2, 0));
 	rbt.insert(ft::make_pair(0, 0));
@@ -254,20 +254,20 @@ ExposedRedBlackTree<int, int> generateBrokenRbtClassOne() {
 	return rbt;
 }
 
-ExposedRedBlackTree<int, int> generateBrokenRbtClassTwo() {
-	ExposedRedBlackTree<int, int> rbt = generateBrokenRbtClassOne();
+ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassTwo() {
+	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt = generateBrokenRbtClassOne();
 	rbt.root()->right->isBlack = true;
 	return rbt;
 }
 
-ExposedRedBlackTree<int, int> generateBrokenRbtClassThree() {
-	ExposedRedBlackTree<int, int> rbt = generateBrokenRbtClassTwo();
+ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassThree() {
+	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt = generateBrokenRbtClassTwo();
 	rbt.root()->right->left->isBlack = false;
 	return rbt;
 }
 
-ExposedRedBlackTree<int, int> generateBrokenRbtClassFour() {
-	ExposedRedBlackTree<int, int> rbt;
+ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassFour() {
+	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt;
 	rbt.insert(ft::make_pair(3, 0));
 	rbt.insert(ft::make_pair(4, 0));
 	rbt.insert(ft::make_pair(1, 0));

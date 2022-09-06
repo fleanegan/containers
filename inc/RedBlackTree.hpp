@@ -51,8 +51,8 @@ namespace ft {
 		}
 	};
 
-	template<typename TKey, typename TValue, template<typename, typename> class NodeType = ft::RedBlackNode, typename Allocator = std::allocator<NodeType<TKey, TValue> > >
-	class RedBlackTree : public BinarySearchTree<TKey, TValue, ft::RedBlackNode> {
+	template<typename TKey, typename TValue, typename NodeType, typename Allocator = std::allocator<NodeType> >
+	class RedBlackTree : public ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode<TKey, TValue> > {
 	public:
 		typedef TKey key_type;
 		typedef TValue mapped_type;
@@ -61,24 +61,24 @@ namespace ft {
 		typedef Allocator allocator_type;
 //		typedef typename Allocator::reference reference;
 //		typedef typename Allocator::const_reference const_reference;
-		typedef RedBlackNode<TKey, TValue> Node;
+		typedef NodeType Node;
 
 	public:
 
 		RedBlackTree(const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode, allocator_type>(alloc) {
+				: ft::BinarySearchTree<TKey, TValue, Node, allocator_type>(alloc) {
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree(const RedBlackTree<TKey, TValue> &rhs, const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode, allocator_type>(alloc) {
-			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
+		RedBlackTree(const RedBlackTree<TKey, TValue, NodeType> &rhs, const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<TKey, TValue, NodeType, allocator_type>(alloc) {
+			BinarySearchTree<TKey, TValue, Node>::operator=(rhs);
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree<TKey, TValue> &
-		operator=(const RedBlackTree<TKey, TValue> &rhs) {
-			BinarySearchTree<TKey, TValue, ft::RedBlackNode>::operator=(rhs);
+		RedBlackTree<TKey, TValue, NodeType> &
+		operator=(const RedBlackTree<TKey, TValue, NodeType> &rhs) {
+			BinarySearchTree<TKey, TValue, Node>::operator=(rhs);
 			return *this;
 		}
 
@@ -87,7 +87,7 @@ namespace ft {
 		}
 
 		Node *insert(ft::pair<TKey, TValue> const &in) {
-			Node *newNode = BinarySearchTree<TKey, TValue, ft::RedBlackNode>::insert(in);
+			Node *newNode = BinarySearchTree<TKey, TValue, Node>::insert(in);
 			Node *currentNode = newNode;
 			Node *parent;
 			Node *grandParent;

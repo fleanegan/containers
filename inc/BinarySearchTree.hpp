@@ -44,6 +44,7 @@ namespace ft {
 		typedef TKey key_type;
 		typedef TValue mapped_type;
 		typedef ft::pair<const key_type, mapped_type> value_type;
+		typedef ft::ptrdiff_t difference_type;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef NodeType Node;
@@ -108,6 +109,10 @@ namespace ft {
 				}
 			}
 			return NULL;
+		}
+
+		void clear(){
+			deleteSubTreeFrom(rootNode);
 		}
 
 		pointer getNullNode() {
@@ -182,6 +187,11 @@ namespace ft {
 			return current_size;
 		}
 
+		size_type max_size(void) const {
+			return (std::min((size_type) std::numeric_limits<difference_type>::max(),
+							 std::numeric_limits<size_type>::max() / (sizeof(NodeType) + sizeof(pointer))));
+		}
+
 		static pointer getLowest(pointer startingPoint, pointer nullNode) {
 			pointer tmp = startingPoint;
 
@@ -200,8 +210,9 @@ namespace ft {
 			return tmp;
 		}
 
+		//todo: fix uninitialized read (a->content and b-> content might be garbage
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode ) const {
-			if (a->content != b->content && !((a == &nullNode) && (b == bNullNode)))
+			if (!((a == &nullNode) && (b == bNullNode)) && a->content != b->content)
 				return false;
 			if (a->right != &nullNode){
 				if (b->right == bNullNode || isSameStructure(a->right, b->right, bNullNode) == false)
@@ -246,7 +257,11 @@ namespace ft {
 				return;
 			deleteSubTreeFrom((localRoot)->left);
 			deleteSubTreeFrom((localRoot)->right);
-			delete localRoot;
+			if (localRoot == rootNode)
+				rootNode = &nullNode;
+			--current_size;
+			_allocator.destroy(localRoot);
+			_allocator.deallocate(localRoot, 1);
 		}
 
 		void copySubTree(pointer source, const_pointer sourceNullNode, pointer *dest) {

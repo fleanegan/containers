@@ -88,3 +88,18 @@ TEST(Map, comparingEmptyMapWithNonEmpty){
 	ASSERT_FALSE(b >= a);
 }
 
+TEST(Map, mapWithNoItemsIsEmpty){
+	ft::map<simpleDummy, simpleDummy> map;
+
+	ASSERT_TRUE(map.empty());
+}
+
+TEST(Map, emptyAfterClearing){
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+
+	map.clear();
+
+	ASSERT_EQ(0, map.size());
+	ASSERT_TRUE(map.empty());
+}
+

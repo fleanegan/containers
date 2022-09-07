@@ -38,10 +38,11 @@ namespace ft {
 		}
 	};
 
-	template <typename TKey, typename TValue, typename NodeType, typename Allocator = std::allocator<NodeType> >
+	template <typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class BinarySearchTree {
 	public:
 		typedef Allocator allocator_type;
+		typedef Compare compare_type;
 		typedef size_t size_type;
 
 	protected:
@@ -51,10 +52,12 @@ namespace ft {
 	private:
 		allocator_type _allocator;
 		size_type current_size;
+		compare_type _compare;
 	public:
-		BinarySearchTree(const allocator_type &alloc = allocator_type()) :
+		BinarySearchTree(const compare_type &compare = compare_type(), const allocator_type &alloc = allocator_type()) :
 				nullNode(),
 				rootNode(&nullNode),
+				_compare(compare),
 				_allocator(alloc),
 				current_size(0) {
 
@@ -63,6 +66,7 @@ namespace ft {
 		BinarySearchTree(const BinarySearchTree &rhs) :
 				nullNode(),
 				rootNode(&nullNode),
+				_compare(rhs._compare),
 				_allocator(rhs._allocator) {
 			*this = rhs;
 		}
@@ -85,7 +89,7 @@ namespace ft {
 			while (tmp != &nullNode) {
 				if (tmp->content.first == i)
 					return (tmp);
-				if (tmp->content.first > i) {
+				if (_compare(tmp->content.first, i) == false) {
 					if (tmp->left == &nullNode)
 						return &nullNode;
 					tmp = tmp->left;
@@ -201,7 +205,7 @@ namespace ft {
 			Node *tmp = rootNode;
 
 			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
-				if (*keyOfNewNode < tmp->content.first) {
+				if (_compare(*keyOfNewNode, tmp->content.first)) {
 					if (tmp->left == &nullNode)
 						return tmp;
 					tmp = tmp->left;
@@ -245,21 +249,21 @@ namespace ft {
 			if (localRoot == &nullNode)
 				return &nullNode;
 			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
-				if (localRoot->content.first < currentOptimum->content.first && localRoot->content.first > biggerThan->content.first)
+				if (_compare(localRoot->content.first, currentOptimum->content.first) && _compare(localRoot->content.first, biggerThan->content.first) == false)
 					return localRoot;
 				return currentOptimum;
 			}
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != &nullNode && leftMinimum->content.first > biggerThan->content.first &&
-				leftMinimum->content.first < currentOptimum->content.first) {
-				if (leftMinimum->content.first < localRoot->content.first)
+			if (leftMinimum != &nullNode && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
+					_compare(leftMinimum->content.first, currentOptimum->content.first)) {
+				if (_compare(leftMinimum->content.first, localRoot->content.first))
 					return leftMinimum;
 				return localRoot;
 			}
-			if (rightMinimum != &nullNode && rightMinimum->content.first > biggerThan->content.first &&
-				rightMinimum->content.first < currentOptimum->content.first) {
-				if (rightMinimum->content.first < localRoot->content.first)
+			if (rightMinimum != &nullNode && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
+					_compare(rightMinimum->content.first, currentOptimum->content.first)) {
+				if (_compare(rightMinimum->content.first, localRoot->content.first))
 					return rightMinimum;
 				return localRoot;
 			}
@@ -304,7 +308,7 @@ namespace ft {
 	private:
 		void linkChildAndParent(Node *newNode, Node **newParent) {
 			if (*newParent != &nullNode) {
-				if (newNode->content.first < (*newParent)->content.first)
+				if (_compare(newNode->content.first, (*newParent)->content.first))
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;

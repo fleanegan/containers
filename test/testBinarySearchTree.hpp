@@ -293,6 +293,15 @@ TEST(BinarySearchTree, assigningTakesSize){
 	ASSERT_EQ(2, copy.size());
 }
 
+TEST(BinarySearchTree, usingCompareGreaterLeadsToInversedTree){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>, std::greater<> > bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	bst.insert(ft::make_pair(2, 2));
+
+	ASSERT_EQ(2, bst.root()->left->content.first);
+}
+
 TEST(BinarySearchTree, addingAlreadyExistingDoesNotIncrementsSize){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
 	bst.insert(ft::make_pair(1, 1));

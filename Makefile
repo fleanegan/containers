@@ -36,7 +36,7 @@ OBJ_NO_MAIN := $(filter-out $(OBJ_PATH)main.o, $(OBJ))
 CXX = c++
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 MAKE_DEP_FLAGS = -MMD
-TEST_FLAGS	= -pthread -lgtest
+TEST_FLAGS	= -pthread -lgtest -std=c++98 -g
 
 ifeq ($(MAKECMDGOALS),test)
 	CPPFLAGS += -g -D TESTING
@@ -50,7 +50,7 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 
 $(OBJ_PATH)%.o: $(TEST_PATH)%.cpp
 	@mkdir -p $(@D)
-	$(CXX) -D TESTING -g -I$(TEST_PATH) $(INC_PARAMS) $(MAKE_DEP_FLAGS) -c $< -o $@
+	$(CXX) -D TESTING -g -I  -std=c++98 $(TEST_PATH) $(INC_PARAMS) $(MAKE_DEP_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
 	@echo "Build $(NAME)"

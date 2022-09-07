@@ -51,7 +51,7 @@ namespace ft {
 		}
 	};
 
-	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Allocator = std::allocator<NodeType> >
+	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class RedBlackTree : public ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode<TKey, TValue> > {
 	public:
 		typedef TKey key_type;
@@ -65,20 +65,20 @@ namespace ft {
 
 	public:
 
-		RedBlackTree(const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<key_type, mapped_type, Node, allocator_type>(alloc) {
+		RedBlackTree(const Compare &compare = std::less<TKey>(), const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<key_type, mapped_type, Node, Compare, allocator_type>(compare, alloc) {
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<key_type, mapped_type, NodeType, allocator_type>(alloc) {
-			BinarySearchTree<key_type, mapped_type, Node>::operator=(rhs);
+		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, Compare, const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<key_type, mapped_type, NodeType, Compare, allocator_type>(alloc) {
+			BinarySearchTree<key_type, mapped_type, Compare, Node>::operator=(rhs);
 			this->nullNode.isBlack = true;
 		}
 
 		RedBlackTree<key_type, mapped_type, NodeType> &
-		operator=(const RedBlackTree<key_type, mapped_type, NodeType> &rhs) {
-			BinarySearchTree<key_type, mapped_type, Node>::operator=(rhs);
+		operator=(const RedBlackTree<key_type, mapped_type, Compare, NodeType> &rhs) {
+			BinarySearchTree<key_type, mapped_type, Compare, Node>::operator=(rhs);
 			return *this;
 		}
 

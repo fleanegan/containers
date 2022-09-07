@@ -24,7 +24,7 @@ namespace ft {
 
 	private:
 		typedef typename allocator_type::template rebind<NodeType>::other rb_allocator_type;
-		typedef ft::RedBlackTree<key_type, mapped_type, NodeType, rb_allocator_type> RbTree;
+		typedef ft::RedBlackTree<key_type, mapped_type, NodeType, Compare, rb_allocator_type> RbTree;
 
 	public:
 		typedef MapIterator<key_type, mapped_type, NodeType> iterator;
@@ -54,7 +54,7 @@ namespace ft {
 
 		explicit map(const Compare& comp = Compare(),
 					 const allocator_type & alloc = allocator_type())
-					 : rbTree(RbTree(rb_allocator_type(alloc))){
+					 : rbTree(RbTree(comp, rb_allocator_type(alloc))){
 
 		}
 

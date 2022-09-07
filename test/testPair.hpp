@@ -48,6 +48,19 @@ TEST(pair, comparison){
 	ASSERT_TRUE(b > a);
 }
 
+
+TEST(pair, comparisonOfOnlyValueDifferent){
+	ft::pair<int, int> a(1, 4);
+	ft::pair<int, int> b(1, 6);
+
+	ASSERT_TRUE(a < b);
+	ASSERT_TRUE(a <= b);
+	ASSERT_TRUE(a <= a);
+	ASSERT_TRUE(b <= b);
+	ASSERT_TRUE(b >= a);
+	ASSERT_TRUE(b > a);
+}
+
 TEST(pair, make_pair){
 	ft::pair<int, simpleDummy> pr = ft::make_pair(235, simpleDummy(3));
 

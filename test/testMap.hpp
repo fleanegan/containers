@@ -51,3 +51,24 @@ TEST(Map, returnValueStatesFalseSinceKeyAlreadyPresent){
 	ASSERT_EQ(0, result.first->second);
 	ASSERT_FALSE(result.second);
 }
+
+TEST(Map, comparingMapWithItselfReturnsSame){
+	ft::map<int, int> map;
+
+	ASSERT_TRUE(map == map);
+}
+
+TEST(Map, comparingMapWithAnotherOneWithSameStructureReturnsSame){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> b = generateTestMap();
+
+	ASSERT_TRUE(a == b);
+}
+
+TEST(Map, comparingMapWithAnotherOneWithSameStructureReturnsSame_Negation){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> b = generateTestMap();
+
+	ASSERT_FALSE(a != b);
+}
+

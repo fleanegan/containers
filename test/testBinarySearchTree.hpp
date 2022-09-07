@@ -336,4 +336,75 @@ TEST(BinarySearchTree, getHighestItem){
 	ASSERT_EQ(20, result->content.first);
 }
 
- //test corner cases: what happens if the rootnode is being rotated, what if the z.right is nullNode
+
+TEST(BinarySearchTree, equalityOfDifferingRootsIsFalse){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a;
+	a.insert(ft::make_pair(1, 0));
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+	b.insert(ft::make_pair(3, 0));
+
+	ASSERT_FALSE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, equalityOfDifferingRightChildIsFalse){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a;
+	a.insert(ft::make_pair(1, 0));
+	a.insert(ft::make_pair(2, 0));
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+	b.insert(ft::make_pair(1, 0));
+	b.insert(ft::make_pair(3, 0));
+
+	ASSERT_FALSE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, equalityOfOnlyEqualLeftChildsIsTrue){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a;
+	a.insert(ft::make_pair(1, 0));
+	a.insert(ft::make_pair(0, 0));
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+	b.insert(ft::make_pair(1, 0));
+	b.insert(ft::make_pair(0, 0));
+
+	ASSERT_TRUE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, equalityOfUnEqualLeftChildsIsFalse){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a;
+	a.insert(ft::make_pair(2, 0));
+	a.insert(ft::make_pair(1, 0));
+	a.insert(ft::make_pair(0, 0));
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+	b.insert(ft::make_pair(2, 0));
+	b.insert(ft::make_pair(1, 0));
+
+	ASSERT_FALSE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, twoTreesAreEqualIfTheyHaveEqualOrderAndItems){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b = generateFiveLevelTree();
+
+	ASSERT_TRUE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, sameValuesDifferentOrderIsNotSameStructure){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b = generateFiveLevelTree();
+	b.popNode(5);
+	b.insert(ft::make_pair(5, 0));
+
+	ASSERT_FALSE(a.isSameStructure(a.root(), b.root(), b.getNullNode()));
+}
+
+TEST(BinarySearchTree, twoEmptyBinaryTreesAreEqual){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a;
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+
+	ASSERT_TRUE(a == b);
+}
+
+TEST(BinarySearchTree, BinaryTreesEqualsItself){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
+
+	ASSERT_TRUE(a == a);
+}

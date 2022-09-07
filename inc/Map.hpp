@@ -54,10 +54,21 @@ namespace ft {
 
 		explicit map(const Compare& comp = Compare(),
 					 const allocator_type & alloc = allocator_type())
-					 : rbTree(RbTree(comp, rb_allocator_type(alloc))){
+				: rbTree(RbTree(comp, rb_allocator_type(alloc))){
 
 		}
 
+		//todo: decomment after equality operators
+//		map(const map &rhs){
+//			if (*this != rhs)
+//				*this = rhs;
+//		}
+//
+//		map &operator=(const map &rhs){
+//			if (*this == rhs)
+//				return *this;
+//			rbTree = rhs.rbTree;
+//		}
 //		const_iterator begin() const {
 //			return const_iterator(_arr);
 //		}
@@ -88,6 +99,22 @@ namespace ft {
 		size_type size(){
 			return rbTree.size();
 		}
+
+		template <class VKey, class VT, class VCompare, class VAllocator>
+		friend bool operator==(const map<VKey,VT,VCompare,VAllocator>& x,
+						const map<VKey,VT,VCompare,VAllocator>& y);
 	};
+
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator==(const map<Key,T,Compare,Allocator>& x,
+					const map<Key,T,Compare,Allocator>& y){
+		return (x.rbTree == y.rbTree);
+	}
+
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator!=(const map<Key,T,Compare,Allocator>& x,
+					const map<Key,T,Compare,Allocator>& y){
+		return !(x == y);
+	}
 }
 #endif //CONTAINERS_MAP_HPP

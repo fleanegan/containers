@@ -41,14 +41,22 @@ namespace ft {
 	template <typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class BinarySearchTree {
 	public:
+		typedef TKey key_type;
+		typedef TValue mapped_type;
+		typedef ft::pair<const key_type, mapped_type> value_type;
+		typedef Compare key_compare;
 		typedef Allocator allocator_type;
+		typedef NodeType Node;
+		typedef Node& reference;
+		typedef Node const& const_reference;
+		typedef Node* pointer;
+		typedef Node const * const_pointer;
 		typedef Compare compare_type;
 		typedef size_t size_type;
 
 	protected:
-		typedef NodeType Node;
 		Node nullNode;
-		Node *rootNode;
+		pointer rootNode;
 	private:
 		allocator_type _allocator;
 		size_type current_size;
@@ -83,7 +91,7 @@ namespace ft {
 			deleteSubTreeFrom(rootNode);
 		}
 
-		Node *findByKey(TKey &i) {
+		pointer findByKey(TKey &i) {
 			Node *tmp = rootNode;
 
 			while (tmp != &nullNode) {
@@ -102,19 +110,19 @@ namespace ft {
 			return NULL;
 		}
 
-		Node *getNullNode() {
+		pointer getNullNode() {
 			return &nullNode;
 		}
 
-		Node *getNullNode() const {
+		pointer getNullNode() const {
 			return &nullNode;
 		}
 
-		Node *insertByValue(ft::pair<TKey, TValue> in) {
+		pointer insertByValue(ft::pair<TKey, TValue> in) {
 			return insert(in);
 		}
 
-		Node *insert(ft::pair<TKey, TValue> const &in) {
+		pointer insert(ft::pair<TKey, TValue> const &in) {
 			Node *newParent = &nullNode;
 
 			if (rootNode != &nullNode) {
@@ -125,11 +133,11 @@ namespace ft {
 			return pairToChildOf(in, newParent);
 		}
 
-		Node *root() {
+		pointer root() {
 			return rootNode;
 		}
 
-		Node *root() const {
+		pointer root() const {
 			return rootNode;
 		}
 
@@ -174,7 +182,7 @@ namespace ft {
 			return current_size;
 		}
 
-		static Node* getLowest(Node *startingPoint, Node *nullNode) {
+		static pointer getLowest(Node *startingPoint, Node *nullNode) {
 			Node *tmp = startingPoint;
 
 			while (tmp->left != nullNode)
@@ -182,7 +190,7 @@ namespace ft {
 			return tmp;
 		}
 
-		static Node *getHighest(Node *startingPoint, Node *nullNode) {
+		static pointer getHighest(Node *startingPoint, Node *nullNode) {
 			Node *tmp = startingPoint;
 
 			while (tmp->right != nullNode)
@@ -201,7 +209,7 @@ namespace ft {
 			linkChildAndParent(pivot, &nodeToChangePlaceWith);
 		}
 
-		Node *findInsertPlace(const TKey *keyOfNewNode) const {
+		pointer findInsertPlace(const TKey *keyOfNewNode) const {
 			Node *tmp = rootNode;
 
 			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
@@ -241,7 +249,7 @@ namespace ft {
 		}
 
 	protected:
-		Node *getInorderSuccessor(Node *localRoot, Node *biggerThan,
+		pointer getInorderSuccessor(Node *localRoot, Node *biggerThan,
 								  Node *currentOptimum) {
 			Node *leftMinimum = &nullNode;
 			Node *rightMinimum = &nullNode;
@@ -320,7 +328,7 @@ namespace ft {
 			newNode->parent = *newParent;
 		}
 
-		Node *linkChildToGrandParent(Node *parent, Node *&grandParent) {
+		pointer linkChildToGrandParent(Node *parent, Node *&grandParent) {
 			Node *leftover;
 
 			if (parent->left != &nullNode)
@@ -333,7 +341,7 @@ namespace ft {
 			return leftover;
 		}
 
-		Node *pairToChildOf(const pair <TKey, TValue> &in, Node *&newParent) {
+		pointer pairToChildOf(const pair <TKey, TValue> &in, Node *&newParent) {
 			Node *newNode;
 			newNode = _allocator.allocate(1);
 			_allocator.construct(newNode, in, &nullNode);

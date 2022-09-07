@@ -57,36 +57,38 @@ namespace ft {
 		typedef TKey key_type;
 		typedef TValue mapped_type;
 		typedef ft::pair<const key_type, mapped_type> value_type;
-//		typedef Compare key_compare;
+		typedef Compare key_compare;
 		typedef Allocator allocator_type;
-//		typedef typename Allocator::reference reference;
-//		typedef typename Allocator::const_reference const_reference;
 		typedef NodeType Node;
+		typedef typename Allocator::reference reference;
+		typedef typename Allocator::const_reference const_reference;
+		typedef typename Allocator::pointer pointer;
+		typedef typename Allocator::const_pointer const_pointer;
 
 	public:
 
-		RedBlackTree(const Compare &compare = std::less<TKey>(), const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<key_type, mapped_type, Node, Compare, allocator_type>(compare, alloc) {
+		RedBlackTree(const key_compare &compare = std::less<TKey>(), const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<key_type, mapped_type, Node, key_compare, allocator_type>(compare, alloc) {
 			this->nullNode.isBlack = true;
 		}
 
-		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, Compare, const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<key_type, mapped_type, NodeType, Compare, allocator_type>(alloc) {
-			BinarySearchTree<key_type, mapped_type, Compare, Node>::operator=(rhs);
+		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, key_compare, const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<key_type, mapped_type, NodeType, key_compare, allocator_type>(alloc) {
+			BinarySearchTree<key_type, mapped_type, key_compare, Node>::operator=(rhs);
 			this->nullNode.isBlack = true;
 		}
 
 		RedBlackTree<key_type, mapped_type, NodeType> &
-		operator=(const RedBlackTree<key_type, mapped_type, Compare, NodeType> &rhs) {
-			BinarySearchTree<key_type, mapped_type, Compare, Node>::operator=(rhs);
+		operator=(const RedBlackTree<key_type, mapped_type, key_compare, NodeType> &rhs) {
+			BinarySearchTree<key_type, mapped_type, key_compare, Node>::operator=(rhs);
 			return *this;
 		}
 
-		Node *insertByValue(ft::pair<key_type, mapped_type> const &in) {
+		pointer insertByValue(ft::pair<key_type, mapped_type> const &in) {
 			return insert(in);
 		}
 
-		Node *insert(ft::pair<key_type, mapped_type> const &in) {
+		pointer insert(ft::pair<key_type, mapped_type> const &in) {
 			Node *newNode = BinarySearchTree<key_type, mapped_type, Node>::insert(in);
 			Node *currentNode = newNode;
 			Node *parent;
@@ -171,20 +173,20 @@ namespace ft {
 		}
 
 	private:
-		Node *fixupRotate(Node *currentNode, Node *parent, Node *grandParent) {
+		pointer fixupRotate(Node *currentNode, Node *parent, Node *grandParent) {
 			if (parent == grandParent->right)
 				return fixupRotateRightBranch(currentNode, parent, grandParent);
 			else
 				return fixupRotateLeftBranch(currentNode, parent, grandParent);
 		}
 
-		Node *getUncle(Node *grandParent, Node *parent) const {
+		pointer getUncle(Node *grandParent, Node *parent) const {
 			if (parent == grandParent->right)
 				return grandParent->left;
 			return grandParent->right;
 		}
 
-		Node *fixupRotateRightBranch(Node *currentNode, Node *parent, Node *grandParent) {
+		pointer fixupRotateRightBranch(Node *currentNode, Node *parent, Node *grandParent) {
 			if (currentNode == parent->right) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->leftRotate(grandParent);
@@ -194,7 +196,7 @@ namespace ft {
 			return parent;
 		}
 
-		Node *fixupRotateLeftBranch(Node *currentNode, Node *parent, Node *grandParent) {
+		pointer fixupRotateLeftBranch(Node *currentNode, Node *parent, Node *grandParent) {
 			if (currentNode == parent->left) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->rightRotate(grandParent);
@@ -227,7 +229,7 @@ namespace ft {
 			successor->left->parent = successor;
 		}
 
-		Node *fixupDeletionCaseOne(Node *parent, Node *sibling) {
+		pointer fixupDeletionCaseOne(Node *parent, Node *sibling) {
 			Node *troubleMaker;
 
 			sibling->isBlack = true;
@@ -242,7 +244,7 @@ namespace ft {
 			return troubleMaker;
 		}
 
-		Node *fixupDeletionCaseTwo(Node *parent, Node *sibling) {
+		pointer fixupDeletionCaseTwo(Node *parent, Node *sibling) {
 			Node *troubleMaker;
 
 			sibling->isBlack = false;
@@ -269,7 +271,7 @@ namespace ft {
 			}
 		}
 
-		Node *fixupDeletionCaseFour(Node *parent, Node *sibling) {
+		pointer fixupDeletionCaseFour(Node *parent, Node *sibling) {
 			Node *troubleMaker;
 
 			sibling->isBlack = parent->isBlack;
@@ -285,7 +287,7 @@ namespace ft {
 			return troubleMaker;
 		}
 
-		Node *getSibling(const Node *troubleMaker, Node *parent) const {
+		pointer getSibling(const Node *troubleMaker, Node *parent) const {
 			Node *sibling;
 
 			if (troubleMaker == parent->left)
@@ -305,7 +307,7 @@ namespace ft {
 			}
 		}
 
-		double isContainingDoubleRed(Node *current) {
+		bool isContainingDoubleRed(Node *current) {
 			if (current != &this->nullNode) {
 				if (current->isBlack == current->parent->isBlack && current->isBlack == false)
 					return true;

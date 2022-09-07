@@ -212,8 +212,9 @@ namespace ft {
 
 		//todo: fix uninitialized read (a->content and b-> content might be garbage
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode ) const {
-			if (!((a == &nullNode) && (b == bNullNode)) && a->content != b->content)
-				return false;
+			if (!((a == &nullNode) && (b == bNullNode)))
+				if (a != &nullNode && b != bNullNode && a->content != b->content)
+					return false;
 			if (a->right != &nullNode){
 				if (b->right == bNullNode || isSameStructure(a->right, b->right, bNullNode) == false)
 					return false;

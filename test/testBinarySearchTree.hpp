@@ -261,7 +261,7 @@ TEST(BinarySearchTree, copyConstructor){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> reproduction(bst);
 
 	ASSERT_EQ(1, reproduction.root()->content.first);
-	//todo: add size == newSize
+	ASSERT_EQ(2, reproduction.size());
 }
 
 TEST(BinarySearchTree, noItemsSizeIsZero){

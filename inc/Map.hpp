@@ -74,8 +74,15 @@ namespace ft {
 			return iterator(rbTree.getNullNode(), rbTree.getNullNode());
 		}
 
-		void insert(const value_type &in){
-			rbTree.insert(in);
+		ft::pair<iterator, bool> insert(const value_type &in){
+			ft::pair<iterator, bool> result;
+			size_type before = size();
+			result.first = iterator(rbTree.insert(in), rbTree.getNullNode());
+			result.second = true;
+			size_type after = size();
+			if (before == after)
+				result.second = false;
+			return result;
 		}
 
 		size_type size(){

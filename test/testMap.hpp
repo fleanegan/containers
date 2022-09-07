@@ -1,11 +1,19 @@
 #include "testUtils.hpp"
 
-TEST(Map, insertingElementWithKeyAlreadyPresent){
+TEST(Map, insertingElementIncrementsSize){
 	ft::map<int, int> map;
 
 	map.insert(ft::make_pair(1, 0));
 
 	ASSERT_EQ(1, map.size());
+}
+
+TEST(Map, insertingElementReturnsPairWithSuccessStatusAsSecondElement){
+	ft::map<int, int> map;
+
+	ft::pair<ft::map<int, int>::iterator, bool> result = map.insert(ft::make_pair(1, 1));
+
+	ASSERT_TRUE(result.second);
 }
 
 TEST(Map, beginContainsLowestKey) {
@@ -25,5 +33,21 @@ TEST(Map, prevOfEndIsHighestKey) {
 	ASSERT_EQ(4, *(*it).first);
 }
 
-//insertingElementWithKeyAlreadyPresentHasSizeOne
-//returnValueStatesFalseSinceKeyAlreadyPresent
+TEST(Map, insertingElementWithKeyAlreadyPresentHasSizeOne){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(1, 0));
+
+	map.insert(ft::make_pair(1, 0));
+
+	ASSERT_EQ(1, map.size());
+}
+
+TEST(Map, returnValueStatesFalseSinceKeyAlreadyPresent){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(1, 0));
+
+	ft::pair<ft::map<int, int>::iterator, bool> result = map.insert(ft::make_pair(1, 1));
+
+	ASSERT_EQ(0, result.first->second);
+	ASSERT_FALSE(result.second);
+}

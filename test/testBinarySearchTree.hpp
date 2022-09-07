@@ -320,6 +320,14 @@ TEST(BinarySearchTree, poppingNodeDecrementsSize){
 	ASSERT_EQ(0, bst.size());
 }
 
+TEST(BinarySearchTree, getLowestItemOnEmptyTreeReturnsNullNode){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
+
+	ft::SearchTreeStandardNode<int, int> *result = bst.getLowest(bst.root(), bst.getNullNode());
+
+	ASSERT_EQ(result, bst.getNullNode());
+}
+
 TEST(BinarySearchTree, getLowestItem){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 

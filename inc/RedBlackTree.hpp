@@ -43,7 +43,7 @@ namespace ft {
 		}
 
 
-		RedBlackNode() : left(NULL), right(NULL), parent(NULL), isBlack(false) {
+		RedBlackNode() : left(this), right(this), parent(this), isBlack(false) {
 		}
 
 		virtual ~RedBlackNode() {

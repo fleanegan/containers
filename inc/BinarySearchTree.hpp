@@ -30,7 +30,7 @@ namespace ft {
 																				 parent(nullNode) {
 		}
 
-		SearchTreeStandardNode() : left(NULL), right(NULL), parent(NULL) {
+		SearchTreeStandardNode() : left(this), right(this), parent(this) {
 		}
 
 		virtual ~SearchTreeStandardNode() {
@@ -185,6 +185,8 @@ namespace ft {
 		static pointer getLowest(pointer startingPoint, pointer nullNode) {
 			pointer tmp = startingPoint;
 
+			if (tmp == nullNode && tmp->left == nullNode)
+				return tmp;
 			while (tmp->left != nullNode)
 				tmp = tmp->left;
 			return tmp;

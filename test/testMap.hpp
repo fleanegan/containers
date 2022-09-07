@@ -72,3 +72,19 @@ TEST(Map, comparingMapWithAnotherOneWithSameStructureReturnsSame_Negation){
 	ASSERT_FALSE(a != b);
 }
 
+TEST(Map, comparingEmptyMapWithNonEmpty){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> b;
+
+	ASSERT_FALSE(a < b);
+	ASSERT_TRUE(a > b);
+	ASSERT_FALSE(a > a);
+	ASSERT_FALSE(a < a);
+	ASSERT_TRUE(a <= a);
+	ASSERT_TRUE(b <= a);
+	ASSERT_FALSE(a <= b);
+	ASSERT_TRUE(a >= a);
+	ASSERT_TRUE(a >= b);
+	ASSERT_FALSE(b >= a);
+}
+

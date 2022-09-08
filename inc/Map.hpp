@@ -130,6 +130,25 @@ namespace ft {
 				rbTree.insert(*first++);
 		}
 
+		void erase (iterator position){
+			rbTree.popNodeByPointer(position.current());
+		}
+
+		size_type erase (const key_type& k){
+			rbTree.popNode(k);
+			return 1;
+		}
+
+		void erase (iterator first, iterator last){
+			iterator tmp;
+
+			--last;
+			while (first != last)
+				rbTree.popNodeByPointer(last--.current());
+			rbTree.popNodeByPointer(last--.current());
+		}
+
+
 		size_type size() {
 			return rbTree.size();
 		}
@@ -159,7 +178,7 @@ namespace ft {
 			return const_cast<mapped_type &>(static_cast<const this_type &>(*this).at(k));
 		}
 
-		const mapped_type& at (const key_type& k) const{
+		const mapped_type& at(const key_type& k) const{
 			NodeType const *result = rbTree.find(k);
 
 			if (result == NULL)

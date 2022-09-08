@@ -176,3 +176,40 @@ TEST(Map, insertWithHint){
 
 	map.insert(map.begin(), ft::make_pair(1, 2));
 }
+
+TEST(Map, erasingOneElementDecrementsSize){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy>::size_type before = a.size();
+
+	a.erase(a.begin());
+
+	ft::map<simpleDummy, simpleDummy>::size_type after = a.size();
+	ASSERT_EQ(before, after + 1);
+}
+
+TEST(Map, erasingByKeyReturnsOne){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy>::size_type before = a.size();
+
+	ft::map<simpleDummy, simpleDummy>::size_type result = a.erase(a.begin()->first);
+
+	ft::map<simpleDummy, simpleDummy>::size_type after = a.size();
+	ASSERT_EQ(before, after + 1);
+	ASSERT_EQ(1, result);
+}
+
+TEST(Map, deletingTheWholeMapByIterators){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+
+	a.erase(a.begin(), a.end());
+
+	ASSERT_EQ(0, a.size());
+}
+
+TEST(Map, deletingEmptyMapDoesNotDoAnything){
+	ft::map<simpleDummy, simpleDummy> a;
+
+	a.erase(a.begin(), a.end());
+
+	ASSERT_EQ(0, a.size());
+}

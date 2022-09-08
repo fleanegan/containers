@@ -8,6 +8,7 @@
 #include <iterator>
 #include <vector>
 #include <typeinfo>
+#include <map>
 #include "Stack.hpp"
 #include "Pair.hpp"
 #include "BinarySearchTree.hpp"
@@ -22,7 +23,10 @@
 #ifndef TESTING
 
 int main(){
-	return 0;
+	const ft::map<int, int> map;
+
+	ft::map<int, int>::const_iterator constIt = map.begin();
+	(void) constIt;
 }
 
 

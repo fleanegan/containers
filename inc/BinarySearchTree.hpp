@@ -66,17 +66,17 @@ namespace ft {
 		BinarySearchTree(const compare_type &compare = compare_type(), const allocator_type &alloc = allocator_type()) :
 				nullNode(),
 				rootNode(&nullNode),
-				_compare(compare),
 				_allocator(alloc),
-				current_size(0) {
+				current_size(0),
+				_compare(compare){
 
 		}
 
 		BinarySearchTree(const BinarySearchTree &rhs) :
 				nullNode(),
 				rootNode(&nullNode),
-				_compare(rhs._compare),
-				_allocator(rhs._allocator) {
+				_allocator(rhs._allocator) ,
+				_compare(rhs._compare){
 			*this = rhs;
 		}
 
@@ -181,7 +181,7 @@ namespace ft {
 							 std::numeric_limits<size_type>::max() / (sizeof(NodeType) + sizeof(pointer))));
 		}
 
-		static pointer getLowest(pointer startingPoint, pointer nullNode) {
+		static pointer getLowest(pointer startingPoint, const_pointer nullNode) {
 			pointer tmp = startingPoint;
 
 			if (tmp == nullNode && tmp->left == nullNode)
@@ -191,7 +191,7 @@ namespace ft {
 			return tmp;
 		}
 
-		static pointer getHighest(pointer startingPoint, pointer nullNode) {
+		static pointer getHighest(pointer startingPoint, const_pointer nullNode) {
 			pointer tmp = startingPoint;
 
 			while (tmp->right != nullNode)
@@ -277,7 +277,8 @@ namespace ft {
 
 			if (source != sourceNullNode) {
 				newNode = _allocator.allocate(1);
-				_allocator.construct(newNode, *source, &nullNode);
+				Node tmp(*source, &nullNode);
+				_allocator.construct(newNode, tmp);
 				linkChildAndParent(newNode, dest);
 				if (source->right != sourceNullNode)
 					copySubTree(source->right, sourceNullNode, &newNode);

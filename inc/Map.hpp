@@ -61,8 +61,8 @@ namespace ft {
 		explicit map(const Compare &comp = Compare(),
 					 const allocator_type &alloc = allocator_type())
 				: rbTree(RbTree(comp, rb_allocator_type(alloc))),
-				compare(comp),
-				alloc(alloc){
+				  alloc(alloc),
+				  compare(comp){
 		}
 
 		map(const map &rhs) {
@@ -93,17 +93,18 @@ namespace ft {
 
 		}
 
-//		const_iterator begin() const {
-//			return const_iterator(_arr);
-//		}
+		const_iterator begin() const {
+			NodeType const * nullNode = rbTree.getNullNode();
+			return const_iterator(rbTree.getLowest(rbTree.root(), nullNode), rbTree.getNullNode());
+		}
 
 		iterator begin() {
 			return iterator(rbTree.getLowest(rbTree.root(), rbTree.getNullNode()), rbTree.getNullNode());
 		}
 
-//		const_iterator end() const {
-//			return const_iterator(_arr);
-//		}
+		const_iterator end() const {
+			return const_iterator(rbTree.getNullNode(), rbTree.getNullNode());
+		}
 
 		iterator end() {
 			return iterator(rbTree.getNullNode(), rbTree.getNullNode());
@@ -180,34 +181,26 @@ namespace ft {
 	}
 
 	template<class Key, class T, class Compare, class Allocator>
-//	bool operator<(const map<Key,T,Compare,Allocator>& x,
-//					const map<Key,T,Compare,Allocator>& y){
-	bool operator<(map<Key, T, Compare, Allocator> &x,
-				   map<Key, T, Compare, Allocator> &y) {
+	bool operator<(const map<Key,T,Compare,Allocator>& x,
+					const map<Key,T,Compare,Allocator>& y){
 		return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 	}
 
 	template<class Key, class T, class Compare, class Allocator>
-//	bool operator>(const map<Key,T,Compare,Allocator>& x,
-//					const map<Key,T,Compare,Allocator>& y){
-	bool operator>(map<Key, T, Compare, Allocator> &x,
-				   map<Key, T, Compare, Allocator> &y) {
+	bool operator>(const map<Key, T, Compare, Allocator> &x,
+				   const map<Key, T, Compare, Allocator> &y) {
 		return !(x < y) && (x != y);
 	}
 
 	template<class Key, class T, class Compare, class Allocator>
-//	bool operator<=(const map<Key,T,Compare,Allocator>& x,
-//					const map<Key,T,Compare,Allocator>& y){
-	bool operator>=(map<Key, T, Compare, Allocator> &x,
-					map<Key, T, Compare, Allocator> &y) {
+	bool operator>=(const map<Key, T, Compare, Allocator> &x,
+					const map<Key, T, Compare, Allocator> &y) {
 		return !ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 	}
 
 	template<class Key, class T, class Compare, class Allocator>
-//	bool operator<=(const map<Key,T,Compare,Allocator>& x,
-//					const map<Key,T,Compare,Allocator>& y){
-	bool operator<=(map<Key, T, Compare, Allocator> &x,
-					map<Key, T, Compare, Allocator> &y) {
+	bool operator<=(const map<Key, T, Compare, Allocator> &x,
+					const map<Key, T, Compare, Allocator> &y) {
 		return !ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end());
 	}
 }

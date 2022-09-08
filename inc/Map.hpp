@@ -172,6 +172,10 @@ namespace ft {
 			rbTree.clear();
 		}
 
+		size_type count() const{
+			return 1;
+		}
+
 		mapped_type& operator[] (const key_type& k) {
 			iterator it = insert(ft::make_pair(k, mapped_type())).first;
 			return it->second;
@@ -187,6 +191,18 @@ namespace ft {
 			if (result == NULL)
 				throw std::out_of_range("key not found");
 			return result->content.second;
+		}
+
+		iterator find( const Key& key ){
+			const_iterator result = static_cast<const this_type &>(*this).find(key);
+			return iterator(const_cast<NodeType *>(result.current()), rbTree.getNullNode());
+		}
+
+		const_iterator find( const Key& key ) const{
+			NodeType const *  result = rbTree.find(key);
+			if (result == NULL)
+				return end();
+			return const_iterator(result, rbTree.getNullNode());
 		}
 
 		template<class VKey, class VT, class VCompare, class VAllocator>

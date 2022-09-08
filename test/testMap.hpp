@@ -215,10 +215,23 @@ TEST(Map, deletingEmptyMapDoesNotDoAnything){
 }
 
 TEST(Map, swappingEmptyMapWithNonEmpty){
+	ft::map<simpleDummy, simpleDummy> compA = generateTestMap();
 	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> compB;
 	ft::map<simpleDummy, simpleDummy> b;
 
 	a.swap(b);
 
 	ASSERT_EQ(0, a.size());
+	ASSERT_EQ(compA.size(), b.size());
+	ASSERT_TRUE(compA <= b);
+	ASSERT_TRUE(compB <= a);
+}
+
+TEST(Map, searchingInEmptyMapReturnsEnd){
+	ft::map<simpleDummy, simpleDummy> a;
+
+	ft::map<simpleDummy, simpleDummy>::iterator it = a.find(simpleDummy(1));
+
+	ASSERT_EQ(a.end(), it);
 }

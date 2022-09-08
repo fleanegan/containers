@@ -165,9 +165,14 @@ TEST(Map, atReadOnly){
 	ASSERT_EQ(2, constMap.at(1));
 }
 
-
 TEST(Map, constMapHasConstIterator){
 	const ft::map<int, int> map;
 
 	ft::map<int, int>::const_iterator constIt = map.begin();
+}
+
+TEST(Map, insertWithHint){
+	ft::map<int, int> map;
+
+	map.insert(map.begin(), ft::make_pair(1, 2));
 }

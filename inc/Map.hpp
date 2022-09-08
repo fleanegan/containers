@@ -75,9 +75,7 @@ namespace ft {
 			 const allocator_type& alloc = allocator_type()) :
 					compare(comp),
 					alloc(alloc){
-			while (first != last){
-				rbTree.insert(*first++);
-			}
+			insert(first, last);
 		}
 
 		map &operator=(const map &map) {
@@ -121,10 +119,16 @@ namespace ft {
 			return result;
 		}
 
-		iterator insert (iterator position, const value_type& val);
+		ft::pair<iterator,bool> insert (iterator position, const value_type& val){
+			(void) position;
+			return insert(val);
+		}
 
 		template <class InputIterator>
-		void insert (InputIterator first, InputIterator last);
+		void insert (InputIterator first, InputIterator last){
+			while (first != last)
+				rbTree.insert(*first++);
+		}
 
 		size_type size() {
 			return rbTree.size();

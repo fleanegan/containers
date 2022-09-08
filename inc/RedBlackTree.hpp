@@ -69,13 +69,13 @@ namespace ft {
 
 		RedBlackTree(const key_compare &compare = std::less<TKey>(), const allocator_type &alloc = allocator_type())
 				: ft::BinarySearchTree<key_type, mapped_type, Node, key_compare, allocator_type>(compare, alloc) {
-			this->nullNode.isBlack = true;
+			this->nullNode->isBlack = true;
 		}
 
 		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, key_compare, const allocator_type &alloc = allocator_type())
 				: ft::BinarySearchTree<key_type, mapped_type, NodeType, key_compare, allocator_type>(alloc) {
 			BinarySearchTree<key_type, mapped_type, key_compare, Node>::operator=(rhs);
-			this->nullNode.isBlack = true;
+			this->nullNode->isBlack = true;
 		}
 
 		RedBlackTree<key_type, mapped_type, NodeType> &
@@ -103,12 +103,12 @@ namespace ft {
 			Node *potentialColourTrouble;
 			bool isNodeToBeRemovedBlack = nodeToBeRemoved->isBlack;
 
-			if (nodeToBeRemoved == &this->nullNode)
+			if (nodeToBeRemoved == this->nullNode)
 				return;
-			if (nodeToBeRemoved->right == &this->nullNode) {
+			if (nodeToBeRemoved->right == this->nullNode) {
 				potentialColourTrouble = nodeToBeRemoved->left;
 				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			} else if (nodeToBeRemoved->left == &this->nullNode) {
+			} else if (nodeToBeRemoved->left == this->nullNode) {
 				potentialColourTrouble = nodeToBeRemoved->right;
 				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
 			} else {
@@ -141,7 +141,7 @@ namespace ft {
 			Node *parent = troubleMaker->parent;
 			Node *sibling;
 
-			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker != &this->nullNode) {
+			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker != this->nullNode) {
 				sibling = getSibling(troubleMaker, parent);
 				if (sibling->isBlack == false)
 					troubleMaker = fixupDeletionCaseOne(parent, sibling);
@@ -298,17 +298,17 @@ namespace ft {
 		}
 
 		void countBranches(Node *current, int sum, ft::vector<int> &result) {
-			if (current != &this->nullNode) {
+			if (current != this->nullNode) {
 				sum += current->isBlack;
 				countBranches(current->right, sum, result);
 				countBranches(current->left, sum, result);
-				if (current->right == &this->nullNode && current->left == &this->nullNode)
+				if (current->right == this->nullNode && current->left == this->nullNode)
 					result.push_back(sum);
 			}
 		}
 
 		bool isContainingDoubleRed(Node *current) {
-			if (current != &this->nullNode) {
+			if (current != this->nullNode) {
 				if (current->isBlack == current->parent->isBlack && current->isBlack == false)
 					return true;
 				return isContainingDoubleRed(current->right) || isContainingDoubleRed(current->left);

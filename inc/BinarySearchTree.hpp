@@ -55,28 +55,29 @@ namespace ft {
 		typedef Compare compare_type;
 		typedef size_t size_type;
 
-	protected:
-		Node nullNode;
-		pointer rootNode;
 	private:
 		allocator_type _allocator;
-		size_type current_size;
 		compare_type _compare;
+		size_type current_size;
+	protected:
+		pointer nullNode;
+		pointer rootNode;
+
 	public:
 		BinarySearchTree(const compare_type &compare = compare_type(), const allocator_type &alloc = allocator_type()) :
-				nullNode(),
-				rootNode(&nullNode),
 				_allocator(alloc),
+				_compare(compare),
 				current_size(0),
-				_compare(compare){
+				nullNode(makeNullNode()),
+				rootNode(nullNode){
 
 		}
 
 		BinarySearchTree(const BinarySearchTree &rhs) :
-				nullNode(),
-				rootNode(&nullNode),
 				_allocator(rhs._allocator) ,
-				_compare(rhs._compare){
+				_compare(rhs._compare),
+				nullNode(makeNullNode()),
+				rootNode(nullNode){
 			*this = rhs;
 		}
 
@@ -84,12 +85,13 @@ namespace ft {
 			if (rhs.rootNode == this->rootNode)
 				return *this;
 			current_size = rhs.current_size;
-			copySubTree(rhs.rootNode, &rhs.nullNode, &rootNode);
+			copySubTree(rhs.rootNode, rhs.nullNode, &rootNode);
 			return *this;
 		}
 
 		virtual ~BinarySearchTree() {
-			deleteSubTreeFrom(rootNode);
+			clear();
+			destroyAndDeallocateNode(nullNode);
 		}
 
 		pointer find(const TKey &i){
@@ -105,11 +107,11 @@ namespace ft {
 		}
 
 		pointer getNullNode() {
-			return &nullNode;
+			return nullNode;
 		}
 
 		const_pointer getNullNode() const {
-			return &nullNode;
+			return nullNode;
 		}
 
 		pointer insertByValue(ft::pair<TKey, TValue> in) {
@@ -117,9 +119,9 @@ namespace ft {
 		}
 
 		pointer insert(ft::pair<TKey, TValue> const &in) {
-			pointer newParent = &nullNode;
+			pointer newParent = nullNode;
 
-			if (rootNode != &nullNode) {
+			if (rootNode != nullNode) {
 				newParent = findInsertPlace(&in.first);
 				if (newParent->content.first == in.first)
 					return newParent;
@@ -141,11 +143,11 @@ namespace ft {
 		}
 
 		virtual void popNodeByPointer(pointer nodeToBeRemoved) {
-			if (nodeToBeRemoved == &nullNode)
+			if (nodeToBeRemoved == nullNode)
 				return;
-			if (nodeToBeRemoved->right == &nullNode)
+			if (nodeToBeRemoved->right == nullNode)
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			else if (nodeToBeRemoved->left == &nullNode)
+			else if (nodeToBeRemoved->left == nullNode)
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
 			else
 				substituteNodeWithSuccessor(nodeToBeRemoved);
@@ -153,7 +155,7 @@ namespace ft {
 		}
 
 		void leftRotate(pointer pivot) {
-			if (pivot->right == &nullNode)
+			if (pivot->right == nullNode)
 				return;
 			pointer nodeToChangePlaceWith = pivot->right;
 
@@ -163,7 +165,7 @@ namespace ft {
 		}
 
 		void rightRotate(pointer pivot) {
-			if (pivot->left == &nullNode)
+			if (pivot->left == nullNode)
 				return;
 			pointer nodeToChangePlaceWith = pivot->left;
 
@@ -200,34 +202,47 @@ namespace ft {
 		}
 
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode ) const {
-			if (!((a == &nullNode) && (b == bNullNode)))
-				if (a != &nullNode && b != bNullNode && a->content != b->content)
+			if (!((a == nullNode) && (b == bNullNode)))
+				if (a != nullNode && b != bNullNode && a->content != b->content)
 					return false;
-			if (a->right != &nullNode){
+			if (a->right != nullNode){
 				if (b->right == bNullNode || isSameStructure(a->right, b->right, bNullNode) == false)
 					return false;
 			}
-			if (a->left != &nullNode){
+			if (a->left != nullNode){
 				if (b->left == bNullNode || isSameStructure(a->left, b->left, bNullNode) == false)
 					return false;
 			}
 			return true;
 		}
 
+		void swap(BinarySearchTree &in){
+			size_type current_size_tmp = current_size;
+			pointer rootNode_tmp = rootNode;
+			pointer nullNode_tmp = nullNode;
+
+			current_size = in.current_size;
+			nullNode = in.nullNode;
+			rootNode = in.rootNode;
+			in.current_size = current_size_tmp;
+			in.rootNode = rootNode_tmp;
+			in.nullNode = nullNode_tmp;
+		}
+
 	private:
 		const_pointer findByKey(const TKey &i) const {
 			pointer tmp = rootNode;
 
-			while (tmp != &nullNode) {
+			while (tmp != nullNode) {
 				if (tmp->content.first == i)
 					return (tmp);
 				if (_compare(tmp->content.first, i) == false) {
-					if (tmp->left == &nullNode)
-						return &nullNode;
+					if (tmp->left == nullNode)
+						return nullNode;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == &nullNode)
-						return &nullNode;
+					if (tmp->right == nullNode)
+						return nullNode;
 					tmp = tmp->right;
 				}
 			}
@@ -246,13 +261,13 @@ namespace ft {
 		pointer findInsertPlace(const TKey *keyOfNewNode) const {
 			pointer tmp = rootNode;
 
-			while ((tmp->left != &nullNode || tmp->right != &nullNode)) {
+			while ((tmp->left != nullNode || tmp->right != nullNode)) {
 				if (_compare(*keyOfNewNode, tmp->content.first)) {
-					if (tmp->left == &nullNode)
+					if (tmp->left == nullNode)
 						return tmp;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == &nullNode)
+					if (tmp->right == nullNode)
 						return tmp;
 					tmp = tmp->right;
 				}
@@ -261,12 +276,12 @@ namespace ft {
 		}
 
 		void deleteSubTreeFrom(pointer localRoot) {
-			if (localRoot == &nullNode)
+			if (localRoot == nullNode)
 				return;
 			deleteSubTreeFrom((localRoot)->left);
 			deleteSubTreeFrom((localRoot)->right);
 			if (localRoot == rootNode)
-				rootNode = &nullNode;
+				rootNode = nullNode;
 			--current_size;
 			_allocator.destroy(localRoot);
 			_allocator.deallocate(localRoot, 1);
@@ -276,9 +291,7 @@ namespace ft {
 			pointer newNode;
 
 			if (source != sourceNullNode) {
-				newNode = _allocator.allocate(1);
-				Node tmp(*source, &nullNode);
-				_allocator.construct(newNode, tmp);
+				newNode = copyNode(source);
 				linkChildAndParent(newNode, dest);
 				if (source->right != sourceNullNode)
 					copySubTree(source->right, sourceNullNode, &newNode);
@@ -287,28 +300,36 @@ namespace ft {
 			}
 		}
 
+		pointer copyNode(const Node *source) {
+			pointer newNode;
+			newNode = _allocator.allocate(1);
+			Node tmp(*source, nullNode);
+			_allocator.construct(newNode, tmp);
+			return newNode;
+		}
+
 	protected:
 		pointer getInorderSuccessor(pointer localRoot, pointer biggerThan,
 								  pointer currentOptimum) {
-			pointer leftMinimum = &nullNode;
-			pointer rightMinimum = &nullNode;
+			pointer leftMinimum = nullNode;
+			pointer rightMinimum = nullNode;
 
-			if (localRoot == &nullNode)
-				return &nullNode;
-			if (localRoot->right == &nullNode && localRoot->left == &nullNode) {
+			if (localRoot == nullNode)
+				return nullNode;
+			if (localRoot->right == nullNode && localRoot->left == nullNode) {
 				if (_compare(localRoot->content.first, currentOptimum->content.first) && _compare(localRoot->content.first, biggerThan->content.first) == false)
 					return localRoot;
 				return currentOptimum;
 			}
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != &nullNode && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
+			if (leftMinimum != nullNode && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
 					_compare(leftMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(leftMinimum->content.first, localRoot->content.first))
 					return leftMinimum;
 				return localRoot;
 			}
-			if (rightMinimum != &nullNode && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
+			if (rightMinimum != nullNode && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
 					_compare(rightMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(rightMinimum->content.first, localRoot->content.first))
 					return rightMinimum;
@@ -332,8 +353,8 @@ namespace ft {
 		}
 
 		void replaceNode(pointer nodeToBeReplaced, pointer replacer) {
-			if (nodeToBeReplaced->parent == &nullNode) {
-				rootNode = &nullNode;
+			if (nodeToBeReplaced->parent == nullNode) {
+				rootNode = nullNode;
 				linkChildAndParent(replacer, &rootNode);
 			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
 				nodeToBeReplaced->parent->left = replacer;
@@ -344,24 +365,39 @@ namespace ft {
 
 		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved) {
 			if (nodeToBeRemoved == rootNode) {
-				rootNode = &nullNode;
-				nullNode.right = &nullNode;
-				nullNode.left = &nullNode;
+				rootNode = nullNode;
+				nullNode->right = nullNode;
+				nullNode->left = nullNode;
 			}
 			--current_size;
 			delete nodeToBeRemoved;
 		}
 
 	private:
+		pointer makeNullNode() {
+			pointer result;
+			result = _allocator.allocate(1);
+			_allocator.construct(result, Node());
+			result->right = result;
+			result->left = result;
+			result->parent = result;
+			return result;
+		}
+
+		void destroyAndDeallocateNode(pointer in){
+			_allocator.destroy(in);
+			_allocator.deallocate(in, 1);
+		}
+
 		void linkChildAndParent(pointer newNode, pointer *newParent) {
-			if (*newParent != &nullNode) {
+			if (*newParent != nullNode) {
 				if (_compare(newNode->content.first, (*newParent)->content.first))
 					(*newParent)->left = newNode;
 				else
 					(*newParent)->right = newNode;
 			} else {
-				nullNode.right = newNode;
-				nullNode.left = newNode;
+				nullNode->right = newNode;
+				nullNode->left = newNode;
 				rootNode = newNode;
 			}
 			newNode->parent = *newParent;
@@ -370,7 +406,7 @@ namespace ft {
 		pointer pairToChildOf(const pair <TKey, TValue> &in, pointer &newParent) {
 			pointer newNode;
 			newNode = _allocator.allocate(1);
-			_allocator.construct(newNode, in, &nullNode);
+			_allocator.construct(newNode, in, nullNode);
 			linkChildAndParent(newNode, &newParent);
 			++current_size;
 			return newNode;

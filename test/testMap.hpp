@@ -213,3 +213,12 @@ TEST(Map, deletingEmptyMapDoesNotDoAnything){
 
 	ASSERT_EQ(0, a.size());
 }
+
+TEST(Map, swappingEmptyMapWithNonEmpty){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> b;
+
+	a.swap(b);
+
+	ASSERT_EQ(0, a.size());
+}

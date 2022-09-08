@@ -148,6 +148,9 @@ namespace ft {
 			rbTree.popNodeByPointer(last--.current());
 		}
 
+		void swap (map& x){
+			rbTree.swap(x.rbTree);
+		}
 
 		size_type size() {
 			return rbTree.size();

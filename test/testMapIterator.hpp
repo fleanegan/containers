@@ -128,6 +128,7 @@ TEST(MapIterator, dereferenceConstIterator) {
 	ft::map<simpleDummy, simpleDummy>::const_iterator aee = map.begin();
 
 	aee++;
+
 	*aee;
 
 	ASSERT_EQ(0, *(a->first));

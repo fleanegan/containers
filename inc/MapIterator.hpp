@@ -7,12 +7,11 @@
 
 namespace ft {
 
-	template<typename Key, typename T, typename NodeType>
+	template<typename value_type, typename Key, typename T, typename NodeType>
 	class MapIterator {
 	public:
 		typedef Key key_type;
 		typedef T mapped_type;
-		typedef ft::pair<const Key, T> value_type;
 		typedef NodeType Node;
 		typedef value_type* pointer;
 		typedef value_type const * const_pointer;
@@ -28,8 +27,8 @@ namespace ft {
 															  nullNode(nullNode) {
 		}
 
-		template<class UKey, class UValue, class UNode = ft::RedBlackNode<UKey, UValue> >
-		MapIterator(const MapIterator<UKey, UValue, UNode> &it) : currentNode(it.current()),
+		template<class UVType, class UKey, class UValue, class UNode>
+		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : currentNode(it.current()),
 														   nullNode(it.null()) {
 		}
 
@@ -65,7 +64,7 @@ namespace ft {
 		}
 
 		MapIterator operator--(int i) {
-			MapIterator<key_type, mapped_type, NodeType> result = *this;
+			MapIterator<value_type, key_type, mapped_type, NodeType> result = *this;
 			if (i == 0) {
 				moveToPrevNode();
 			}
@@ -73,7 +72,7 @@ namespace ft {
 		}
 
 		MapIterator operator++(int i) {
-			MapIterator<key_type, mapped_type, NodeType> result = *this;
+			MapIterator<value_type, key_type, mapped_type, NodeType> result = *this;
 			if (i == 0) {
 				moveToNextNode();
 			}
@@ -89,15 +88,13 @@ namespace ft {
 			return &currentNode->content;
 		}
 
-		template<typename Disabler = Node , typename ft::enable_if<!ft::is_const<Disabler>::value>::type*>
 		reference operator*() {
 			return currentNode->content;
 		}
 
-		const_reference operator*() const {
+		const_reference operator*() const{
 			return currentNode->content;
 		}
-
 	private:
 		void moveToNextNode() {
 			Key originalKey;

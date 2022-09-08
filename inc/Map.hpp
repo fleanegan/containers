@@ -27,8 +27,8 @@ namespace ft {
 		typedef ft::RedBlackTree<key_type, mapped_type, NodeType, Compare, rb_allocator_type> RbTree;
 
 	public:
-		typedef MapIterator<key_type, mapped_type, NodeType> iterator;
-		typedef MapIterator<key_type, mapped_type, const NodeType> const_iterator;
+		typedef MapIterator<value_type, key_type, mapped_type, NodeType> iterator;
+		typedef MapIterator<const value_type, key_type, mapped_type, const NodeType> const_iterator;
 		typedef typename RbTree::size_type size_type;
 		//typedef difference_type;
 		typedef typename Allocator::pointer pointer;
@@ -76,7 +76,7 @@ namespace ft {
 					compare(comp),
 					alloc(alloc){
 			while (first != last){
-				insert(*first++);
+				rbTree.insert(*first++);
 			}
 		}
 
@@ -109,16 +109,21 @@ namespace ft {
 			return iterator(rbTree.getNullNode(), rbTree.getNullNode());
 		}
 
-		ft::pair<iterator, bool> insert(const value_type &in) {
+		ft::pair<iterator,bool> insert (const value_type& val) {
 			ft::pair<iterator, bool> result;
 			size_type before = size();
-			result.first = iterator(rbTree.insert(in), rbTree.getNullNode());
+			result.first = iterator(rbTree.insert(val), rbTree.getNullNode());
 			result.second = true;
 			size_type after = size();
 			if (before == after)
 				result.second = false;
 			return result;
 		}
+
+		iterator insert (iterator position, const value_type& val);
+
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last);
 
 		size_type size() {
 			return rbTree.size();

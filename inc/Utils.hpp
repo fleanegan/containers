@@ -6,7 +6,6 @@
 #define CONTAINERS_UTILS_HPP
 
 #include <limits>
-#include <type_traits>
 
 namespace ft{
 	template<typename It>
@@ -43,21 +42,6 @@ namespace ft{
 	distance (It first, It last){
 		return ft::distance<It>(first, last, typename ft::iterator_traits<It>::iterator_category());
 	}
-
-	//todo: check c++98 compatibility
-	template <class T, T v>
-	struct integral_constant {
-		static constexpr T value = v;
-		typedef T value_type;
-		typedef integral_constant<T,v> type;
-		constexpr operator T() { return v; }
-	};
-
-	typedef integral_constant<bool, true> true_type;
-	typedef integral_constant<bool, false> false_type;
-
-	template<class T> struct is_const          : false_type {};
-	template<class T> struct is_const<const T> : true_type {};
 
 	template <bool, typename T = void>
 	struct enable_if

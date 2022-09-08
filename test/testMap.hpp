@@ -103,3 +103,25 @@ TEST(Map, emptyAfterClearing){
 	ASSERT_TRUE(map.empty());
 }
 
+TEST(Map, constructOneElementFromIterator){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+
+	ft::map<simpleDummy, simpleDummy> fromA(a.begin(), ++a.begin());
+
+
+	ASSERT_EQ(1, fromA.size());
+	ASSERT_EQ(0, *(fromA.begin()->first));
+}
+
+TEST(Map, constructHoleMapFromIterator){
+	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+
+	ft::map<simpleDummy, simpleDummy> fromA(a.begin(), a.end());
+
+	bool structuralEquality = (fromA == a);
+	bool lexicographicalEquality = (fromA >= a);
+	ASSERT_FALSE(structuralEquality);
+	ASSERT_TRUE(lexicographicalEquality);
+}
+
+

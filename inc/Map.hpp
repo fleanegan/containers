@@ -39,6 +39,7 @@ namespace ft {
 	private:
 		RbTree rbTree;
 		allocator_type alloc;
+		Compare compare;
 
 	public:
 		class value_compare : public std::binary_function<value_type, value_type, bool> {
@@ -59,19 +60,32 @@ namespace ft {
 		explicit map(const Compare &comp = Compare(),
 					 const allocator_type &alloc = allocator_type())
 				: rbTree(RbTree(comp, rb_allocator_type(alloc))),
+				compare(comp),
 				alloc(alloc){
-
 		}
 
 		map(const map &rhs) {
 			*this = rhs;
 		}
 
-		map &operator=(const map &rhs) {
-			if (rbTree.root() == rhs.rbTree.root())
+		template <class InputIterator>
+		map (InputIterator first, InputIterator last,
+			 const key_compare& comp = key_compare(),
+			 const allocator_type& alloc = allocator_type()) :
+					compare(comp),
+					alloc(alloc){
+			while (first != last){
+				insert(*first++);
+			}
+		}
+
+		map &operator=(const map &map) {
+			if (rbTree.root() == map.rbTree.root())
 				return *this;
-			rbTree = rhs.rbTree;
-			alloc = rhs.alloc;
+			rbTree = map.rbTree;
+			alloc = map.alloc;
+			compare = map.compare;
+			return *this;
 		}
 
 		~map(){

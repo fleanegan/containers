@@ -132,15 +132,3 @@ TEST(MapIterator, dereferenceConstIterator) {
 
 	ASSERT_EQ(0, *(a->first));
 }
-
-template <typename Q>
-struct bar{
-	template<typename T = Q, typename ft::enable_if<ft::is_const<T>::value>::type* = nullptr>
-	void foo() {
-		std::cout << "is const " << std::endl;
-	}
-	template<typename T = Q, typename ft::enable_if<!ft::is_const<T>::value>::type* = nullptr>
-	void foo() {
-		std::cout << "is not const " << std::endl;
-	}
-};

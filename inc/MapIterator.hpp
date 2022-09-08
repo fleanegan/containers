@@ -7,16 +7,20 @@
 
 namespace ft {
 
-	template<typename value_type, typename Key, typename T, typename NodeType>
+	template<typename ValueType, typename Key, typename T, typename NodeType>
 	class MapIterator {
 	public:
 		typedef Key key_type;
 		typedef T mapped_type;
 		typedef NodeType Node;
-		typedef value_type* pointer;
-		typedef value_type const * const_pointer;
-		typedef value_type& reference;
-		typedef value_type const & const_reference;
+		typedef ValueType value_type;
+		typedef ValueType* pointer;
+		typedef ValueType const * const_pointer;
+		typedef ValueType& reference;
+		typedef ValueType const & const_reference;
+		typedef ft::ptrdiff_t difference_type;
+		typedef std::bidirectional_iterator_tag iterator_category;
+
 	private:
 		Node *currentNode;
 		Node *nullNode;
@@ -64,7 +68,7 @@ namespace ft {
 		}
 
 		MapIterator operator--(int i) {
-			MapIterator<value_type, key_type, mapped_type, NodeType> result = *this;
+			MapIterator<ValueType, key_type, mapped_type, NodeType> result = *this;
 			if (i == 0) {
 				moveToPrevNode();
 			}
@@ -72,7 +76,7 @@ namespace ft {
 		}
 
 		MapIterator operator++(int i) {
-			MapIterator<value_type, key_type, mapped_type, NodeType> result = *this;
+			MapIterator<ValueType, key_type, mapped_type, NodeType> result = *this;
 			if (i == 0) {
 				moveToNextNode();
 			}

@@ -7,6 +7,7 @@
 
 #include "RedBlackTree.hpp"
 #include "MapIterator.hpp"
+#include "ReverseIterator.hpp"
 
 namespace ft {
 	template<class Key, class T, class Compare = std::less<Key>,
@@ -21,6 +22,7 @@ namespace ft {
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
 		typedef ft::RedBlackNode<key_type, mapped_type> NodeType;
+		typedef typename BinarySearchTree<key_type, value_type, NodeType, Compare, Allocator>::difference_type difference_type;
 
 	private:
 		typedef typename allocator_type::template rebind<NodeType>::other rb_allocator_type;
@@ -29,12 +31,11 @@ namespace ft {
 	public:
 		typedef MapIterator<value_type, key_type, mapped_type, NodeType> iterator;
 		typedef MapIterator<const value_type, key_type, mapped_type, const NodeType> const_iterator;
+		typedef ft::ReverseIterator<iterator> reverse_iterator;
+		typedef ft::ReverseIterator<const_iterator> const_reverse_iterator;
 		typedef typename RbTree::size_type size_type;
-		//typedef difference_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		//typedef std::reverse_iterator<iterator> reverse_iterator;
-		//typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 	private:
 		typedef typename ft::map<Key, T, Compare, Allocator> this_type;
@@ -103,6 +104,11 @@ namespace ft {
 		const_iterator end() const {
 			return const_iterator(rbTree.getNullNode(), rbTree.getNullNode());
 		}
+
+//		todo
+//		reverse_iterator rbegin() {
+//			return reverse_iterator(end());
+//		}
 
 		iterator end() {
 			return iterator(rbTree.getNullNode(), rbTree.getNullNode());

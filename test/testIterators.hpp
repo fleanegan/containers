@@ -3,7 +3,7 @@
 #define REVERSE_ITERATOR_OFFSET 1
 TEST(reverseIterator, canDereferenceNormally) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET);
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET);
 
 	simpleDummy result = *revIt;
 
@@ -12,7 +12,7 @@ TEST(reverseIterator, canDereferenceNormally) {
 
 TEST(reverseIterator, advancingReverseIteratorMeansRetreating) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET + 1);
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET + 1);
 	ASSERT_EQ(2, **revIt);
 
 	revIt++;
@@ -31,7 +31,7 @@ TEST(reverseIterator, isMisalignedOnPurpose) {
 
 TEST(reverseIterator, baseIteratorIsNotReverse) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
 	ft::vector<simpleDummy>::iterator forwIt = revIt.base();
 	int before = **forwIt;
 
@@ -43,7 +43,7 @@ TEST(reverseIterator, baseIteratorIsNotReverse) {
 
 TEST(reverseIterator, postAndPrefixIncrementing) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET);
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + REVERSE_ITERATOR_OFFSET);
 
 	ASSERT_EQ(**(revIt--), **(vec.begin()));
 	ASSERT_EQ(**(++revIt), **(vec.begin()));
@@ -51,22 +51,22 @@ TEST(reverseIterator, postAndPrefixIncrementing) {
 
 TEST(reverseIterator, accessingByIndexIsInversed){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.rbegin());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.rbegin());
 
 	ASSERT_EQ(4, **(revIt += 1));
 }
 
 TEST(reverseIterator, compareConstReverseIteratorAgainstNonConstReverseIterator) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
-	ReverseIterator<const ft::vector<simpleDummy>::iterator> constRevIt = vec.rbegin();
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
+	ft::ReverseIterator<const ft::vector<simpleDummy>::iterator> constRevIt = vec.rbegin();
 
 	ASSERT_EQ(constRevIt, revIt);
 }
 
 TEST(reverseIterator, movingIteratorTo) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
 
 
 	simpleDummy baseOperatorResult = *(revIt.base().operator-(1));
@@ -77,36 +77,36 @@ TEST(reverseIterator, movingIteratorTo) {
 
 TEST(reverseIterator, plusEqualDecrements) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt = vec.rbegin();
 
 	ASSERT_EQ(3, **(revIt += 2));
 }
 
 TEST(reverseIterator, minusEqualIncrements) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
 
 	ASSERT_EQ(2, **(revIt -= 2));
 }
 
 TEST(reverseIterator, distanceBetweenTwoReverseIteratorsIsNegative) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revItEnd(vec.end());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revItEnd(vec.end());
 
 	ASSERT_LT(revItEnd - revIt, 0);
 }
 
 TEST(reverseIterator, numberPlusIteratorReturnsNegativeDistance) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin());
 
 	ASSERT_EQ(2, **(-2 + revIt));
 }
 
 TEST(reverseIterator, movingIteratorBackwards) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
-	ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + 2);
+	ft::ReverseIterator<ft::vector<simpleDummy>::iterator> revIt(vec.begin() + 2);
 
 	simpleDummy baseOperatorResult = *(revIt.base().operator+(1));
 	simpleDummy operatorResult = *(revIt - 1);

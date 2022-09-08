@@ -165,6 +165,13 @@ TEST(Map, atReadOnly){
 	ASSERT_EQ(2, constMap.at(1));
 }
 
+//todo
+//TEST(Map, hasReverseIterator){
+//	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+//
+//	ft::map<simpleDummy, simpleDummy>::reverse_iterator revy = a.rbegin();
+//}
+
 TEST(Map, constMapHasConstIterator){
 	const ft::map<int, int> map;
 

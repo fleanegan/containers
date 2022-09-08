@@ -124,4 +124,43 @@ TEST(Map, constructHoleMapFromIterator){
 	ASSERT_TRUE(lexicographicalEquality);
 }
 
+TEST(Map, accessOperatorReadOnly){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(0, 1));
+	map.insert(ft::make_pair(1, 2));
 
+	int result = map[1];
+
+	ASSERT_EQ(2, result);
+}
+
+TEST(Map, accessOperatorWrite){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(0, 1));
+
+	map[0] = 2;
+
+	ASSERT_EQ(2, map[0]);
+}
+
+TEST(Map, atThrowsIfKeyNotPresent){
+	ft::map<int, int> map;
+
+	ASSERT_ANY_THROW(map.at(1));
+}
+
+TEST(Map, atReturnsMappedValueOfKeyIfKeyPresent){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(1, 2));
+
+	ASSERT_EQ(2, map.at(1));
+}
+
+TEST(Map, atReadOnly){
+	ft::map<int, int> map;
+	map.insert(ft::make_pair(1, 2));
+
+	const ft::map<int, int> constMap = map;
+
+	ASSERT_EQ(2, constMap.at(1));
+}

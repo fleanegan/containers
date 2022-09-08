@@ -4,7 +4,7 @@ TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturnsNULL){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int> > bst;
 	int keyToFind = 2;
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.findByKey(keyToFind);
+	ft::SearchTreeStandardNode<int, int> *result = bst.find(keyToFind);
 
 	ASSERT_EQ(nullptr, result);
 }
@@ -13,7 +13,7 @@ TEST(BinarySearchTree, searchingANodeOnLevelThree){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int keyToFind = 7;
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.findByKey(keyToFind);
+	ft::SearchTreeStandardNode<int, int> *result = bst.find(keyToFind);
 
 	ASSERT_NE(result, bst.getNullNode());
 }
@@ -179,8 +179,8 @@ TEST(BinarySearchTree, leftRotatingNodeWithNoChildDoesNothing){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int pivotKey = 20;
 	int nodeToSwapWithKey = 19;
-	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
-	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = bst.findByKey(nodeToSwapWithKey);
+	ft::SearchTreeStandardNode<int, int> *pivot = bst.find(pivotKey);
+	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = bst.find(nodeToSwapWithKey);
 
 	bst.leftRotate(pivot);
 
@@ -194,8 +194,8 @@ TEST(BinarySearchTree, rightRotatingNodeWithNoChildDoesNothing){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int pivotKey = 4;
 	int nodeToSwapWithKey = 5;
-	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
-	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = bst.findByKey(nodeToSwapWithKey);
+	ft::SearchTreeStandardNode<int, int> *pivot = bst.find(pivotKey);
+	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = bst.find(nodeToSwapWithKey);
 
 	bst.rightRotate(pivot);
 
@@ -214,7 +214,7 @@ TEST(BinarySearchTree, rotatingRootAwaySetsNullNodeAsParentOfNewRoot){
 TEST(BinarySearchTree, rightRotatingNodeWithNoRightChildWorks){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int pivotKey = 7;
-	ft::SearchTreeStandardNode<int, int> *pivot = bst.findByKey(pivotKey);
+	ft::SearchTreeStandardNode<int, int> *pivot = bst.find(pivotKey);
 	bst.popNodeByPointer(pivot->right);
 	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = pivot->left;
 	ft::SearchTreeStandardNode<int, int> *nodeToSwapWithRight = nodeToSwapWith->right;
@@ -241,7 +241,7 @@ TEST(BinarySearchTree, theParentOfTheRootsChildIsTheParent) {
 TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.findByKey((int &) bst.getNullNode()->content.first);
+	ft::SearchTreeStandardNode<int, int> *result = bst.find((int &) bst.getNullNode()->content.first);
 
 	ASSERT_EQ(nullptr, result);
 }

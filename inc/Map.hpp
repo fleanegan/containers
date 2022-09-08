@@ -37,6 +37,7 @@ namespace ft {
 		//typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 	private:
+		typedef typename ft::map<Key, T, Compare, Allocator> this_type;
 		RbTree rbTree;
 		allocator_type alloc;
 		Compare compare;
@@ -137,6 +138,23 @@ namespace ft {
 
 		void clear(){
 			rbTree.clear();
+		}
+
+		mapped_type& operator[] (const key_type& k) {
+			iterator it = insert(ft::make_pair(k, mapped_type())).first;
+			return it->second;
+		}
+
+		mapped_type& at (const key_type& k){
+			return const_cast<mapped_type &>(static_cast<const this_type &>(*this).at(k));
+		}
+
+		const mapped_type& at (const key_type& k) const{
+			NodeType const *result = rbTree.find(k);
+
+			if (result == NULL)
+				throw std::out_of_range("key not found");
+			return result->content.second;
 		}
 
 		template<class VKey, class VT, class VCompare, class VAllocator>

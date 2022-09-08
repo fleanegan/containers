@@ -92,23 +92,12 @@ namespace ft {
 			deleteSubTreeFrom(rootNode);
 		}
 
-		pointer findByKey(TKey &i) {
-			pointer tmp = rootNode;
+		pointer find(const TKey &i){
+			return const_cast<pointer>(findByKey(i));
+		}
 
-			while (tmp != &nullNode) {
-				if (tmp->content.first == i)
-					return (tmp);
-				if (_compare(tmp->content.first, i) == false) {
-					if (tmp->left == &nullNode)
-						return &nullNode;
-					tmp = tmp->left;
-				} else {
-					if (tmp->right == &nullNode)
-						return &nullNode;
-					tmp = tmp->right;
-				}
-			}
-			return NULL;
+		const_pointer find(const TKey &i) const {
+			return findByKey(i);
 		}
 
 		void clear(){
@@ -147,7 +136,7 @@ namespace ft {
 		}
 
 		virtual void popNode(TKey keyOfNodeToBeRemoved) {
-			pointer nodeToBeRemoved = findByKey(keyOfNodeToBeRemoved);
+			pointer nodeToBeRemoved = find(keyOfNodeToBeRemoved);
 			popNodeByPointer(nodeToBeRemoved);
 		}
 
@@ -226,6 +215,25 @@ namespace ft {
 		}
 
 	private:
+		const_pointer findByKey(const TKey &i) const {
+			pointer tmp = rootNode;
+
+			while (tmp != &nullNode) {
+				if (tmp->content.first == i)
+					return (tmp);
+				if (_compare(tmp->content.first, i) == false) {
+					if (tmp->left == &nullNode)
+						return &nullNode;
+					tmp = tmp->left;
+				} else {
+					if (tmp->right == &nullNode)
+						return &nullNode;
+					tmp = tmp->right;
+				}
+			}
+			return NULL;
+		}
+
 		void updateNodesForRotation(pointer pivot, pointer nodeToChangePlaceWith) {
 			pointer parent = pivot->parent;
 

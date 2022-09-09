@@ -5,6 +5,8 @@
 #ifndef CONTAINERS_MAPITERATOR_HPP
 #define CONTAINERS_MAPITERATOR_HPP
 
+#include "map.hpp"
+
 namespace ft {
 
 	template<typename ValueType, typename Key, typename T, typename NodeType, typename Compare = std::less<Key> >

@@ -3,6 +3,7 @@
 
 #include "Pair.hpp"
 #include "Node.hpp"
+#include "Utils.hpp"
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
@@ -374,7 +375,8 @@ namespace ft {
 		pointer pairToChildOf(const pair<TKey, TValue> &in, pointer &newParent) {
 			pointer newNode;
 			newNode = _allocator.allocate(1);
-			_allocator.construct(newNode, in, nullNode);
+			Node tmp(in, nullNode);
+			_allocator.construct(newNode, tmp);
 			linkChildAndParent(newNode, &newParent);
 			++current_size;
 			return newNode;

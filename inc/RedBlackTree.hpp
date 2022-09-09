@@ -3,6 +3,8 @@
 
 #include "BinarySearchTree.hpp"
 #include "Pair.hpp"
+#include "vector.hpp"
+
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >

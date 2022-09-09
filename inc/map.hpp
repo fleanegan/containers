@@ -40,8 +40,8 @@ namespace ft {
 	private:
 		typedef typename ft::map<Key, T, Compare, Allocator> this_type;
 		RbTree rbTree;
-		allocator_type alloc;
 		Compare compare;
+		allocator_type alloc;
 
 	public:
 		class value_compare : public std::binary_function<value_type, value_type, bool> {

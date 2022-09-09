@@ -1,5 +1,5 @@
 #include "testUtils.hpp"
-#include "../inc/Vector.hpp"
+#include "../inc/vector.hpp"
 
 TEST(vectorIterator, deferencingAnIteratorReturnsAReferenceToTheObjectPointedTo){
 	ft::vector<simpleDummy> vec;

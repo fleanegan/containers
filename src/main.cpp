@@ -1,7 +1,7 @@
 #include <iostream>
 #include "IteratorTraits.hpp"
 #include "../inc/IteratorTraits.hpp"
-#include "../inc/Vector.hpp"
+#include "../inc/vector.hpp"
 #include "../inc/VectorIterator.hpp"
 #include "../inc/RedBlackTree.hpp"
 #include "Utils.hpp"
@@ -12,7 +12,7 @@
 #include "Stack.hpp"
 #include "Pair.hpp"
 #include "BinarySearchTree.hpp"
-#include "Map.hpp"
+#include "map.hpp"
 #include "MapIterator.hpp"
 
 //#define TESTED_TYPE int
@@ -23,9 +23,7 @@
 #ifndef TESTING
 
 int main(){
-	ft::RedBlackNode<int, int> rootNode;
-	ft::pair<int, int> srcPair = ft::make_pair(1, 1);
-
+	ft::map<int, int> ie;
 }
 
 

@@ -43,46 +43,46 @@ namespace ft {
 												content(rhs.content){
 		}
 
-		SearchTreeStandardNode() : left(this), right(this), parent(this), isNull(true) {
+		SearchTreeStandardNode() : right(this), left(this), parent(this), isNull(true) {
 		}
 
 		bool isNullNode() const {
 			return isNull;
 		}
 
-		virtual SearchTreeStandardNode *getRight() {
+		SearchTreeStandardNode *getRight() {
 			return static_cast<SearchTreeStandardNode *>(right);
 		}
 
-		virtual SearchTreeStandardNode *getRight() const {
+		SearchTreeStandardNode *getRight() const {
 			return static_cast<SearchTreeStandardNode *>(right);
 		}
 
-		virtual void setRight(SearchTreeStandardNode *in) {
+		void setRight(SearchTreeStandardNode *in) {
 			right = in;
 		}
 
-		virtual SearchTreeStandardNode *getLeft() {
+		SearchTreeStandardNode *getLeft() {
 			return static_cast<SearchTreeStandardNode *>(left);
 		}
 
-		virtual SearchTreeStandardNode *getLeft() const {
+		SearchTreeStandardNode *getLeft() const {
 			return static_cast<SearchTreeStandardNode *>(left);
 		}
 
-		virtual void setLeft(SearchTreeStandardNode *in) {
+		void setLeft(SearchTreeStandardNode *in) {
 			left = in;
 		}
 
-		virtual SearchTreeStandardNode *getParent() {
+		SearchTreeStandardNode *getParent() {
 			return static_cast<SearchTreeStandardNode *>(parent);
 		}
 
-		virtual SearchTreeStandardNode *getParent() const {
+		SearchTreeStandardNode *getParent() const {
 			return static_cast<SearchTreeStandardNode *>(parent);
 		}
 
-		virtual void setParent(SearchTreeStandardNode *in) {
+		void setParent(SearchTreeStandardNode *in) {
 			parent = in;
 		}
 

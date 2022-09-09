@@ -13,37 +13,46 @@ namespace ft {
 		RedBlackNode *left;
 		RedBlackNode *parent;
 		bool isBlack;
+		bool isNull;
 
 		RedBlackNode(const TKey &key, const TValue &value, RedBlackNode<TKey, TValue> *nullNode) : content(key, value),
 																								   right(nullNode),
 																								   left(nullNode),
 																								   parent(nullNode),
-																								   isBlack(false) {
+																								   isBlack(false),
+																								   isNull(false){
 		}
 
 		RedBlackNode(const ft::pair<TKey, TValue> &in, RedBlackNode<TKey, TValue> *nullNode) : content(in),
 																							   right(nullNode),
 																							   left(nullNode),
 																							   parent(nullNode),
-																							   isBlack(false) {
+																							   isBlack(false),
+																							   isNull(false){
 		}
 
 		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs, RedBlackNode<TKey, TValue> *nullNode) : content(rhs.content),
 																									right(nullNode),
 																									left(nullNode),
 																									parent(nullNode),
-																									isBlack(false) {
+																									isBlack(rhs.isBlack),
+																									isNull(rhs.isNull){
 		}
 
-		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs) :	content(rhs.content),
-																right(rhs.right),
-																left(rhs.left),
-																parent(rhs.parent),
-																isBlack(rhs.isBlack) {
+		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs) : content(rhs.content),
+															  right(rhs.right),
+															  left(rhs.left),
+															  parent(rhs.parent),
+															  isBlack(rhs.isBlack),
+															  isNull(rhs.isNull){
 		}
 
 
-		RedBlackNode() : right(this), left(this), parent(this), isBlack(false) {
+		RedBlackNode() : right(this), left(this), parent(this), isBlack(false), isNull(true) {
+		}
+
+		bool isNullNode() const{
+			return isNull;
 		}
 
 		virtual ~RedBlackNode() {
@@ -103,12 +112,12 @@ namespace ft {
 			Node *potentialColourTrouble;
 			bool isNodeToBeRemovedBlack = nodeToBeRemoved->isBlack;
 
-			if (nodeToBeRemoved == this->nullNode)
+			if (nodeToBeRemoved->isNullNode())
 				return;
-			if (nodeToBeRemoved->right == this->nullNode) {
+			if (nodeToBeRemoved->right->isNullNode()) {
 				potentialColourTrouble = nodeToBeRemoved->left;
 				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			} else if (nodeToBeRemoved->left == this->nullNode) {
+			} else if (nodeToBeRemoved->left->isNullNode()) {
 				potentialColourTrouble = nodeToBeRemoved->right;
 				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
 			} else {
@@ -141,7 +150,7 @@ namespace ft {
 			Node *parent = troubleMaker->parent;
 			Node *sibling;
 
-			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker != this->nullNode) {
+			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker->isNullNode() == false) {
 				sibling = getSibling(troubleMaker, parent);
 				if (sibling->isBlack == false)
 					troubleMaker = fixupDeletionCaseOne(parent, sibling);
@@ -298,17 +307,17 @@ namespace ft {
 		}
 
 		void countBranches(Node *current, int sum, ft::vector<int> &result) {
-			if (current != this->nullNode) {
+			if (current->isNullNode() == false) {
 				sum += current->isBlack;
 				countBranches(current->right, sum, result);
 				countBranches(current->left, sum, result);
-				if (current->right == this->nullNode && current->left == this->nullNode)
+				if (current->right->isNullNode() && current->left->isNullNode())
 					result.push_back(sum);
 			}
 		}
 
 		bool isContainingDoubleRed(Node *current) {
-			if (current != this->nullNode) {
+			if (current->isNullNode() == false) {
 				if (current->isBlack == current->parent->isBlack && current->isBlack == false)
 					return true;
 				return isContainingDoubleRed(current->right) || isContainingDoubleRed(current->left);

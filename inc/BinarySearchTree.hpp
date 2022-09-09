@@ -11,26 +11,37 @@ namespace ft {
 		SearchTreeStandardNode *right;
 		SearchTreeStandardNode *left;
 		SearchTreeStandardNode *parent;
+		bool isNull;
 
-		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode) :content(key, value),
-																													right(nullNode),
-																													left(nullNode),
-																													parent(nullNode) {
+		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode)
+				: content(key, value),
+				  right(nullNode),
+				  left(nullNode),
+				  parent(nullNode),
+				  isNull(false) {
 		}
 
-		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode) : content(in),
-																													right(nullNode),
-																													left(nullNode),
-																													parent(nullNode) {
+		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode)
+				: content(in),
+				  right(nullNode),
+				  left(nullNode),
+				  parent(nullNode),
+				  isNull(false) {
 		}
 
-		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs, SearchTreeStandardNode<TKey, TValue> *nullNode) : content(rhs.content),
+		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs,
+							   SearchTreeStandardNode<TKey, TValue> *nullNode) : content(rhs.content),
 																				 right(nullNode),
 																				 left(nullNode),
-																				 parent(nullNode) {
+																				 parent(nullNode),
+																				 isNull(false) {
 		}
 
-		SearchTreeStandardNode() : left(this), right(this), parent(this) {
+		SearchTreeStandardNode() : left(this), right(this), parent(this), isNull(true) {
+		}
+
+		bool isNullNode() const{
+			return isNull;
 		}
 
 		virtual ~SearchTreeStandardNode() {
@@ -38,7 +49,7 @@ namespace ft {
 		}
 	};
 
-	template <typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
+	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class BinarySearchTree {
 	public:
 		typedef TKey key_type;
@@ -48,10 +59,10 @@ namespace ft {
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef NodeType Node;
-		typedef Node& reference;
-		typedef Node const& const_reference;
-		typedef Node* pointer;
-		typedef Node const * const_pointer;
+		typedef Node &reference;
+		typedef Node const &const_reference;
+		typedef Node *pointer;
+		typedef Node const *const_pointer;
 		typedef Compare compare_type;
 		typedef size_t size_type;
 
@@ -69,15 +80,15 @@ namespace ft {
 				_compare(compare),
 				current_size(0),
 				nullNode(makeNullNode()),
-				rootNode(nullNode){
+				rootNode(nullNode) {
 
 		}
 
 		BinarySearchTree(const BinarySearchTree &rhs) :
-				_allocator(rhs._allocator) ,
+				_allocator(rhs._allocator),
 				_compare(rhs._compare),
 				nullNode(makeNullNode()),
-				rootNode(nullNode){
+				rootNode(nullNode) {
 			*this = rhs;
 		}
 
@@ -94,7 +105,7 @@ namespace ft {
 			destroyAndDeallocateNode(nullNode);
 		}
 
-		pointer find(const TKey &i){
+		pointer find(const TKey &i) {
 			return const_cast<pointer>(findByKey(i));
 		}
 
@@ -102,7 +113,7 @@ namespace ft {
 			return findByKey(i);
 		}
 
-		void clear(){
+		void clear() {
 			deleteSubTreeFrom(rootNode);
 		}
 
@@ -121,7 +132,7 @@ namespace ft {
 		pointer insert(ft::pair<TKey, TValue> const &in) {
 			pointer newParent = nullNode;
 
-			if (rootNode != nullNode) {
+			if (rootNode->isNullNode() == false) {
 				newParent = findInsertPlace(&in.first);
 				if (newParent->content.first == in.first)
 					return newParent;
@@ -143,11 +154,11 @@ namespace ft {
 		}
 
 		virtual void popNodeByPointer(pointer nodeToBeRemoved) {
-			if (nodeToBeRemoved == nullNode)
+			if (nodeToBeRemoved->isNullNode())
 				return;
-			if (nodeToBeRemoved->right == nullNode)
+			if (nodeToBeRemoved->right->isNullNode())
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			else if (nodeToBeRemoved->left == nullNode)
+			else if (nodeToBeRemoved->left->isNullNode())
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
 			else
 				substituteNodeWithSuccessor(nodeToBeRemoved);
@@ -155,7 +166,7 @@ namespace ft {
 		}
 
 		void leftRotate(pointer pivot) {
-			if (pivot->right == nullNode)
+			if (pivot->right->isNullNode())
 				return;
 			pointer nodeToChangePlaceWith = pivot->right;
 
@@ -165,7 +176,7 @@ namespace ft {
 		}
 
 		void rightRotate(pointer pivot) {
-			if (pivot->left == nullNode)
+			if (pivot->left->isNullNode())
 				return;
 			pointer nodeToChangePlaceWith = pivot->left;
 
@@ -174,7 +185,7 @@ namespace ft {
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
-		size_type size() const{
+		size_type size() const {
 			return current_size;
 		}
 
@@ -183,40 +194,40 @@ namespace ft {
 							 std::numeric_limits<size_type>::max() / (sizeof(NodeType) + sizeof(pointer))));
 		}
 
-		static pointer getLowest(pointer startingPoint, const_pointer nullNode) {
+		static pointer getLowest(pointer startingPoint) {
 			pointer tmp = startingPoint;
 
-			if (tmp == nullNode && tmp->left == nullNode)
+			if (tmp->isNullNode() && tmp->left->isNullNode())
 				return tmp;
-			while (tmp->left != nullNode)
+			while (tmp->left->isNullNode() == false)
 				tmp = tmp->left;
 			return tmp;
 		}
 
-		static pointer getHighest(pointer startingPoint, const_pointer nullNode) {
+		static pointer getHighest(pointer startingPoint) {
 			pointer tmp = startingPoint;
 
-			while (tmp->right != nullNode)
+			while (tmp->right->isNullNode() == false)
 				tmp = tmp->right;
 			return tmp;
 		}
 
-		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode ) const {
-			if (!((a == nullNode) && (b == bNullNode)))
-				if (a != nullNode && b != bNullNode && a->content != b->content)
+		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode) const {
+			if (!((a->isNullNode()) && (b == bNullNode)))
+				if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
 					return false;
-			if (a->right != nullNode){
+			if (a->right->isNullNode() == false) {
 				if (b->right == bNullNode || isSameStructure(a->right, b->right, bNullNode) == false)
 					return false;
 			}
-			if (a->left != nullNode){
+			if (a->left->isNullNode() == false) {
 				if (b->left == bNullNode || isSameStructure(a->left, b->left, bNullNode) == false)
 					return false;
 			}
 			return true;
 		}
 
-		void swap(BinarySearchTree &in){
+		void swap(BinarySearchTree &in) {
 			size_type current_size_tmp = current_size;
 			pointer rootNode_tmp = rootNode;
 			pointer nullNode_tmp = nullNode;
@@ -233,15 +244,15 @@ namespace ft {
 		const_pointer findByKey(const TKey &i) const {
 			pointer tmp = rootNode;
 
-			while (tmp != nullNode) {
+			while (tmp->isNullNode() == false) {
 				if (tmp->content.first == i)
 					return (tmp);
 				if (_compare(tmp->content.first, i) == false) {
-					if (tmp->left == nullNode)
+					if (tmp->left->isNullNode())
 						return nullNode;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == nullNode)
+					if (tmp->right->isNullNode())
 						return nullNode;
 					tmp = tmp->right;
 				}
@@ -261,13 +272,13 @@ namespace ft {
 		pointer findInsertPlace(const TKey *keyOfNewNode) const {
 			pointer tmp = rootNode;
 
-			while ((tmp->left != nullNode || tmp->right != nullNode)) {
+			while ((tmp->left->isNullNode() == false || tmp->right->isNullNode() == false)) {
 				if (_compare(*keyOfNewNode, tmp->content.first)) {
-					if (tmp->left == nullNode)
+					if (tmp->left->isNullNode())
 						return tmp;
 					tmp = tmp->left;
 				} else {
-					if (tmp->right == nullNode)
+					if (tmp->right->isNullNode())
 						return tmp;
 					tmp = tmp->right;
 				}
@@ -276,7 +287,7 @@ namespace ft {
 		}
 
 		void deleteSubTreeFrom(pointer localRoot) {
-			if (localRoot == nullNode)
+			if (localRoot->isNullNode())
 				return;
 			deleteSubTreeFrom((localRoot)->left);
 			deleteSubTreeFrom((localRoot)->right);
@@ -310,27 +321,28 @@ namespace ft {
 
 	protected:
 		pointer getInorderSuccessor(pointer localRoot, pointer biggerThan,
-								  pointer currentOptimum) {
+									pointer currentOptimum) {
 			pointer leftMinimum = nullNode;
 			pointer rightMinimum = nullNode;
 
-			if (localRoot == nullNode)
+			if (localRoot->isNullNode())
 				return nullNode;
-			if (localRoot->right == nullNode && localRoot->left == nullNode) {
-				if (_compare(localRoot->content.first, currentOptimum->content.first) && _compare(localRoot->content.first, biggerThan->content.first) == false)
+			if (localRoot->right->isNullNode() && localRoot->left->isNullNode()) {
+				if (_compare(localRoot->content.first, currentOptimum->content.first) &&
+					_compare(localRoot->content.first, biggerThan->content.first) == false)
 					return localRoot;
 				return currentOptimum;
 			}
 			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
-			if (leftMinimum != nullNode && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
-					_compare(leftMinimum->content.first, currentOptimum->content.first)) {
+			if (leftMinimum->isNullNode() == false && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
+				_compare(leftMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(leftMinimum->content.first, localRoot->content.first))
 					return leftMinimum;
 				return localRoot;
 			}
-			if (rightMinimum != nullNode && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
-					_compare(rightMinimum->content.first, currentOptimum->content.first)) {
+			if (rightMinimum->isNullNode() == false && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
+				_compare(rightMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(rightMinimum->content.first, localRoot->content.first))
 					return rightMinimum;
 				return localRoot;
@@ -353,7 +365,7 @@ namespace ft {
 		}
 
 		void replaceNode(pointer nodeToBeReplaced, pointer replacer) {
-			if (nodeToBeReplaced->parent == nullNode) {
+			if (nodeToBeReplaced->parent->isNullNode()) {
 				rootNode = nullNode;
 				linkChildAndParent(replacer, &rootNode);
 			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
@@ -384,13 +396,13 @@ namespace ft {
 			return result;
 		}
 
-		void destroyAndDeallocateNode(pointer in){
+		void destroyAndDeallocateNode(pointer in) {
 			_allocator.destroy(in);
 			_allocator.deallocate(in, 1);
 		}
 
 		void linkChildAndParent(pointer newNode, pointer *newParent) {
-			if (*newParent != nullNode) {
+			if ((*newParent)->isNullNode() == false) {
 				if (_compare(newNode->content.first, (*newParent)->content.first))
 					(*newParent)->left = newNode;
 				else
@@ -403,7 +415,7 @@ namespace ft {
 			newNode->parent = *newParent;
 		}
 
-		pointer pairToChildOf(const pair <TKey, TValue> &in, pointer &newParent) {
+		pointer pairToChildOf(const pair<TKey, TValue> &in, pointer &newParent) {
 			pointer newNode;
 			newNode = _allocator.allocate(1);
 			_allocator.construct(newNode, in, nullNode);
@@ -413,17 +425,17 @@ namespace ft {
 		}
 	};
 
-	template <class Key, class T, class NodeType, class Compare, class Allocator>
-	bool operator==(const BinarySearchTree<Key,T, NodeType, Compare,Allocator>& x,
-					const BinarySearchTree<Key,T, NodeType, Compare,Allocator>& y){
+	template<class Key, class T, class NodeType, class Compare, class Allocator>
+	bool operator==(const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &x,
+					const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &y) {
 		if (x.size() == 0 && y.size() == 0)
 			return true;
 		return x.isSameStructure(x.root(), y.root(), y.getNullNode());
 	}
 
-	template <class Key, class T, class NodeType, class Compare, class Allocator>
-	bool operator!=(const BinarySearchTree<Key,T, NodeType, Compare,Allocator>& x,
-					const BinarySearchTree<Key,T, NodeType, Compare,Allocator>& y){
+	template<class Key, class T, class NodeType, class Compare, class Allocator>
+	bool operator!=(const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &x,
+					const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &y) {
 		return !(x == y);
 	}
 }

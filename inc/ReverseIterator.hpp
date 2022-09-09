@@ -24,10 +24,10 @@ namespace ft {
 
 		}
 
-		ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.current()) {}
+		ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.base()) {}
 
 		template<class NonConstIterator>
-		ReverseIterator(const ReverseIterator<NonConstIterator> &revIt) : iterator(T(revIt.current())) {}
+		ReverseIterator(const ReverseIterator<NonConstIterator> &revIt) : iterator(T(revIt.base())) {}
 
 		template<class NonConstIterator>
 		ReverseIterator &operator=(const ReverseIterator<NonConstIterator> &rhs) {

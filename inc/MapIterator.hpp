@@ -23,21 +23,17 @@ namespace ft {
 
 	private:
 		Node *currentNode;
-		Node *nullNode;
 	public:
 		MapIterator() : currentNode() {}
 
-		MapIterator(Node *const node, Node *const nullNode) : currentNode(node),
-															  nullNode(nullNode) {
+		MapIterator(Node *const node, Node *const nullNode) : currentNode(node){
 		}
 
 		template<class UVType, class UKey, class UValue, class UNode>
-		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : currentNode(it.current()),
-														   nullNode(it.null()) {
+		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : currentNode(it.current()){
 		}
 
-		MapIterator(const MapIterator &rhs) : currentNode(rhs.currentNode),
-											  nullNode(rhs.nullNode) {}
+		MapIterator(const MapIterator &rhs) : currentNode(rhs.currentNode){}
 
 		MapIterator &operator--() {
 			moveToPrevNode();
@@ -56,15 +52,6 @@ namespace ft {
 
 		Node *current() const {
 			return currentNode;
-		}
-
-		Node *null() {
-			return nullNode;
-		}
-
-
-		Node *null() const {
-			return nullNode;
 		}
 
 		MapIterator operator--(int i) {
@@ -103,23 +90,25 @@ namespace ft {
 		void moveToNextNode() {
 			Key originalKey;
 
-			if (currentNode == nullNode)
+			if (currentNode->isNullNode())
 				currentNode =
-						BinarySearchTree<key_type, mapped_type, Node>::getLowest(currentNode, nullNode);
+						BinarySearchTree<key_type, mapped_type, Node>::getLowest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
-				if (currentNode->right != nullNode) {
+				if (currentNode->right->isNullNode() == false) {
 					currentNode = currentNode->right;
-					while (currentNode->left != nullNode)
+					while (currentNode->left->isNullNode() == false)
 						currentNode = currentNode->left;
 				} else {
-					while (currentNode == currentNode->parent->right && currentNode->parent != nullNode)
+					while (currentNode == currentNode->parent->right && currentNode->parent->isNullNode() == false)
 						currentNode = currentNode->parent;
-					if (currentNode->parent != nullNode &&
+					if (currentNode->parent->isNullNode() == false &&
 						currentNode == currentNode->parent->left)
 						currentNode = currentNode->parent;
 					if (currentNode->content.first < originalKey)
-						currentNode = nullNode;
+						//todo: replace with direct link to nullNode
+						while (currentNode->isNullNode() == false)
+							currentNode = currentNode->right;
 				}
 			}
 		}
@@ -127,23 +116,25 @@ namespace ft {
 		void moveToPrevNode() {
 			Key originalKey;
 
-			if (currentNode == nullNode)
+			if (currentNode->isNullNode())
 				currentNode =
-						BinarySearchTree<key_type, mapped_type, Node>::getHighest(currentNode, nullNode);
+						BinarySearchTree<key_type, mapped_type, Node>::getHighest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
-				if (currentNode->left != nullNode) {
+				if (currentNode->left->isNullNode() == false) {
 					currentNode = currentNode->left;
-					while (currentNode->right != nullNode)
+					while (currentNode->right->isNullNode() == false)
 						currentNode = currentNode->right;
 				} else {
-					while (currentNode == currentNode->parent->left && currentNode->parent != nullNode)
+					while (currentNode == currentNode->parent->left && currentNode->parent->isNullNode() == false)
 						currentNode = currentNode->parent;
-					if (currentNode->parent != nullNode &&
+					if (currentNode->parent->isNullNode() == false &&
 						currentNode == currentNode->parent->right)
 						currentNode = currentNode->parent;
 					if (currentNode->content.first > originalKey)
-						currentNode = nullNode;
+						//todo: replace with direct link to nullNode
+						while (currentNode->isNullNode() == false)
+							currentNode = currentNode->right;
 				}
 			}
 		}

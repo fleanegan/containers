@@ -94,21 +94,20 @@ namespace ft {
 
 		const_iterator begin() const {
 			NodeType const * nullNode = rbTree.getNullNode();
-			return const_iterator(rbTree.getLowest(rbTree.root(), nullNode), rbTree.getNullNode());
+			return const_iterator(rbTree.getLowest(rbTree.root()), rbTree.getNullNode());
 		}
 
 		iterator begin() {
-			return iterator(rbTree.getLowest(rbTree.root(), rbTree.getNullNode()), rbTree.getNullNode());
+			return iterator(rbTree.getLowest(rbTree.root()), rbTree.getNullNode());
 		}
 
 		const_iterator end() const {
 			return const_iterator(rbTree.getNullNode(), rbTree.getNullNode());
 		}
 
-//		todo
-//		reverse_iterator rbegin() {
-//			return reverse_iterator(end());
-//		}
+		reverse_iterator rbegin() {
+			return reverse_iterator(end());
+		}
 
 		iterator end() {
 			return iterator(rbTree.getNullNode(), rbTree.getNullNode());

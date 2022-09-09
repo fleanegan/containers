@@ -7,7 +7,7 @@
 
 namespace ft {
 
-	template<typename ValueType, typename Key, typename T, typename NodeType>
+	template<typename ValueType, typename Key, typename T, typename NodeType, typename Compare = std::less<Key> >
 	class MapIterator {
 	public:
 		typedef Key key_type;
@@ -20,20 +20,26 @@ namespace ft {
 		typedef ValueType const & const_reference;
 		typedef ft::ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef Compare compare_type;
 
+		Compare compare;
 	private:
 		Node *currentNode;
 	public:
-		MapIterator() : currentNode() {}
+		MapIterator(const compare_type &compare = compare_type()) : 	currentNode(),
+																					compare(compare) {}
 
-		MapIterator(Node *const node) : currentNode(node){
+		MapIterator(Node *const node, const compare_type &compare = compare_type()) : 	currentNode(node),
+																									compare(compare){
 		}
 
 		template<class UVType, class UKey, class UValue, class UNode>
-		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : currentNode(it.current()){
+		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : 	currentNode(it.current()),
+																			compare(it.compare){
 		}
 
-		MapIterator(const MapIterator &rhs) : currentNode(rhs.currentNode){}
+		MapIterator(const MapIterator &rhs) : 	currentNode(rhs.currentNode),
+												compare(rhs.compare){}
 
 		MapIterator &operator--() {
 			moveToPrevNode();
@@ -48,7 +54,6 @@ namespace ft {
 		Node *current() {
 			return currentNode;
 		}
-
 
 		Node *current() const {
 			return currentNode;
@@ -105,7 +110,7 @@ namespace ft {
 					if (currentNode->getParent()->isNullNode() == false &&
 						currentNode == currentNode->getParent()->getLeft())
 						currentNode = currentNode->getParent();
-					if (currentNode->content.first < originalKey)
+					if (compare(currentNode->content.first, originalKey))
 						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
 							currentNode = currentNode->getRight();
@@ -131,7 +136,7 @@ namespace ft {
 					if (currentNode->getParent()->isNullNode() == false &&
 						currentNode == currentNode->getParent()->getRight())
 						currentNode = currentNode->getParent();
-					if (currentNode->content.first > originalKey)
+					if (compare(currentNode->content.first, originalKey) == false)
 						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
 							currentNode = currentNode->getRight();

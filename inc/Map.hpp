@@ -29,8 +29,8 @@ namespace ft {
 		typedef ft::RedBlackTree<key_type, mapped_type, NodeType, Compare, rb_allocator_type> RbTree;
 
 	public:
-		typedef MapIterator<value_type, key_type, mapped_type, NodeType> iterator;
-		typedef MapIterator<const value_type, key_type, mapped_type, const NodeType> const_iterator;
+		typedef MapIterator<value_type, key_type, mapped_type, NodeType, Compare> iterator;
+		typedef MapIterator<const value_type, key_type, mapped_type, const NodeType, Compare> const_iterator;
 		typedef ft::ReverseIterator<iterator> reverse_iterator;
 		typedef ft::ReverseIterator<const_iterator> const_reverse_iterator;
 		typedef typename RbTree::size_type size_type;
@@ -94,23 +94,35 @@ namespace ft {
 
 		const_iterator begin() const {
 			NodeType const * nullNode = rbTree.getNullNode();
-			return const_iterator(rbTree.getLowest(rbTree.root()));
+			return const_iterator(rbTree.getLowest(rbTree.root()), compare);
 		}
 
 		iterator begin() {
-			return iterator(rbTree.getLowest(rbTree.root()));
+			return iterator(rbTree.getLowest(rbTree.root()), compare);
 		}
 
 		const_iterator end() const {
-			return const_iterator(rbTree.getNullNode());
+			return const_iterator(rbTree.getNullNode(), compare);
 		}
 
 		reverse_iterator rbegin() {
 			return reverse_iterator(end());
 		}
 
+		const_reverse_iterator rbegin() const{
+			return reverse_iterator(end());
+		}
+
+		const_reverse_iterator rend() const {
+			return reverse_iterator(begin());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(begin());
+		}
+
 		iterator end() {
-			return iterator(rbTree.getNullNode());
+			return iterator(rbTree.getNullNode(), compare);
 		}
 
 		ft::pair<iterator,bool> insert (const value_type& val) {

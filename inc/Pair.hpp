@@ -21,6 +21,10 @@ namespace ft{
 
 			}
 
+			pair(const pair &rhs) : first(rhs.first), second(rhs.second){
+
+			}
+
 			pair& operator= (const pair& pr){
 				if (pr == *this)
 					return *this;

@@ -23,7 +23,8 @@
 #ifndef TESTING
 
 int main(){
-	ft::map<int, int> ie;
+	std::map<int, int> egs;
+	egs.lower_bound(3333);
 }
 
 

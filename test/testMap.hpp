@@ -241,3 +241,51 @@ TEST(Map, searchingInEmptyMapReturnsEnd){
 
 	ASSERT_EQ(a.end(), it);
 }
+
+TEST(Map, lowerBoundReturnsIteratorToNodeWhichIsGreaterEqual){
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+
+	simpleDummy value = (*map.lower_bound(simpleDummy(21))).first;
+
+	ASSERT_EQ(4, *value);
+}
+
+TEST(Map, lowerBoundOfBiggestReturnsSecondLargest){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	simpleDummy value = (*map.lower_bound(simpleDummy(7))).first;
+
+	ASSERT_EQ(3, *value);
+}
+
+TEST(Map, lowerBoundReturnsSameKeyifKeyIsFound){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	simpleDummy value = (*map.lower_bound(simpleDummy(8))).first;
+
+	ASSERT_EQ(8, *value);
+}
+
+TEST(Map, lowerBoundWorksAlsoForNodeUnderBegin){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	ft::map<simpleDummy, simpleDummy>::iterator it = map.lower_bound(simpleDummy(0));
+
+	ASSERT_EQ(it, map.begin());
+}
+
+TEST(Map, upperBoundReturnsBeginIfSearchKeyIsTooSmall){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	ft::map<simpleDummy, simpleDummy>::iterator it = map.upper_bound(simpleDummy(-12));
+
+	ASSERT_EQ(it, map.begin());
+}
+
+TEST(Map, upperBoundGetsNext){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	ft::map<simpleDummy, simpleDummy>::iterator it = map.upper_bound(simpleDummy(4));
+
+	ASSERT_EQ(8, *(*it).first);
+}

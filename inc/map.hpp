@@ -222,6 +222,41 @@ namespace ft {
 			return const_iterator(result);
 		}
 
+		iterator lower_bound( const Key& key ){
+			const_iterator result = static_cast<const this_type &>(*this).lower_bound(key);
+			return iterator(const_cast<NodeType *>(result.current()));
+		}
+
+		const_iterator lower_bound( const Key& key ) const{
+			const_iterator biggest = --end();
+			const_iterator smallest = begin();
+
+			while (1){
+				if (compare(key, biggest->first) == false)
+					return biggest;
+				if (biggest == smallest)
+					return end();
+				--biggest;
+			}
+		}
+
+		iterator upper_bound( const Key& key ){
+			const_iterator result = static_cast<const this_type &>(*this).upper_bound(key);
+			return iterator(const_cast<NodeType *>(result.current()));
+		}
+
+		const_iterator upper_bound( const Key& key ) const{
+			const_iterator biggest = end();
+			const_iterator smallest = begin();
+
+			while (biggest != smallest){
+				if (compare(key, smallest->first))
+					return smallest;
+				++smallest;
+			}
+			return end();
+		}
+
 		template<class VKey, class VT, class VCompare, class VAllocator>
 		friend bool operator==(const map<VKey, VT, VCompare, VAllocator> &x,
 							   const map<VKey, VT, VCompare, VAllocator> &y);

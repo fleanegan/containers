@@ -187,15 +187,15 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 }
 
 /*
- * 		      3
-	         / \
-	        1  16
-  		   /    \
-  		 7      19
-		/ \    /  \
-	   5   8  18   20
-	  / \
-	 4   6
+ * 		        3
+	         /     \
+	        1       16
+           	      /   \
+           	   7       19
+           	  / \     /  \
+           	 5   8   18  20
+		    / \
+		   4   6
 */
 ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> generateFiveLevelTree() {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> result;

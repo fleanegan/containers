@@ -26,8 +26,8 @@ TEST(RedBlackTree, threeConsecutivelyBiggerNodesCauseLeftRotation) {
 	rbt.insert(ft::make_pair(simpleDummy(2), simpleDummy(0)));
 
 	ASSERT_EQ(1, *rbt.root()->content.first);
-	ASSERT_EQ(0, *rbt.root()->left->content.first);
-	ASSERT_EQ(2, *rbt.root()->right->content.first);
+	ASSERT_EQ(0, *rbt.root()->getLeft()->content.first);
+	ASSERT_EQ(2, *rbt.root()->getRight()->content.first);
 }
 
 TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
@@ -37,8 +37,8 @@ TEST(RedBlackTree, addingBiggerThenSmallerNodesCauseLeftRotation) {
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 
 	ASSERT_EQ(1, *rbt.root()->content.first);
-	ASSERT_EQ(0, *rbt.root()->left->content.first);
-	ASSERT_EQ(2, *rbt.root()->right->content.first);
+	ASSERT_EQ(0, *rbt.root()->getLeft()->content.first);
+	ASSERT_EQ(2, *rbt.root()->getRight()->content.first);
 }
 
 TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
@@ -47,7 +47,7 @@ TEST(RedBlackTree, changeOfRootUpdatesLinksOfNullNode) {
 	rbt.insert(ft::make_pair(simpleDummy(0), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(1), simpleDummy(0)));
 
-	ASSERT_EQ(rbt.getNullNode()->right, rbt.root());
+	ASSERT_EQ(rbt.getNullNode()->getRight(), rbt.root());
 }
 
 TEST(RedBlackTree, insertColourChangeIfUncleHasNotTheSame) {
@@ -55,19 +55,19 @@ TEST(RedBlackTree, insertColourChangeIfUncleHasNotTheSame) {
 	rbt.insert(ft::make_pair(simpleDummy(5), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(9), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(11), simpleDummy(0)));
-	ASSERT_FALSE(rbt.root()->left->isBlack);
+	ASSERT_FALSE(rbt.root()->getLeft()->isBlack);
 	rbt.insert(ft::make_pair(simpleDummy(25), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(24), simpleDummy(0)));
 	rbt.insert(ft::make_pair(simpleDummy(26), simpleDummy(0)));
 
 	ASSERT_EQ(9, *rbt.root()->content.first);
-	ASSERT_EQ(5, *rbt.root()->left->content.first);
-	ASSERT_TRUE(rbt.root()->left->isBlack);
-	ASSERT_EQ(24, *rbt.root()->right->content.first);
-	ASSERT_FALSE(rbt.root()->right->isBlack);
-	ASSERT_EQ(25, *rbt.root()->right->right->content.first);
-	ASSERT_FALSE(rbt.root()->right->right->right->isBlack);
-	ASSERT_EQ(11, *rbt.root()->right->left->content.first);
+	ASSERT_EQ(5, *rbt.root()->getLeft()->content.first);
+	ASSERT_TRUE(rbt.root()->getLeft()->isBlack);
+	ASSERT_EQ(24, *rbt.root()->getRight()->content.first);
+	ASSERT_FALSE(rbt.root()->getRight()->isBlack);
+	ASSERT_EQ(25, *rbt.root()->getRight()->getRight()->content.first);
+	ASSERT_FALSE(rbt.root()->getRight()->getRight()->getRight()->isBlack);
+	ASSERT_EQ(11, *rbt.root()->getRight()->getLeft()->content.first);
 }
 
 TEST(RedBlackTree, removeRootWithOneChild) {
@@ -88,7 +88,7 @@ TEST(RedBlackTree, multipleInsertionsAlwaysCreateAValidTree){
 
 TEST(RedBlackTree, notTheSameBlackCountIsInvalidTree){
 	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
-	rbt.root()->left->left->left->isBlack = true;
+	rbt.root()->getLeft()->getLeft()->getLeft()->isBlack = true;
 
 	ASSERT_FALSE(rbt.isValid());
 }
@@ -107,8 +107,8 @@ TEST(RedBlackTree, doubleRedIsIllegal){
 	rbt.insertByValue(ft::make_pair(1, 0));
 	rbt.insertByValue(ft::make_pair(0, 0));
 	rbt.insertByValue(ft::make_pair(2, 0));
-	rbt.root()->left->isBlack = false;
-	rbt.root()->right->isBlack = false;
+	rbt.root()->getLeft()->isBlack = false;
+	rbt.root()->getRight()->isBlack = false;
 
 	ASSERT_FALSE(rbt.isValid());
 }
@@ -117,11 +117,11 @@ TEST(RedBlackTree, variousDeletionsTreeStillValid){
 	ft::RedBlackTree<simpleDummy, simpleDummy, ft::RedBlackNode<simpleDummy, simpleDummy> >rbt = generateBigRbt();
 	ASSERT_TRUE(rbt.isValid());
 
-	rbt.popNodeByPointer(rbt.root()->right->right);
+	rbt.popNodeByPointer(rbt.root()->getRight()->getRight());
 	ASSERT_TRUE(rbt.isValid());
-	rbt.popNodeByPointer(rbt.root()->left->right);
+	rbt.popNodeByPointer(rbt.root()->getLeft()->getRight());
 	ASSERT_TRUE(rbt.isValid());
-	rbt.popNodeByPointer(rbt.root()->right->right->right);
+	rbt.popNodeByPointer(rbt.root()->getRight()->getRight()->getRight());
 	ASSERT_TRUE(rbt.isValid());
 	while (rbt.root() != rbt.getNullNode()){
 		rbt.popNodeByPointer(rbt.root());

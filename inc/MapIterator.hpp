@@ -26,7 +26,7 @@ namespace ft {
 	public:
 		MapIterator() : currentNode() {}
 
-		MapIterator(Node *const node, Node *const nullNode) : currentNode(node){
+		MapIterator(Node *const node) : currentNode(node){
 		}
 
 		template<class UVType, class UKey, class UValue, class UNode>
@@ -95,20 +95,20 @@ namespace ft {
 						BinarySearchTree<key_type, mapped_type, Node>::getLowest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
-				if (currentNode->right->isNullNode() == false) {
-					currentNode = currentNode->right;
-					while (currentNode->left->isNullNode() == false)
-						currentNode = currentNode->left;
+				if (currentNode->getRight()->isNullNode() == false) {
+					currentNode = currentNode->getRight();
+					while (currentNode->getLeft()->isNullNode() == false)
+						currentNode = currentNode->getLeft();
 				} else {
-					while (currentNode == currentNode->parent->right && currentNode->parent->isNullNode() == false)
-						currentNode = currentNode->parent;
-					if (currentNode->parent->isNullNode() == false &&
-						currentNode == currentNode->parent->left)
-						currentNode = currentNode->parent;
+					while (currentNode == currentNode->getParent()->getRight() && currentNode->getParent()->isNullNode() == false)
+						currentNode = currentNode->getParent();
+					if (currentNode->getParent()->isNullNode() == false &&
+						currentNode == currentNode->getParent()->getLeft())
+						currentNode = currentNode->getParent();
 					if (currentNode->content.first < originalKey)
 						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
-							currentNode = currentNode->right;
+							currentNode = currentNode->getRight();
 				}
 			}
 		}
@@ -121,20 +121,20 @@ namespace ft {
 						BinarySearchTree<key_type, mapped_type, Node>::getHighest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
-				if (currentNode->left->isNullNode() == false) {
-					currentNode = currentNode->left;
-					while (currentNode->right->isNullNode() == false)
-						currentNode = currentNode->right;
+				if (currentNode->getLeft()->isNullNode() == false) {
+					currentNode = currentNode->getLeft();
+					while (currentNode->getRight()->isNullNode() == false)
+						currentNode = currentNode->getRight();
 				} else {
-					while (currentNode == currentNode->parent->left && currentNode->parent->isNullNode() == false)
-						currentNode = currentNode->parent;
-					if (currentNode->parent->isNullNode() == false &&
-						currentNode == currentNode->parent->right)
-						currentNode = currentNode->parent;
+					while (currentNode == currentNode->getParent()->getLeft() && currentNode->getParent()->isNullNode() == false)
+						currentNode = currentNode->getParent();
+					if (currentNode->getParent()->isNullNode() == false &&
+						currentNode == currentNode->getParent()->getRight())
+						currentNode = currentNode->getParent();
 					if (currentNode->content.first > originalKey)
 						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
-							currentNode = currentNode->right;
+							currentNode = currentNode->getRight();
 				}
 			}
 		}

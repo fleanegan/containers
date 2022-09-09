@@ -248,21 +248,21 @@ ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClas
 	rbt.insert(ft::make_pair(0, 0));
 	rbt.insert(ft::make_pair(3, 0));
 	rbt.insert(ft::make_pair(4, 0));
-	rbt.root()->right->right->isBlack = true;
-	rbt.root()->right->left->isBlack = true;
-	rbt.root()->right->isBlack = false;
+	rbt.root()->getRight()->getRight()->isBlack = true;
+	rbt.root()->getRight()->getLeft()->isBlack = true;
+	rbt.root()->getRight()->isBlack = false;
 	return rbt;
 }
 
 ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassTwo() {
 	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt = generateBrokenRbtClassOne();
-	rbt.root()->right->isBlack = true;
+	rbt.root()->getRight()->isBlack = true;
 	return rbt;
 }
 
 ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClassThree() {
 	ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > rbt = generateBrokenRbtClassTwo();
-	rbt.root()->right->left->isBlack = false;
+	rbt.root()->getRight()->getLeft()->isBlack = false;
 	return rbt;
 }
 
@@ -273,9 +273,9 @@ ExposedRedBlackTree<int, int, ft::RedBlackNode<int, int> > generateBrokenRbtClas
 	rbt.insert(ft::make_pair(1, 0));
 	rbt.insert(ft::make_pair(2, 0));
 	rbt.insert(ft::make_pair(0, 0));
-	rbt.root()->left->right->isBlack = true;
-	rbt.root()->left->left->isBlack = true;
-	rbt.root()->right->right->isBlack = false;
+	rbt.root()->getLeft()->getRight()->isBlack = true;
+	rbt.root()->getLeft()->getLeft()->isBlack = true;
+	rbt.root()->getRight()->getRight()->isBlack = false;
 	return rbt;
 }
 

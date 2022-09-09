@@ -5,61 +5,6 @@
 #include "Pair.hpp"
 
 namespace ft {
-
-	template<typename TKey, typename TValue>
-	struct RedBlackNode {
-		ft::pair<const TKey, TValue> content;
-		RedBlackNode *right;
-		RedBlackNode *left;
-		RedBlackNode *parent;
-		bool isBlack;
-		bool isNull;
-
-		RedBlackNode(const TKey &key, const TValue &value, RedBlackNode<TKey, TValue> *nullNode) : content(key, value),
-																								   right(nullNode),
-																								   left(nullNode),
-																								   parent(nullNode),
-																								   isBlack(false),
-																								   isNull(false){
-		}
-
-		RedBlackNode(const ft::pair<TKey, TValue> &in, RedBlackNode<TKey, TValue> *nullNode) : content(in),
-																							   right(nullNode),
-																							   left(nullNode),
-																							   parent(nullNode),
-																							   isBlack(false),
-																							   isNull(false){
-		}
-
-		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs, RedBlackNode<TKey, TValue> *nullNode) : content(rhs.content),
-																									right(nullNode),
-																									left(nullNode),
-																									parent(nullNode),
-																									isBlack(rhs.isBlack),
-																									isNull(rhs.isNull){
-		}
-
-		RedBlackNode(const RedBlackNode<TKey, TValue> &rhs) : content(rhs.content),
-															  right(rhs.right),
-															  left(rhs.left),
-															  parent(rhs.parent),
-															  isBlack(rhs.isBlack),
-															  isNull(rhs.isNull){
-		}
-
-
-		RedBlackNode() : right(this), left(this), parent(this), isBlack(false), isNull(true) {
-		}
-
-		bool isNullNode() const{
-			return isNull;
-		}
-
-		virtual ~RedBlackNode() {
-
-		}
-	};
-
 	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class RedBlackTree : public ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode<TKey, TValue> > {
 	public:
@@ -114,16 +59,16 @@ namespace ft {
 
 			if (nodeToBeRemoved->isNullNode())
 				return;
-			if (nodeToBeRemoved->right->isNullNode()) {
-				potentialColourTrouble = nodeToBeRemoved->left;
-				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			} else if (nodeToBeRemoved->left->isNullNode()) {
-				potentialColourTrouble = nodeToBeRemoved->right;
-				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
+			if (nodeToBeRemoved->getRight()->isNullNode()) {
+				potentialColourTrouble = nodeToBeRemoved->getLeft();
+				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->getLeft());
+			} else if (nodeToBeRemoved->getLeft()->isNullNode()) {
+				potentialColourTrouble = nodeToBeRemoved->getRight();
+				this->replaceNode(nodeToBeRemoved, nodeToBeRemoved->getRight());
 			} else {
-				successor = this->getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
+				successor = this->getInorderSuccessor(nodeToBeRemoved->getRight(), nodeToBeRemoved, nodeToBeRemoved->getRight());
 				isNodeToBeRemovedBlack = successor->isBlack;
-				potentialColourTrouble = successor->right;
+				potentialColourTrouble = successor->getRight();
 				replaceNodeBySuccessor(nodeToBeRemoved, successor);
 				successor->isBlack = nodeToBeRemoved->isBlack;
 			}
@@ -147,14 +92,14 @@ namespace ft {
 
 	protected:
 		virtual void fixupDeletion(Node *troubleMaker) {
-			Node *parent = troubleMaker->parent;
+			Node *parent = troubleMaker->getParent();
 			Node *sibling;
 
 			while (troubleMaker != this->rootNode && troubleMaker->isBlack && troubleMaker->isNullNode() == false) {
 				sibling = getSibling(troubleMaker, parent);
 				if (sibling->isBlack == false)
 					troubleMaker = fixupDeletionCaseOne(parent, sibling);
-				if (sibling->left->isBlack && sibling->right->isBlack)
+				if (sibling->getLeft()->isBlack && sibling->getRight()->isBlack)
 					troubleMaker = fixupDeletionCaseTwo(parent, sibling);
 				else if (isOuterChildBlack(sibling))
 					fixupDeletionCaseThree(parent, &sibling);
@@ -167,9 +112,9 @@ namespace ft {
 		void fixupInsertion(Node *currentNode, Node *parent, Node *grandParent) {
 			Node *uncle;
 
-			while (currentNode->parent->isBlack == false) {
-				parent = currentNode->parent;
-				grandParent = parent->parent;
+			while (currentNode->getParent()->isBlack == false) {
+				parent = currentNode->getParent();
+				grandParent = parent->getParent();
 				uncle = getUncle(grandParent, parent);
 				if (uncle->isBlack == parent->isBlack) {
 					fixupColourChange(parent, grandParent, uncle);
@@ -183,20 +128,20 @@ namespace ft {
 
 	private:
 		pointer fixupRotate(Node *currentNode, Node *parent, Node *grandParent) {
-			if (parent == grandParent->right)
+			if (parent == grandParent->getRight())
 				return fixupRotateRightBranch(currentNode, parent, grandParent);
 			else
 				return fixupRotateLeftBranch(currentNode, parent, grandParent);
 		}
 
 		pointer getUncle(Node *grandParent, Node *parent) const {
-			if (parent == grandParent->right)
-				return grandParent->left;
-			return grandParent->right;
+			if (parent == grandParent->getRight())
+				return grandParent->getLeft();
+			return grandParent->getRight();
 		}
 
 		pointer fixupRotateRightBranch(Node *currentNode, Node *parent, Node *grandParent) {
-			if (currentNode == parent->right) {
+			if (currentNode == parent->getRight()) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->leftRotate(grandParent);
 				return grandParent;
@@ -206,7 +151,7 @@ namespace ft {
 		}
 
 		pointer fixupRotateLeftBranch(Node *currentNode, Node *parent, Node *grandParent) {
-			if (currentNode == parent->left) {
+			if (currentNode == parent->getLeft()) {
 				fixupInnerRotationReColour(parent, grandParent);
 				this->rightRotate(grandParent);
 				return grandParent;
@@ -227,15 +172,15 @@ namespace ft {
 		}
 
 		void replaceNodeBySuccessor(Node *nodeToBeRemoved, Node *successor) {
-			if (successor->parent != nodeToBeRemoved) {
-				this->replaceNode(successor, successor->right);
-				successor->right = nodeToBeRemoved->right;
-				successor->right->parent = successor;
+			if (successor->getParent() != nodeToBeRemoved) {
+				this->replaceNode(successor, successor->getRight());
+				successor->setRight(nodeToBeRemoved->getRight());
+				successor->getRight()->setParent(successor);
 			} else
-				successor->right->parent = successor;
+				successor->getRight()->setParent(successor);
 			this->replaceNode(nodeToBeRemoved, successor);
-			successor->left = nodeToBeRemoved->left;
-			successor->left->parent = successor;
+			successor->setLeft(nodeToBeRemoved->getLeft());
+			successor->getLeft()->setParent(successor);
 		}
 
 		pointer fixupDeletionCaseOne(Node *parent, Node *sibling) {
@@ -243,12 +188,12 @@ namespace ft {
 
 			sibling->isBlack = true;
 			parent->isBlack = false;
-			if (sibling == parent->left) {
+			if (sibling == parent->getLeft()) {
 				this->leftRotate(parent);
-				troubleMaker = sibling->right;
+				troubleMaker = sibling->getRight();
 			} else {
 				this->rightRotate(parent);
-				troubleMaker = sibling->left;
+				troubleMaker = sibling->getLeft();
 			}
 			return troubleMaker;
 		}
@@ -262,21 +207,21 @@ namespace ft {
 		}
 
 		bool isOuterChildBlack(const Node *sibling) const {
-			if (sibling == sibling->parent->right)
-				return sibling->right->isBlack;
-			return sibling->left->isBlack;
+			if (sibling == sibling->getParent()->getRight())
+				return sibling->getRight()->isBlack;
+			return sibling->getLeft()->isBlack;
 		}
 
 		void fixupDeletionCaseThree(Node *parent, Node **sibling) {
 			(*sibling)->isBlack = false;
-			if ((*sibling) == parent->right) {
-				(*sibling)->left->isBlack = true;
+			if ((*sibling) == parent->getRight()) {
+				(*sibling)->getLeft()->isBlack = true;
 				this->rightRotate((*sibling));
-				(*sibling) = parent->right;
+				(*sibling) = parent->getRight();
 			} else {
-				(*sibling)->right->isBlack = true;
+				(*sibling)->getRight()->isBlack = true;
 				this->leftRotate((*sibling));
-				(*sibling) = parent->left;
+				(*sibling) = parent->getLeft();
 			}
 		}
 
@@ -285,11 +230,11 @@ namespace ft {
 
 			sibling->isBlack = parent->isBlack;
 			parent->isBlack = true;
-			if (sibling == parent->right) {
-				sibling->right->isBlack = true;
+			if (sibling == parent->getRight()) {
+				sibling->getRight()->isBlack = true;
 				this->leftRotate(parent);
 			} else {
-				sibling->left->isBlack = true;
+				sibling->getLeft()->isBlack = true;
 				this->rightRotate(parent);
 			}
 			troubleMaker = this->rootNode;
@@ -299,28 +244,28 @@ namespace ft {
 		pointer getSibling(const Node *troubleMaker, Node *parent) const {
 			Node *sibling;
 
-			if (troubleMaker == parent->left)
-				sibling = parent->right;
+			if (troubleMaker == parent->getLeft())
+				sibling = parent->getRight();
 			else
-				sibling = parent->left;
+				sibling = parent->getLeft();
 			return sibling;
 		}
 
 		void countBranches(Node *current, int sum, ft::vector<int> &result) {
 			if (current->isNullNode() == false) {
 				sum += current->isBlack;
-				countBranches(current->right, sum, result);
-				countBranches(current->left, sum, result);
-				if (current->right->isNullNode() && current->left->isNullNode())
+				countBranches(current->getRight(), sum, result);
+				countBranches(current->getLeft(), sum, result);
+				if (current->getRight()->isNullNode() && current->getLeft()->isNullNode())
 					result.push_back(sum);
 			}
 		}
 
 		bool isContainingDoubleRed(Node *current) {
 			if (current->isNullNode() == false) {
-				if (current->isBlack == current->parent->isBlack && current->isBlack == false)
+				if (current->isBlack == current->getParent()->isBlack && current->isBlack == false)
 					return true;
-				return isContainingDoubleRed(current->right) || isContainingDoubleRed(current->left);
+				return isContainingDoubleRed(current->getRight()) || isContainingDoubleRed(current->getLeft());
 			}
 			return false;
 		}

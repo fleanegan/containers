@@ -94,15 +94,15 @@ namespace ft {
 
 		const_iterator begin() const {
 			NodeType const * nullNode = rbTree.getNullNode();
-			return const_iterator(rbTree.getLowest(rbTree.root()), rbTree.getNullNode());
+			return const_iterator(rbTree.getLowest(rbTree.root()));
 		}
 
 		iterator begin() {
-			return iterator(rbTree.getLowest(rbTree.root()), rbTree.getNullNode());
+			return iterator(rbTree.getLowest(rbTree.root()));
 		}
 
 		const_iterator end() const {
-			return const_iterator(rbTree.getNullNode(), rbTree.getNullNode());
+			return const_iterator(rbTree.getNullNode());
 		}
 
 		reverse_iterator rbegin() {
@@ -110,13 +110,13 @@ namespace ft {
 		}
 
 		iterator end() {
-			return iterator(rbTree.getNullNode(), rbTree.getNullNode());
+			return iterator(rbTree.getNullNode());
 		}
 
 		ft::pair<iterator,bool> insert (const value_type& val) {
 			ft::pair<iterator, bool> result;
 			size_type before = size();
-			result.first = iterator(rbTree.insert(val), rbTree.getNullNode());
+			result.first = iterator(rbTree.insert(val));
 			result.second = true;
 			size_type after = size();
 			if (before == after)
@@ -200,14 +200,14 @@ namespace ft {
 
 		iterator find( const Key& key ){
 			const_iterator result = static_cast<const this_type &>(*this).find(key);
-			return iterator(const_cast<NodeType *>(result.current()), rbTree.getNullNode());
+			return iterator(const_cast<NodeType *>(result.current()));
 		}
 
 		const_iterator find( const Key& key ) const{
 			NodeType const *  result = rbTree.find(key);
 			if (result == NULL)
 				return end();
-			return const_iterator(result, rbTree.getNullNode());
+			return const_iterator(result);
 		}
 
 		template<class VKey, class VT, class VCompare, class VAllocator>

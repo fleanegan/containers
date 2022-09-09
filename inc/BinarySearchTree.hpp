@@ -2,53 +2,9 @@
 #define CONTAINERS_BINARYSEARCHTREE_HPP
 
 #include "Pair.hpp"
+#include "Node.hpp"
 
 namespace ft {
-
-	template<typename TKey, typename TValue>
-	struct SearchTreeStandardNode {
-		ft::pair<const TKey, TValue> content;
-		SearchTreeStandardNode *right;
-		SearchTreeStandardNode *left;
-		SearchTreeStandardNode *parent;
-		bool isNull;
-
-		SearchTreeStandardNode(const TKey &key, const TValue &value, SearchTreeStandardNode<TKey, TValue> *nullNode)
-				: content(key, value),
-				  right(nullNode),
-				  left(nullNode),
-				  parent(nullNode),
-				  isNull(false) {
-		}
-
-		SearchTreeStandardNode(const ft::pair<TKey, TValue> &in, SearchTreeStandardNode<TKey, TValue> *nullNode)
-				: content(in),
-				  right(nullNode),
-				  left(nullNode),
-				  parent(nullNode),
-				  isNull(false) {
-		}
-
-		SearchTreeStandardNode(const SearchTreeStandardNode<TKey, TValue> &rhs,
-							   SearchTreeStandardNode<TKey, TValue> *nullNode) : content(rhs.content),
-																				 right(nullNode),
-																				 left(nullNode),
-																				 parent(nullNode),
-																				 isNull(false) {
-		}
-
-		SearchTreeStandardNode() : left(this), right(this), parent(this), isNull(true) {
-		}
-
-		bool isNullNode() const{
-			return isNull;
-		}
-
-		virtual ~SearchTreeStandardNode() {
-
-		}
-	};
-
 	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
 	class BinarySearchTree {
 	public:
@@ -156,32 +112,32 @@ namespace ft {
 		virtual void popNodeByPointer(pointer nodeToBeRemoved) {
 			if (nodeToBeRemoved->isNullNode())
 				return;
-			if (nodeToBeRemoved->right->isNullNode())
-				replaceNode(nodeToBeRemoved, nodeToBeRemoved->left);
-			else if (nodeToBeRemoved->left->isNullNode())
-				replaceNode(nodeToBeRemoved, nodeToBeRemoved->right);
+			if (nodeToBeRemoved->getRight()->isNullNode())
+				replaceNode(nodeToBeRemoved, nodeToBeRemoved->getLeft());
+			else if (nodeToBeRemoved->getLeft()->isNullNode())
+				replaceNode(nodeToBeRemoved, nodeToBeRemoved->getRight());
 			else
 				substituteNodeWithSuccessor(nodeToBeRemoved);
 			deleteNodeWithCleanUp(nodeToBeRemoved);
 		}
 
 		void leftRotate(pointer pivot) {
-			if (pivot->right->isNullNode())
+			if (pivot->getRight()->isNullNode())
 				return;
-			pointer nodeToChangePlaceWith = pivot->right;
+			pointer nodeToChangePlaceWith = pivot->getRight();
 
-			pivot->right = nodeToChangePlaceWith->left;
-			nodeToChangePlaceWith->left->parent = pivot;
+			pivot->setRight(nodeToChangePlaceWith->getLeft());
+			nodeToChangePlaceWith->getLeft()->setParent(pivot);
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
 		void rightRotate(pointer pivot) {
-			if (pivot->left->isNullNode())
+			if (pivot->getLeft()->isNullNode())
 				return;
-			pointer nodeToChangePlaceWith = pivot->left;
+			pointer nodeToChangePlaceWith = pivot->getLeft();
 
-			pivot->left = nodeToChangePlaceWith->right;
-			nodeToChangePlaceWith->right->parent = pivot;
+			pivot->setLeft(nodeToChangePlaceWith->getRight());
+			nodeToChangePlaceWith->getRight()->setParent(pivot);
 			updateNodesForRotation(pivot, nodeToChangePlaceWith);
 		}
 
@@ -197,18 +153,18 @@ namespace ft {
 		static pointer getLowest(pointer startingPoint) {
 			pointer tmp = startingPoint;
 
-			if (tmp->isNullNode() && tmp->left->isNullNode())
+			if (tmp->isNullNode() && tmp->getLeft()->isNullNode())
 				return tmp;
-			while (tmp->left->isNullNode() == false)
-				tmp = tmp->left;
+			while (tmp->getLeft()->isNullNode() == false)
+				tmp = tmp->getLeft();
 			return tmp;
 		}
 
 		static pointer getHighest(pointer startingPoint) {
 			pointer tmp = startingPoint;
 
-			while (tmp->right->isNullNode() == false)
-				tmp = tmp->right;
+			while (tmp->getRight()->isNullNode() == false)
+				tmp = tmp->getRight();
 			return tmp;
 		}
 
@@ -216,12 +172,12 @@ namespace ft {
 			if (!((a->isNullNode()) && (b == bNullNode)))
 				if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
 					return false;
-			if (a->right->isNullNode() == false) {
-				if (b->right == bNullNode || isSameStructure(a->right, b->right, bNullNode) == false)
+			if (a->getRight()->isNullNode() == false) {
+				if (b->getRight() == bNullNode || isSameStructure(a->getRight(), b->getRight(), bNullNode) == false)
 					return false;
 			}
-			if (a->left->isNullNode() == false) {
-				if (b->left == bNullNode || isSameStructure(a->left, b->left, bNullNode) == false)
+			if (a->getLeft()->isNullNode() == false) {
+				if (b->getLeft() == bNullNode || isSameStructure(a->getLeft(), b->getLeft(), bNullNode) == false)
 					return false;
 			}
 			return true;
@@ -248,22 +204,22 @@ namespace ft {
 				if (tmp->content.first == i)
 					return (tmp);
 				if (_compare(tmp->content.first, i) == false) {
-					if (tmp->left->isNullNode())
+					if (tmp->getLeft()->isNullNode())
 						return nullNode;
-					tmp = tmp->left;
+					tmp = tmp->getLeft();
 				} else {
-					if (tmp->right->isNullNode())
+					if (tmp->getRight()->isNullNode())
 						return nullNode;
-					tmp = tmp->right;
+					tmp = tmp->getRight();
 				}
 			}
 			return NULL;
 		}
 
 		void updateNodesForRotation(pointer pivot, pointer nodeToChangePlaceWith) {
-			pointer parent = pivot->parent;
+			pointer parent = pivot->getParent();
 
-			if (nodeToChangePlaceWith->parent == rootNode)
+			if (nodeToChangePlaceWith->getParent() == rootNode)
 				rootNode = nodeToChangePlaceWith;
 			linkChildAndParent(nodeToChangePlaceWith, &parent);
 			linkChildAndParent(pivot, &nodeToChangePlaceWith);
@@ -272,15 +228,15 @@ namespace ft {
 		pointer findInsertPlace(const TKey *keyOfNewNode) const {
 			pointer tmp = rootNode;
 
-			while ((tmp->left->isNullNode() == false || tmp->right->isNullNode() == false)) {
+			while ((tmp->getLeft()->isNullNode() == false || tmp->getRight()->isNullNode() == false)) {
 				if (_compare(*keyOfNewNode, tmp->content.first)) {
-					if (tmp->left->isNullNode())
+					if (tmp->getLeft()->isNullNode())
 						return tmp;
-					tmp = tmp->left;
+					tmp = tmp->getLeft();
 				} else {
-					if (tmp->right->isNullNode())
+					if (tmp->getRight()->isNullNode())
 						return tmp;
-					tmp = tmp->right;
+					tmp = tmp->getRight();
 				}
 			}
 			return tmp;
@@ -289,8 +245,8 @@ namespace ft {
 		void deleteSubTreeFrom(pointer localRoot) {
 			if (localRoot->isNullNode())
 				return;
-			deleteSubTreeFrom((localRoot)->left);
-			deleteSubTreeFrom((localRoot)->right);
+			deleteSubTreeFrom((localRoot)->getLeft());
+			deleteSubTreeFrom((localRoot)->getRight());
 			if (localRoot == rootNode)
 				rootNode = nullNode;
 			--current_size;
@@ -304,10 +260,10 @@ namespace ft {
 			if (source != sourceNullNode) {
 				newNode = copyNode(source);
 				linkChildAndParent(newNode, dest);
-				if (source->right != sourceNullNode)
-					copySubTree(source->right, sourceNullNode, &newNode);
-				if (source->left != sourceNullNode)
-					copySubTree(source->left, sourceNullNode, &newNode);
+				if (source->getRight() != sourceNullNode)
+					copySubTree(source->getRight(), sourceNullNode, &newNode);
+				if (source->getLeft() != sourceNullNode)
+					copySubTree(source->getLeft(), sourceNullNode, &newNode);
 			}
 		}
 
@@ -327,14 +283,14 @@ namespace ft {
 
 			if (localRoot->isNullNode())
 				return nullNode;
-			if (localRoot->right->isNullNode() && localRoot->left->isNullNode()) {
+			if (localRoot->getRight()->isNullNode() && localRoot->getLeft()->isNullNode()) {
 				if (_compare(localRoot->content.first, currentOptimum->content.first) &&
 					_compare(localRoot->content.first, biggerThan->content.first) == false)
 					return localRoot;
 				return currentOptimum;
 			}
-			leftMinimum = getInorderSuccessor(localRoot->left, biggerThan, currentOptimum);
-			rightMinimum = getInorderSuccessor(localRoot->right, biggerThan, currentOptimum);
+			leftMinimum = getInorderSuccessor(localRoot->getLeft(), biggerThan, currentOptimum);
+			rightMinimum = getInorderSuccessor(localRoot->getRight(), biggerThan, currentOptimum);
 			if (leftMinimum->isNullNode() == false && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
 				_compare(leftMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(leftMinimum->content.first, localRoot->content.first))
@@ -353,33 +309,33 @@ namespace ft {
 		void substituteNodeWithSuccessor(pointer nodeToBeRemoved) {
 			pointer successor;
 
-			successor = getInorderSuccessor(nodeToBeRemoved->right, nodeToBeRemoved, nodeToBeRemoved->right);
-			if (successor->parent != nodeToBeRemoved) {
-				replaceNode(successor, successor->right);
-				successor->right = nodeToBeRemoved->right;
-				successor->right->parent = successor;
+			successor = getInorderSuccessor(nodeToBeRemoved->getRight(), nodeToBeRemoved, nodeToBeRemoved->getRight());
+			if (successor->getParent() != nodeToBeRemoved) {
+				replaceNode(successor, successor->getRight());
+				successor->setRight(nodeToBeRemoved->getRight());
+				successor->getRight()->setParent(successor);
 			}
 			replaceNode(nodeToBeRemoved, successor);
-			successor->left = nodeToBeRemoved->left;
-			successor->left->parent = successor;
+			successor->setLeft(nodeToBeRemoved->getLeft());
+			successor->getLeft()->setParent(successor);
 		}
 
 		void replaceNode(pointer nodeToBeReplaced, pointer replacer) {
-			if (nodeToBeReplaced->parent->isNullNode()) {
+			if (nodeToBeReplaced->getParent()->isNullNode()) {
 				rootNode = nullNode;
 				linkChildAndParent(replacer, &rootNode);
-			} else if (nodeToBeReplaced == nodeToBeReplaced->parent->left)
-				nodeToBeReplaced->parent->left = replacer;
+			} else if (nodeToBeReplaced == nodeToBeReplaced->getParent()->getLeft())
+				nodeToBeReplaced->getParent()->setLeft(replacer);
 			else
-				nodeToBeReplaced->parent->right = replacer;
-			replacer->parent = nodeToBeReplaced->parent;
+				nodeToBeReplaced->getParent()->setRight(replacer);
+			replacer->setParent(nodeToBeReplaced->getParent());
 		}
 
 		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved) {
 			if (nodeToBeRemoved == rootNode) {
 				rootNode = nullNode;
-				nullNode->right = nullNode;
-				nullNode->left = nullNode;
+				nullNode->setRight(nullNode);
+				nullNode->setLeft(nullNode);
 			}
 			--current_size;
 			delete nodeToBeRemoved;
@@ -390,9 +346,9 @@ namespace ft {
 			pointer result;
 			result = _allocator.allocate(1);
 			_allocator.construct(result, Node());
-			result->right = result;
-			result->left = result;
-			result->parent = result;
+			result->setRight(result);
+			result->setLeft(result);
+			result->setParent(result);
 			return result;
 		}
 
@@ -404,15 +360,15 @@ namespace ft {
 		void linkChildAndParent(pointer newNode, pointer *newParent) {
 			if ((*newParent)->isNullNode() == false) {
 				if (_compare(newNode->content.first, (*newParent)->content.first))
-					(*newParent)->left = newNode;
+					(*newParent)->setLeft(newNode);
 				else
-					(*newParent)->right = newNode;
+					(*newParent)->setRight(newNode);
 			} else {
-				nullNode->right = newNode;
-				nullNode->left = newNode;
+				nullNode->setRight(newNode);
+				nullNode->setLeft(newNode);
 				rootNode = newNode;
 			}
-			newNode->parent = *newParent;
+			newNode->setParent(*newParent);
 		}
 
 		pointer pairToChildOf(const pair<TKey, TValue> &in, pointer &newParent) {

@@ -23,10 +23,9 @@
 #ifndef TESTING
 
 int main(){
-	const ft::map<int, int> map;
+	ft::RedBlackNode<int, int> rootNode;
+	ft::pair<int, int> srcPair = ft::make_pair(1, 1);
 
-	ft::map<int, int>::const_iterator constIt = map.begin();
-	(void) constIt;
 }
 
 

@@ -35,9 +35,9 @@ TEST(BinarySearchTree, insertingNodeWithSmallerKeyAddsToLeft){
 
 	bst.insert(ft::make_pair(0, 0));
 
-	ASSERT_NE(nullptr, bst.root()->left);
-	ASSERT_EQ(0, bst.root()->left->content.first);
-	ASSERT_EQ(0, bst.root()->left->content.second);
+	ASSERT_NE(nullptr, bst.root()->getLeft());
+	ASSERT_EQ(0, bst.root()->getLeft()->content.first);
+	ASSERT_EQ(0, bst.root()->getLeft()->content.second);
 }
 
 TEST(BinarySearchTree, insertingMultipleNodesWithAscendingValuesStacksThemOnTheRight){
@@ -47,8 +47,8 @@ TEST(BinarySearchTree, insertingMultipleNodesWithAscendingValuesStacksThemOnTheR
 	bst.insert(ft::make_pair(2, 0));
 	bst.insert(ft::make_pair(3, 0));
 
-	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
-	ASSERT_EQ(3, bst.root()->right->right->content.first);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getLeft());
+	ASSERT_EQ(3, bst.root()->getRight()->getRight()->content.first);
 }
 
 TEST(BinarySearchTree, insertingMultipleNodesWithDescendingValuesStacksThemOnTheLeft){
@@ -58,8 +58,8 @@ TEST(BinarySearchTree, insertingMultipleNodesWithDescendingValuesStacksThemOnThe
 	bst.insert(ft::make_pair(2, 0));
 	bst.insert(ft::make_pair(1, 0));
 
-	ASSERT_EQ(bst.getNullNode(), bst.root()->right);
-	ASSERT_EQ(1, bst.root()->left->left->content.first);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getRight());
+	ASSERT_EQ(1, bst.root()->getLeft()->getLeft()->content.first);
 }
 
 TEST(BinarySearchTree, copyIsDeep){
@@ -74,11 +74,11 @@ TEST(BinarySearchTree, copyIsDeep){
 	to = from;
 
 	ASSERT_NE(to.root(), from.root());
-	ASSERT_NE(to.root()->right, from.root()->right);
-	ASSERT_NE(to.root()->right, nullptr);
-	ASSERT_NE(to.root()->left, from.root()->left);
-	ASSERT_NE(to.root()->left, nullptr);
-	ASSERT_EQ(-1, to.root()->left->left->right->content.first);
+	ASSERT_NE(to.root()->getRight(), from.root()->getRight());
+	ASSERT_NE(to.root()->getRight(), nullptr);
+	ASSERT_NE(to.root()->getLeft(), from.root()->getLeft());
+	ASSERT_NE(to.root()->getLeft(), nullptr);
+	ASSERT_EQ(-1, to.root()->getLeft()->getLeft()->getRight()->content.first);
 }
 
 TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
@@ -88,8 +88,8 @@ TEST(BinarySearchTree, removingNodeOnLowestLevelSetsChildrenOfParentToNULL){
 
 	bst.popNode(2);
 
-	ASSERT_EQ(bst.getNullNode(), bst.root()->right);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getRight());
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getLeft());
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenAndSuccessorBeingOneOfThem){
@@ -101,7 +101,7 @@ TEST(BinarySearchTree, removingNodeWithTwoChildrenAndSuccessorBeingOneOfThem){
 	bst.popNode(1);
 
 	ASSERT_EQ(2, bst.root()->content.first);
-	ASSERT_EQ(0, bst.root()->left->content.first);
+	ASSERT_EQ(0, bst.root()->getLeft()->content.first);
 }
 
 TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
@@ -112,8 +112,8 @@ TEST(BinarySearchTree, removingNodeWithOneChildMovesItUp){
 
 	bst.popNode(2);
 
-	ASSERT_NE(bst.getNullNode(), bst.root()->right);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
+	ASSERT_NE(bst.getNullNode(), bst.root()->getRight());
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getLeft());
 }
 
 TEST(BinarySearchTree, removingRoot){
@@ -123,8 +123,8 @@ TEST(BinarySearchTree, removingRoot){
 	bst.popNode(1);
 
 	ASSERT_EQ(bst.getNullNode(), bst.root());
-	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->left);
-	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->right);
+	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->getLeft());
+	ASSERT_EQ(bst.getNullNode(), bst.getNullNode()->getRight());
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
@@ -138,8 +138,8 @@ TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessor){
 	bst.popNode(1);
 
 	ASSERT_EQ(2, bst.root()->content.first);
-	ASSERT_EQ(4, bst.root()->right->content.first);
-	ASSERT_EQ(3, bst.root()->right->left->content.first);
+	ASSERT_EQ(4, bst.root()->getRight()->content.first);
+	ASSERT_EQ(3, bst.root()->getRight()->getLeft()->content.first);
 }
 
 TEST(BinarySearchTree, removingNodeWithTwoChildrenReplacesWithInorderSuccessorOnThirdLevel){
@@ -159,9 +159,9 @@ TEST(BinarySearchTree, leftRotatingTree){
 	bst.leftRotate(bst.root());
 
 	ASSERT_EQ(6, bst.root()->content.first);
-	ASSERT_EQ(2, bst.root()->left->content.first);
-	ASSERT_EQ(3, bst.root()->left->right->content.first);
-	ASSERT_EQ(2, bst.root()->left->right->parent->content.first);
+	ASSERT_EQ(2, bst.root()->getLeft()->content.first);
+	ASSERT_EQ(3, bst.root()->getLeft()->getRight()->content.first);
+	ASSERT_EQ(2, bst.root()->getLeft()->getRight()->getParent()->content.first);
 }
 
 TEST(BinarySearchTree, rightRotatingTree){
@@ -171,8 +171,8 @@ TEST(BinarySearchTree, rightRotatingTree){
 	bst.rightRotate(pivot);
 
 	ASSERT_EQ(1, bst.root()->content.first);
-	ASSERT_EQ(bst.getNullNode(), bst.root()->left);
-	ASSERT_EQ(pivot, bst.root()->right);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getLeft());
+	ASSERT_EQ(pivot, bst.root()->getRight());
 }
 
 TEST(BinarySearchTree, leftRotatingNodeWithNoChildDoesNothing){
@@ -184,10 +184,10 @@ TEST(BinarySearchTree, leftRotatingNodeWithNoChildDoesNothing){
 
 	bst.leftRotate(pivot);
 
-	ASSERT_EQ(bst.root()->right->content.first, nodeToSwapWith->parent->content.first);
-	ASSERT_EQ(bst.getNullNode(), pivot->right);
-	ASSERT_EQ(nodeToSwapWithKey, pivot->parent->content.first);
-	ASSERT_EQ(nodeToSwapWith->parent->parent->content.first, bst.root()->content.first);
+	ASSERT_EQ(bst.root()->getRight()->content.first, nodeToSwapWith->getParent()->content.first);
+	ASSERT_EQ(bst.getNullNode(), pivot->getRight());
+	ASSERT_EQ(nodeToSwapWithKey, pivot->getParent()->content.first);
+	ASSERT_EQ(nodeToSwapWith->getParent()->getParent()->content.first, bst.root()->content.first);
 }
 
 TEST(BinarySearchTree, rightRotatingNodeWithNoChildDoesNothing){
@@ -199,8 +199,8 @@ TEST(BinarySearchTree, rightRotatingNodeWithNoChildDoesNothing){
 
 	bst.rightRotate(pivot);
 
-	ASSERT_EQ(bst.getNullNode(), pivot->right);
-	ASSERT_EQ(nodeToSwapWithKey, pivot->parent->content.first);
+	ASSERT_EQ(bst.getNullNode(), pivot->getRight());
+	ASSERT_EQ(nodeToSwapWithKey, pivot->getParent()->content.first);
 }
 
 TEST(BinarySearchTree, rotatingRootAwaySetsNullNodeAsParentOfNewRoot){
@@ -208,34 +208,34 @@ TEST(BinarySearchTree, rotatingRootAwaySetsNullNodeAsParentOfNewRoot){
 
 	bst.leftRotate(bst.root());
 
-	ASSERT_EQ(bst.getNullNode(), bst.root()->parent);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getParent());
 }
 
 TEST(BinarySearchTree, rightRotatingNodeWithNoRightChildWorks){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int pivotKey = 7;
 	ft::SearchTreeStandardNode<int, int> *pivot = bst.find(pivotKey);
-	bst.popNodeByPointer(pivot->right);
-	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = pivot->left;
-	ft::SearchTreeStandardNode<int, int> *nodeToSwapWithRight = nodeToSwapWith->right;
+	bst.popNodeByPointer(pivot->getRight());
+	ft::SearchTreeStandardNode<int, int> *nodeToSwapWith = pivot->getLeft();
+	ft::SearchTreeStandardNode<int, int> *nodeToSwapWithRight = nodeToSwapWith->getRight();
 
 	bst.rightRotate(pivot);
 
-	ASSERT_EQ(nodeToSwapWithRight->content.first, pivot->left->content.first);
-	ASSERT_EQ(bst.getNullNode(), pivot->right);
-	ASSERT_EQ(nodeToSwapWith->content.first, pivot->parent->content.first);
+	ASSERT_EQ(nodeToSwapWithRight->content.first, pivot->getLeft()->content.first);
+	ASSERT_EQ(bst.getNullNode(), pivot->getRight());
+	ASSERT_EQ(nodeToSwapWith->content.first, pivot->getParent()->content.first);
 }
 
 TEST(BinarySearchTree, theParentOfTheRootIsTheNullnode){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
-	ASSERT_EQ(bst.getNullNode(), bst.root()->parent);
+	ASSERT_EQ(bst.getNullNode(), bst.root()->getParent());
 }
 
 TEST(BinarySearchTree, theParentOfTheRootsChildIsTheParent) {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
-	ASSERT_EQ(bst.root(), bst.root()->right->parent);
+	ASSERT_EQ(bst.root(), bst.root()->getRight()->getParent());
 }
 
 TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
@@ -249,8 +249,8 @@ TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
 TEST(BinarySearchTree, nullNodePointsToRoot){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
-	ASSERT_EQ(bst.root(), bst.getNullNode()->right);
-	ASSERT_EQ(bst.root(), bst.getNullNode()->left);
+	ASSERT_EQ(bst.root(), bst.getNullNode()->getRight());
+	ASSERT_EQ(bst.root(), bst.getNullNode()->getLeft());
 }
 
 TEST(BinarySearchTree, copyConstructor){
@@ -299,7 +299,7 @@ TEST(BinarySearchTree, usingCompareGreaterLeadsToInversedTree){
 
 	bst.insert(ft::make_pair(2, 2));
 
-	ASSERT_EQ(2, bst.root()->left->content.first);
+	ASSERT_EQ(2, bst.root()->getLeft()->content.first);
 }
 
 TEST(BinarySearchTree, addingAlreadyExistingDoesNotIncrementsSize){

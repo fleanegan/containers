@@ -28,20 +28,22 @@ namespace ft {
 	private:
 		Node *currentNode;
 	public:
-		MapIterator(const compare_type &compare = compare_type()) : 	currentNode(),
-																					compare(compare) {}
+		MapIterator(const compare_type &compare = compare_type()) :		compare(compare),
+																					currentNode(){}
 
-		MapIterator(Node *const node, const compare_type &compare = compare_type()) : 	currentNode(node),
-																									compare(compare){
+		MapIterator(Node *const node, const compare_type &compare = compare_type()) : 	compare(compare),
+																									currentNode(node){
 		}
 
 		template<class UVType, class UKey, class UValue, class UNode>
-		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : 	currentNode(it.current()),
-																			compare(it.compare){
+		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : 	compare(it.compare),
+																			currentNode(it.current()){
 		}
 
-		MapIterator(const MapIterator &rhs) : 	currentNode(rhs.currentNode),
-												compare(rhs.compare){}
+		MapIterator(const MapIterator &rhs) : 	compare(rhs.compare),
+												currentNode(rhs.currentNode){
+
+		}
 
 		MapIterator &operator--() {
 			moveToPrevNode();

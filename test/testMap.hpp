@@ -289,3 +289,20 @@ TEST(Map, upperBoundGetsNext){
 
 	ASSERT_EQ(8, *(*it).first);
 }
+
+TEST(Map, equalRangeReturnsPairWithIteratorsForElementFound){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	ft::pair<ft::map<simpleDummy, simpleDummy>::iterator, ft::map<simpleDummy, simpleDummy>::iterator> it = map.equal_range(simpleDummy(8));
+
+	ASSERT_EQ(8, *(it.first)->first);
+}
+
+TEST(Map, equalRangeReturnsPairWithTwoTimesEndForKeyNotFound){
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+
+	ft::pair<ft::map<simpleDummy, simpleDummy>::iterator, ft::map<simpleDummy, simpleDummy>::iterator> it = map.equal_range(simpleDummy(666));
+
+	ASSERT_EQ(it.first, it.second);
+	ASSERT_EQ(map.end(), it.second);
+}

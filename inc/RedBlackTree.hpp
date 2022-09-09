@@ -46,11 +46,8 @@ namespace ft {
 
 		pointer insert(ft::pair<key_type, mapped_type> const &in) {
 			Node *newNode = BinarySearchTree<key_type, mapped_type, Node>::insert(in);
-			Node *currentNode = newNode;
-			Node *parent;
-			Node *grandParent;
 
-			fixupInsertion(currentNode, parent, grandParent);
+			fixupInsertion(newNode);
 			return newNode;
 		}
 
@@ -111,8 +108,10 @@ namespace ft {
 			troubleMaker->isBlack = true;
 		}
 
-		void fixupInsertion(Node *currentNode, Node *parent, Node *grandParent) {
+		void fixupInsertion(Node *currentNode) {
 			Node *uncle;
+			Node *grandParent;
+			Node *parent;
 
 			while (currentNode->getParent()->isBlack == false) {
 				parent = currentNode->getParent();

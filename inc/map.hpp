@@ -93,7 +93,6 @@ namespace ft {
 		}
 
 		const_iterator begin() const {
-			NodeType const * nullNode = rbTree.getNullNode();
 			return const_iterator(rbTree.getLowest(rbTree.root()), compare);
 		}
 
@@ -169,7 +168,7 @@ namespace ft {
 			rbTree.swap(x.rbTree);
 		}
 
-		size_type size() {
+		size_type size() const {
 			return rbTree.size();
 		}
 
@@ -255,6 +254,36 @@ namespace ft {
 				++smallest;
 			}
 			return end();
+		}
+
+		ft::pair<iterator,iterator> equal_range( const Key& key ){
+			ft::pair<iterator, iterator> result;
+			ft::pair<const_iterator, const_iterator> result_const = static_cast<const this_type &>(*this).equal_range(key);
+
+			result.first = iterator(const_cast<NodeType *>(result_const.first.current()));
+			result.second = iterator(const_cast<NodeType *>(result_const.second.current()));
+			return result;
+		}
+
+		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const{
+			ft::pair<const_iterator, const_iterator> result;
+			result.first = find(key);
+			if (result.first == end())
+				result.second = result.first;
+			else
+			{
+				result.second = result.first;
+				++result.second;
+			}
+			return result;
+		}
+
+		key_compare key_comp() const{
+			return compare;
+		}
+
+		value_compare value_comp() const{
+			return value_comp();
 		}
 
 		template<class VKey, class VT, class VCompare, class VAllocator>

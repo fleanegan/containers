@@ -62,8 +62,8 @@ namespace ft {
 		explicit map(const Compare &comp = Compare(),
 					 const allocator_type &alloc = allocator_type())
 				: rbTree(RbTree(comp, rb_allocator_type(alloc))),
-				  alloc(alloc),
-				  compare(comp){
+				  compare(comp),
+				  alloc(alloc){
 		}
 
 		map(const map &rhs) {
@@ -176,7 +176,7 @@ namespace ft {
 			return rbTree.max_size();
 		}
 
-		bool empty() {
+		bool empty() const{
 			return size() == 0;
 		}
 
@@ -283,7 +283,7 @@ namespace ft {
 		}
 
 		value_compare value_comp() const{
-			return value_comp();
+			return value_compare(compare);
 		}
 
 		template<class VKey, class VT, class VCompare, class VAllocator>
@@ -328,3 +328,4 @@ namespace ft {
 	}
 }
 #endif //CONTAINERS_MAP_HPP
+

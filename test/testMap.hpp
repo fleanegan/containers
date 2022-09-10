@@ -33,6 +33,17 @@ TEST(Map, prevOfEndIsHighestKey) {
 	ASSERT_EQ(4, *(*it).first);
 }
 
+TEST(Map, assignmentClearsBeforeAddingNew) {
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+	ft::map<simpleDummy, simpleDummy> mapPlusOne;
+	mapPlusOne.insert(ft::make_pair(123, 2));
+
+	mapPlusOne = map;
+
+	ASSERT_TRUE(map == mapPlusOne);
+}
+
+
 TEST(Map, insertingElementWithKeyAlreadyPresentHasSizeOne){
 	ft::map<int, int> map;
 	map.insert(ft::make_pair(1, 0));

@@ -52,6 +52,7 @@ namespace ft {
 		BinarySearchTree &operator=(const BinarySearchTree &rhs) {
 			if (rhs.rootNode == this->rootNode)
 				return *this;
+			clear();
 			current_size = rhs.current_size;
 			copySubTree(rhs.rootNode, rhs.nullNode, &rootNode);
 			return *this;

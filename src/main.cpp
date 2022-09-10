@@ -97,7 +97,7 @@ void	ft_erase(MAP &mp, U param, V param2)
 	printSize(mp);
 }
 
-/*int             main(void)
+int             main(void)
 {
 	std::list<T3> lst;
 	unsigned int lst_size = 7;
@@ -130,29 +130,8 @@ void	ft_erase(MAP &mp, U param, V param2)
 	printSize(mp_range);
 	printSize(mp_copy);
 	return (0);
-}*/
-
-int             main(void)
-{
-	std::list<T3> lst;
-	unsigned int lst_size = 1;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(lst_size - i, i));
-
-	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-
-	TESTED_NAMESPACE::map<T1, T2> mp_range(it, ite);
-
-
-	std::cout << "\t-- PART TWO --" << std::endl;
-
-	mp_range.clear();
-
-	printSize(mp);
-	printSize(mp_range);
-	return (0);
 }
+
 
 
 #endif

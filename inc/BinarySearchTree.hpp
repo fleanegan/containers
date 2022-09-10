@@ -106,14 +106,14 @@ namespace ft {
 			return rootNode;
 		}
 
-		void popNode(TKey keyOfNodeToBeRemoved) {
+		size_type popNode(TKey keyOfNodeToBeRemoved) {
 			pointer nodeToBeRemoved = find(keyOfNodeToBeRemoved);
-			popNodeByPointer(nodeToBeRemoved);
+			return popNodeByPointer(nodeToBeRemoved);
 		}
 
-		void popNodeByPointer(pointer nodeToBeRemoved) {
+		size_type popNodeByPointer(pointer nodeToBeRemoved) {
 			if (nodeToBeRemoved->isNullNode())
-				return;
+				return 0;
 			if (nodeToBeRemoved->getRight()->isNullNode())
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->getLeft());
 			else if (nodeToBeRemoved->getLeft()->isNullNode())
@@ -121,6 +121,7 @@ namespace ft {
 			else
 				substituteNodeWithSuccessor(nodeToBeRemoved);
 			deleteNodeWithCleanUp(nodeToBeRemoved);
+			return 1;
 		}
 
 		void leftRotate(pointer pivot) {
@@ -149,7 +150,7 @@ namespace ft {
 
 		size_type max_size(void) const {
 			return (std::min((size_type) std::numeric_limits<difference_type>::max(),
-							 std::numeric_limits<size_type>::max() / (sizeof(NodeType) + sizeof(pointer))));
+							 std::numeric_limits<size_type>::max() / (sizeof(NodeType))));
 		}
 
 		static pointer getLowest(pointer startingPoint) {

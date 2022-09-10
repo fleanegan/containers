@@ -204,15 +204,11 @@ TEST(Map, erasingOneElementDecrementsSize){
 	ASSERT_EQ(before, after + 1);
 }
 
-TEST(Map, erasingByKeyReturnsOne){
+TEST(Map, erasingByKeyReturnsOneIfElementIsFound){
 	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
-	ft::map<simpleDummy, simpleDummy>::size_type before = a.size();
 
-	ft::map<simpleDummy, simpleDummy>::size_type result = a.erase(a.begin()->first);
-
-	ft::map<simpleDummy, simpleDummy>::size_type after = a.size();
-	ASSERT_EQ(before, after + 1);
-	ASSERT_EQ(1, result);
+	ASSERT_EQ(1, a.erase(a.begin()->first));
+	ASSERT_EQ(0, a.erase(simpleDummy(666)));
 }
 
 TEST(Map, deletingOneElementByIterators){

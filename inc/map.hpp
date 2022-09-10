@@ -155,8 +155,7 @@ namespace ft {
 		}
 
 		size_type erase (const key_type& k){
-			rbTree.popNode(k);
-			return 1;
+			return rbTree.popNode(k);
 		}
 
 		void erase (iterator first, iterator last){

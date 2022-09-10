@@ -134,6 +134,8 @@ int		main(void)
 	//ft_insert(mp, lst.begin(), lst.begin());
 	ft_insert(mp, lst.begin(), lst.end());
 
+	std::map<int, int> mapd;
+	mapd.max_size();
 	return (0);
 }
 

@@ -175,7 +175,7 @@ namespace ft {
 			return rbTree.size();
 		}
 
-		size_type max_size() const{
+		size_type max_size(void) const {
 			return rbTree.max_size();
 		}
 

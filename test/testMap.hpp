@@ -45,12 +45,11 @@ TEST(Map, assignmentClearsBeforeAddingNew) {
 
 
 TEST(Map, insertingElementWithKeyAlreadyPresentHasSizeOne){
-	ft::map<int, int> map;
-	map.insert(ft::make_pair(1, 0));
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
 
 	map.insert(ft::make_pair(1, 0));
 
-	ASSERT_EQ(1, map.size());
+	ASSERT_EQ(generateTestMap().size(), map.size());
 }
 
 TEST(Map, returnValueStatesFalseSinceKeyAlreadyPresent){
@@ -331,4 +330,26 @@ TEST(Map, equalRangeReturnsPairWithTwoTimesEndForKeyNotFound){
 
 	ASSERT_EQ(it.first, it.second);
 	ASSERT_EQ(map.end(), it.second);
+}
+
+TEST(Map, countReturnsOneOnFoundItem){
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+
+	ASSERT_EQ(1, map.count(simpleDummy(0)));
+}
+
+TEST(Map, countReturnsZeroOnNotFoundItem){
+	ft::map<simpleDummy, simpleDummy> map;
+
+	ASSERT_EQ(0, map.count(simpleDummy(666)));
+}
+
+TEST(Map, insertingExistingKeyDoesNotGetAddedToMap){
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(666, 0));
+
+	map.insert(ft::make_pair(666, 1));
+
+	ASSERT_EQ(1, map.size());
+	ASSERT_EQ(++map.begin(),map.end());
 }

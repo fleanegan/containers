@@ -72,49 +72,70 @@ void    printReverse(TESTED_NAMESPACE::map<T1, T2> &mp)
 	std::cout << "_______________________________________________" << std::endl;
 }
 
-
 #include <list>
 
 #define T1 int
 #define T2 std::string
-typedef _pair<const T1, T2> T3;
+typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
 
 static int iter = 0;
 
 template <typename MAP, typename U>
-void	ft_erase(MAP &mp, U param)
+void	ft_insert(MAP &mp, U param, U param2)
 {
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	std::cout << "ret: " << mp.erase(param) << std::endl;
+	mp.insert(param, param2);
 	printSize(mp);
 }
 
 int		main(void)
 {
 	std::list<T3> lst;
-	unsigned int lst_size = 6;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	printSize(mp);
+	std::list<T3>::iterator itlst;
 
-	for (int i = 2; i < 4; ++i)
-		ft_erase(mp, i);
+	lst.push_back(T3(42, "lol"));
 
-	ft_erase(mp, mp.begin()->first);
-	ft_erase(mp, (--mp.end())->first);
+	lst.push_back(T3(50, "mdr"));
+	lst.push_back(T3(35, "funny"));
 
-	mp[-1] = "Hello";
-	mp[10] = "Hi there";
-	mp[10] = "Hi there";
-	printSize(mp);
+	lst.push_back(T3(45, "bunny"));
+	lst.push_back(T3(21, "fizz"));
+	lst.push_back(T3(38, "buzz"));
+	lst.push_back(T3(55, "fuzzy"));
 
-	ft_erase(mp, 0);
-	ft_erase(mp, 1);
+	std::cout << "List contains:" << std::endl;
+	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
+		printPair(itlst);
+
+	std::cout << ">>>>>>>>>>>>>>>>> now inserting into map" << std::endl;
+
+	TESTED_NAMESPACE::map<T1, T2> mp;
+	ft_insert(mp, lst.begin(), lst.end());
+
+	lst.clear();
+
+	std::cout << ">>>>>>>>>>>>>>>>> cleared. manually inserting into map again" << std::endl;
+
+	lst.push_back(T3(87, "hey"));
+	lst.push_back(T3(47, "eqweqweq"));
+	lst.push_back(T3(35, "this key is already inside"));
+	lst.push_back(T3(23, "but not that one"));
+	lst.push_back(T3(1, "surprising isnt it?"));
+	lst.push_back(T3(100, "is it enough??"));
+	lst.push_back(T3(55, "inside map too"));
+
+	std::cout << "List contains:" << std::endl;
+	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
+		printPair(itlst);
+
+	std::cout << ">>>>>>>>>>>>>>>>> NOT cleared.  inserting list  again  into map again" << std::endl;
+
+
+	//ft_insert(mp, lst.begin(), lst.begin());
+	ft_insert(mp, lst.begin(), lst.end());
 
 	return (0);
 }
-
 
 
 #endif

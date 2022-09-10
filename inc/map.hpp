@@ -192,8 +192,7 @@ namespace ft {
 		}
 
 		size_type count( const Key& key ) const{
-			return 1;
-			(void) key;
+			return static_cast<size_type>(end() != find(key));
 		}
 
 		mapped_type& operator[] (const key_type& k) {

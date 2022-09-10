@@ -12,6 +12,7 @@
 #include "../inc/MapIterator.hpp"
 #include "../inc/BinarySearchTree.hpp"
 #include "../inc/RedBlackTree.hpp"
+#include <list>
 #include <iostream>
 #define _DEBUG_SD 0
 

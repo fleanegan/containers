@@ -232,6 +232,8 @@ namespace ft {
 			pointer tmp = rootNode;
 
 			while ((tmp->getLeft()->isNullNode() == false || tmp->getRight()->isNullNode() == false)) {
+				if (*keyOfNewNode == tmp->content.first)
+					return tmp;
 				if (_compare(*keyOfNewNode, tmp->content.first)) {
 					if (tmp->getLeft()->isNullNode())
 						return tmp;

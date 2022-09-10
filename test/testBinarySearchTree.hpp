@@ -320,6 +320,18 @@ TEST(BinarySearchTree, poppingNodeDecrementsSize){
 	ASSERT_EQ(0, bst.size());
 }
 
+TEST(BinarySearchTree, poppingLastNodeSetsAllInternalPointersToNullNode){
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
+	bst.insert(ft::make_pair(1, 1));
+
+	bst.popNode(1);
+
+	ASSERT_TRUE(bst.root()->getLeft()->isNullNode());
+	ASSERT_TRUE(bst.root()->getParent()->isNullNode());
+	ASSERT_TRUE(bst.root()->getRight()->isNullNode());
+	ASSERT_TRUE(bst.root()->isNullNode());
+}
+
 TEST(BinarySearchTree, getLowestItemOnEmptyTreeReturnsNullNode){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
 

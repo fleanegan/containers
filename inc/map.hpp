@@ -135,9 +135,13 @@ namespace ft {
 			return result;
 		}
 
-		ft::pair<iterator,bool> insert (iterator position, const value_type& val){
-			(void) position;
-			return insert(val);
+		iterator insert( iterator hint, const value_type& value ){
+			(void) hint;
+			return insert(value).first;
+		}
+		iterator insert( const_iterator hint, const value_type& value ){
+			(void) hint;
+			return insert(value).first;
 		}
 
 		template <class InputIterator>
@@ -188,8 +192,9 @@ namespace ft {
 			rbTree.clear();
 		}
 
-		size_type count() const{
+		size_type count( const Key& key ) const{
 			return 1;
+			(void) key;
 		}
 
 		mapped_type& operator[] (const key_type& k) {

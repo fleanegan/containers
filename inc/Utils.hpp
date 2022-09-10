@@ -61,6 +61,38 @@ namespace ft{
 
 	template <typename T>
 	const bool is_integral<T>::value = std::numeric_limits<T>::is_integer;
+
+
+	template<typename T>
+	struct less: public std::binary_function<T, T, bool>
+	{
+		bool operator()(const T& x, const T& y) const {
+			return (x < y);
+		}
+	};
+
+	template<typename T>
+	struct more: public std::binary_function<T, T, bool>
+	{
+		bool operator()(const T& x, const T& y) const {
+			return (x > y);
+		}
+	};
+
+	template<class value_type>
+	value_type const &min(value_type const &a, value_type const &b) {
+		return (a < b ? a : b);
+	}
+
+	template<class value_type>
+	value_type const &max(value_type const &a, value_type const &b) {
+		return (a < b ? b : a);
+	}
+
+	template<class value_type>
+	bool equal(value_type const &a, value_type const &b) {
+		return (a == b);
+	}
 }
 
 #endif //CONTAINERS_UTILS_HPP

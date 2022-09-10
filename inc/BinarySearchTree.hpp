@@ -105,12 +105,12 @@ namespace ft {
 			return rootNode;
 		}
 
-		virtual void popNode(TKey keyOfNodeToBeRemoved) {
+		void popNode(TKey keyOfNodeToBeRemoved) {
 			pointer nodeToBeRemoved = find(keyOfNodeToBeRemoved);
 			popNodeByPointer(nodeToBeRemoved);
 		}
 
-		virtual void popNodeByPointer(pointer nodeToBeRemoved) {
+		void popNodeByPointer(pointer nodeToBeRemoved) {
 			if (nodeToBeRemoved->isNullNode())
 				return;
 			if (nodeToBeRemoved->getRight()->isNullNode())
@@ -248,11 +248,7 @@ namespace ft {
 				return;
 			deleteSubTreeFrom((localRoot)->getLeft());
 			deleteSubTreeFrom((localRoot)->getRight());
-			if (localRoot == rootNode)
-				rootNode = nullNode;
-			--current_size;
-			_allocator.destroy(localRoot);
-			_allocator.deallocate(localRoot, 1);
+			deleteNodeWithCleanUp(localRoot);
 		}
 
 		void copySubTree(pointer source, const_pointer sourceNullNode, pointer *dest) {
@@ -292,13 +288,15 @@ namespace ft {
 			}
 			leftMinimum = getInorderSuccessor(localRoot->getLeft(), biggerThan, currentOptimum);
 			rightMinimum = getInorderSuccessor(localRoot->getRight(), biggerThan, currentOptimum);
-			if (leftMinimum->isNullNode() == false && _compare(leftMinimum->content.first, biggerThan->content.first) == false &&
+			if (leftMinimum->isNullNode() == false &&
+				_compare(leftMinimum->content.first, biggerThan->content.first) == false &&
 				_compare(leftMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(leftMinimum->content.first, localRoot->content.first))
 					return leftMinimum;
 				return localRoot;
 			}
-			if (rightMinimum->isNullNode() == false && _compare(rightMinimum->content.first, biggerThan->content.first) == false &&
+			if (rightMinimum->isNullNode() == false &&
+				_compare(rightMinimum->content.first, biggerThan->content.first) == false &&
 				_compare(rightMinimum->content.first, currentOptimum->content.first)) {
 				if (_compare(rightMinimum->content.first, localRoot->content.first))
 					return rightMinimum;
@@ -337,9 +335,11 @@ namespace ft {
 				rootNode = nullNode;
 				nullNode->setRight(nullNode);
 				nullNode->setLeft(nullNode);
+				nullNode->setParent(nullNode);
 			}
 			--current_size;
-			delete nodeToBeRemoved;
+			_allocator.destroy(nodeToBeRemoved);
+			_allocator.deallocate(nodeToBeRemoved, 1);
 		}
 
 	private:

@@ -118,6 +118,8 @@ namespace ft {
 						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
 							currentNode = currentNode->getRight();
+					if (currentNode->isNullNode() == false && currentNode->content.first == originalKey)
+						currentNode = currentNode->getRight();
 				}
 			}
 		}

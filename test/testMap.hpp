@@ -204,8 +204,27 @@ TEST(Map, erasingByKeyReturnsOne){
 	ASSERT_EQ(1, result);
 }
 
+TEST(Map, deletingOneElementByIterators){
+		ft::map<simpleDummy, simpleDummy> a;
+		a.insert(ft::make_pair(1, 2));
+
+		a.erase(a.begin(), a.end());
+
+		ASSERT_EQ(0, a.size());
+}
+
 TEST(Map, deletingTheWholeMapByIterators){
 	ft::map<simpleDummy, simpleDummy> a = generateTestMap();
+
+	a.erase(a.begin(), a.end());
+
+	ASSERT_EQ(0, a.size());
+}
+
+
+TEST(Map, deletingEmptyMapByIterators){
+	ft::map<simpleDummy, simpleDummy> a;
+	ASSERT_EQ(0, a.size());
 
 	a.erase(a.begin(), a.end());
 

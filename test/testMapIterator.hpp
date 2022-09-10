@@ -132,3 +132,49 @@ TEST(MapIterator, dereferenceConstIterator) {
 
 	ASSERT_EQ(0, *(a->first));
 }
+
+TEST(MapIterator, moveToNextChangesAddressOfCurrentNode) {
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(1, 2));
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+	ft::map<simpleDummy, simpleDummy>::NodeType *before = a.current();
+
+	a++;
+
+	ft::map<simpleDummy, simpleDummy>::NodeType *after = a.current();
+	ASSERT_NE(before, after);
+}
+
+TEST(MapIterator, moveToPrevChangesAddressOfCurrentNode) {
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(1, 2));
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.end();
+	ft::map<simpleDummy, simpleDummy>::NodeType *before = a.current();
+
+	a--;
+
+	ft::map<simpleDummy, simpleDummy>::NodeType *after = a.current();
+	ASSERT_NE(before, after);
+}
+
+TEST(MapIterator, moveToPrevMovesToNullNodeIfWasOnBeginBefore) {
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(1, 2));
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+
+	a--;
+
+	ASSERT_TRUE(a.current()->isNullNode());
+}
+
+TEST(MapIterator, moveBackUsesToLeft) {
+	ft::map<simpleDummy, simpleDummy> map;
+	map.insert(ft::make_pair(1, 2));
+	map.insert(ft::make_pair(0, 2));
+	map.insert(ft::make_pair(3, 2));
+	ft::map<simpleDummy, simpleDummy>::iterator a = --map.end();
+
+	a--;
+
+	ASSERT_EQ(1, *(*a).first);
+}

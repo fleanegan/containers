@@ -1,10 +1,6 @@
 #ifndef CONTAINERS_VECTOR_HPP
 #define CONTAINERS_VECTOR_HPP
 
-// todo: probably needs to be removed before handing in
-// -> how to compile independently?
-#define _DEBUG false
-
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
 #include "type_traits.hpp"
@@ -13,6 +9,7 @@
 #include <limits>
 #include "algorithm.hpp"
 #include <iostream>
+#include <stdexcept>
 
 namespace ft {
 	template<class T, class Allocator = std::allocator<T> >
@@ -22,9 +19,9 @@ namespace ft {
 		typedef typename Allocator::reference reference;
 		typedef typename Allocator::const_reference const_reference;
 		typedef VectorIterator<T> iterator;
-		typedef VectorIterator<const T>		const_iterator;
-		typedef ft::reverse_iterator<iterator>		reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef VectorIterator<const T> const_iterator;
+		typedef ft::reverse_iterator<iterator> reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef Allocator allocator_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
@@ -44,13 +41,19 @@ namespace ft {
                 _size(0), \
                 _arr() {}
 
-		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): \
-                _capacity(count), \
-                _allocator(alloc), \
-                _size(count) {
+		explicit vector(size_type count, const T &value = T(), const Allocator &alloc = Allocator()){
+			initSize(count);
+			_allocator = alloc;
 			_arr = _allocator.allocate(count);
 			for (size_type i = 0; i < count; ++i)
 				_allocator.construct(&_arr[i], value);
+		}
+
+		void initSize(const size_type &count){
+			if (count >= max_size())
+				throw std::length_error("cannot be bigger than max_size");
+			_capacity = count;
+			_size = count;
 		}
 
 		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \
@@ -61,9 +64,9 @@ namespace ft {
 			assign(rhs.begin(), rhs.end());
 		}
 
-		template< class InputIt >
-		vector( InputIt first, InputIt last,
-				const Allocator& alloc = Allocator() ) : \
+		template<class InputIt>
+		vector(InputIt first, InputIt last,
+			   const Allocator &alloc = Allocator()) : \
                _capacity(0), \
                _allocator(alloc), \
                _size(0),
@@ -125,7 +128,6 @@ namespace ft {
 		}
 
 		void push_back(const T &x) {
-			_DEBUG && std::cout << "push back\n";
 			if (_size == _capacity) {
 				reserve(_capacity * 2);
 			}
@@ -141,7 +143,6 @@ namespace ft {
 				_capacity = 0;
 				_size = 0;
 				_arr = NULL;
-				_DEBUG && std::cout << "cleared" << std::endl;
 			}
 		}
 
@@ -185,7 +186,7 @@ namespace ft {
 			return _size == 0;
 		}
 
-		template <class InputIterator>
+		template<class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to) {
 			assign<InputIterator>(from, to, typename ft::iterator_traits<InputIterator>::iterator_category());
@@ -216,7 +217,7 @@ namespace ft {
 			reserve(newSize);
 			//todo: segfault if pos > beginning and newSize == newCapacity
 			moveBackwardElements(begin() + index, count);
-			for (size_type i = index; i <= offset; ++i){
+			for (size_type i = index; i <= offset; ++i) {
 				setElementAt(value, i);
 			}
 			_size = newSize;
@@ -224,7 +225,7 @@ namespace ft {
 
 		template<class InputIt, class I>
 		typename ft::enable_if<!ft::is_integral<I>::value, void>::type
-		insert(InputIt pos, I first, I last){
+		insert(InputIt pos, I first, I last) {
 			int index = pos - begin();
 			size_type count = ft::distance(first, last);
 			size_type newSize = _size + count;
@@ -255,14 +256,12 @@ namespace ft {
 		}
 
 		void reserve(size_type newCapacity) {
-			_DEBUG && std::cout << "reserving\n";
-			if (! isReserveNecessary(newCapacity))
+			if (!isReserveNecessary(newCapacity))
 				return;
 			arrayTooBigGuard(newCapacity);
 			newCapacity = preventZeroCapacity(newCapacity);
 			T *tmp = _allocator.allocate(newCapacity);
 			for (size_type i = 0; i < _size; ++i) {
-				_DEBUG && std::cout << "reserve loop\n";
 				_allocator.construct(&tmp[i], _arr[i]);
 				_allocator.destroy(&_arr[i]);
 			}
@@ -271,8 +270,7 @@ namespace ft {
 			_capacity = newCapacity;
 		}
 
-
-		void swap(vector &other){
+		void swap(vector &other) {
 			size_type tmpSize;
 			pointer tmpArr;
 
@@ -287,15 +285,15 @@ namespace ft {
 			other._arr = tmpArr;
 		}
 
-		void resize(size_type sz, T c = T()){
+		void resize(size_type sz, T c = T()) {
 			if (sz > _size)
 				insert(end(), sz - _size, c);
 			else if (sz < _size)
 				erase(begin() + sz, end());
 		}
 
-		allocator_type get_allocator(){
-			return _allocator();
+		allocator_type get_allocator() {
+			return _allocator;
 		}
 
 	private:
@@ -330,6 +328,7 @@ namespace ft {
 			else
 				_arr[i] = value;
 		}
+
 		void freeOldArray() {
 			if (_arr != NULL)
 				_allocator.deallocate(_arr, _capacity);
@@ -352,33 +351,32 @@ namespace ft {
 			return newCapacity;
 		}
 
-		template <class InputIterator>
+		template<class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to, std::forward_iterator_tag) {
 			size_type requiredCapacity = ft::distance(from, to);
 			erase(begin(), end());
 			reserve(requiredCapacity);
-			while (from != to)
-			{
+			while (from != to) {
 				push_back((*from));
 				++from;
 			}
 		}
 
-		template <class InputIterator>
+		template<class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to, std::input_iterator_tag) {
 			erase(begin(), end());
-			while (from != to)
-			{
+			while (from != to) {
 				push_back((*from));
 				++from;
 			}
 		}
 	};
-	template <class T, class Allocator>
-	bool operator==(const ft::vector<T,Allocator>& x,
-					const ft::vector<T,Allocator>& y) {
+
+	template<class T, class Allocator>
+	bool operator==(const ft::vector<T, Allocator> &x,
+					const ft::vector<T, Allocator> &y) {
 		typename ft::vector<T, Allocator>::const_iterator ours = x.begin();
 		typename ft::vector<T, Allocator>::const_iterator theirs = y.begin();
 		if (x.size() != y.size())
@@ -392,15 +390,15 @@ namespace ft {
 		return (ours == x.end() && theirs == y.end());
 	}
 
-	template <class T, class Allocator>
-	bool operator!=(const ft::vector<T,Allocator>& x,
-					const ft::vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	bool operator!=(const ft::vector<T, Allocator> &x,
+					const ft::vector<T, Allocator> &y) {
 		return !(x == y);
 	}
 
-	template <class T, class Allocator>
-	bool operator< (const vector<T,Allocator>& x,
-					const vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	bool operator<(const vector<T, Allocator> &x,
+				   const vector<T, Allocator> &y) {
 		typedef typename ft::vector<T>::size_type size_type;
 		size_type minSize = std::min(x.size(), y.size());
 		for (size_type i = 0; i < minSize; ++i)
@@ -409,26 +407,26 @@ namespace ft {
 		return x.size() < y.size();
 	}
 
-	template <class T, class Allocator>
-	bool operator> (const vector<T,Allocator>& x,
-					const vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	bool operator>(const vector<T, Allocator> &x,
+				   const vector<T, Allocator> &y) {
 		return !(x < y) && (x != y);
 	}
 
-	template <class T, class Allocator>
-	bool operator>=(const vector<T,Allocator>& x,
-					const vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	bool operator>=(const vector<T, Allocator> &x,
+					const vector<T, Allocator> &y) {
 		return x == y || x > y;
 	}
 
-	template <class T, class Allocator>
-	bool operator<=(const vector<T,Allocator>& x,
-					const vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	bool operator<=(const vector<T, Allocator> &x,
+					const vector<T, Allocator> &y) {
 		return x == y || x < y;
 	}
 
-	template <class T, class Allocator>
-	void swap(vector<T,Allocator>& x, vector<T,Allocator>& y){
+	template<class T, class Allocator>
+	void swap(vector<T, Allocator> &x, vector<T, Allocator> &y) {
 		x.swap(y);
 	}
 }

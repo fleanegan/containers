@@ -33,55 +33,23 @@
 
 using namespace NAMESPACE;
 
+template <typename c>
+std::size_t getMax(){
+	std::size_t max = c().max_size();
+	return max;
+}
+
+struct m{
+	m(){
+		throw std::length_error("tm");
+	}
+};
+
 int main()
 {
-	ft::vector<char> strvec(1, '2');
-	std::istringstream str("1 2 3 4 5 6 7");
-	std::istreambuf_iterator<char> it(str), end;
-	if (it != end)
-		std::cout << "wtf " << std::endl;
-	strvec.assign(it, end);
-	ft::vector<char>::iterator itc = strvec.begin();
-	ft::vector<char>::iterator itce = strvec.end();
-	std::cout << "printing vector: ";
-	while (itc != itce){
-		std::cout << *itc++ << ", ";
-	}
-	std::cout << std::endl;
-	ft::vector<int> tes;
-	ft::vector<int>::iterator tesIt = tes.begin();
-	ft::distance(tes.begin(), tes.end());
-	NAMESPACE::stack<float> other_stack;
-	NAMESPACE::vector<std::string> lst;
-
-	lst.push_back("salut");
-	lst.push_back("tu vas bien?");
-	lst.push_back("super");
-	lst.push_back("et toi?");
-
-	NAMESPACE::stack<std::string, vector<std::string> >	my_stack(lst);
-
-	std::cout << std::boolalpha << other_stack.empty() << std::endl;
-	other_stack.push(8.5); // 8.5;
-	other_stack.push(42.4242); // 8.5; 42.4242;
-	std::cout << other_stack.size() << '\n'; // 2
-	other_stack.pop(); // 8.5;
-	std::cout << other_stack.size() << '\n'; // 1
-	other_stack.push(78541.987); // 8.5; 78541.987;
-	std::cout << other_stack.size() << '\n'; // 2
-	std::cout << other_stack.top() << '\n'; //78541.987
-	std::cout << std::boolalpha << other_stack.empty() << std::endl;
-
-	const std::string const_top = my_stack.top();
-
-	std::cout << "const top: " << const_top << '\n';
-
-	while (!my_stack.empty())
-	{
-		std::cout << my_stack.top() << '\n';
-		my_stack.pop();
-	}
-
+	std::vector<int>(getMax<std::vector<int> >() + 1);
+	//m awf;
+//	ft::vector<int> v(getMax() + 10);
 	return (0);
 }
 

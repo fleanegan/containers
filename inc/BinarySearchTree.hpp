@@ -1,9 +1,9 @@
 #ifndef CONTAINERS_BINARYSEARCHTREE_HPP
 #define CONTAINERS_BINARYSEARCHTREE_HPP
 
-#include "Pair.hpp"
+#include "pair.hpp"
 #include "Node.hpp"
-#include "Utils.hpp"
+#include "algorithm.hpp"
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
@@ -149,8 +149,7 @@ namespace ft {
 		}
 
 		size_type max_size(void) const {
-			return (std::min((size_type) std::numeric_limits<difference_type>::max(),
-							 std::numeric_limits<size_type>::max() / (sizeof(NodeType))));
+			return _allocator.max_size();
 		}
 
 		static pointer getLowest(pointer startingPoint) {

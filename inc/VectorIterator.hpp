@@ -6,7 +6,8 @@
 #define CONTAINERS_VECTORITERATOR_HPP
 
 #include "vector.hpp"
-#include "Utils.hpp"
+#include "iterator.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft {
 

@@ -1,16 +1,15 @@
 #include <iostream>
-#include "IteratorTraits.hpp"
-#include "../inc/IteratorTraits.hpp"
+#include "iterator_traits.hpp"
+#include "../inc/iterator_traits.hpp"
 #include "../inc/vector.hpp"
 #include "../inc/VectorIterator.hpp"
 #include "../inc/RedBlackTree.hpp"
-#include "Utils.hpp"
 #include <iterator>
 #include <vector>
 #include <typeinfo>
 #include <map>
-#include "Stack.hpp"
-#include "Pair.hpp"
+#include "stack.hpp"
+#include "pair.hpp"
 #include "BinarySearchTree.hpp"
 #include "map.hpp"
 #include "MapIterator.hpp"
@@ -72,70 +71,100 @@ void    printReverse(TESTED_NAMESPACE::map<T1, T2> &mp)
 	std::cout << "_______________________________________________" << std::endl;
 }
 
+// --- Class foo
+template <typename T>
+class foo {
+public:
+	typedef T	value_type;
+
+	foo(void) : value(), _verbose(false) { };
+	foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+	foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+	~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+	void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+	void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+	foo &operator=(value_type src) { this->value = src; return *this; };
+	foo &operator=(foo const &src) {
+		if (this->_verbose || src._verbose)
+			std::cout << "foo::operator=(foo) CALLED" << std::endl;
+		this->value = src.value;
+		return *this;
+	};
+	value_type	getValue(void) const { return this->value; };
+	void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+	operator value_type(void) const {
+		return value_type(this->value);
+	}
+private:
+	value_type	value;
+	bool		_verbose;
+};
+
 #include <list>
 
 #define T1 int
-#define T2 std::string
+#define T2 foo<int>
 typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
+typedef TESTED_NAMESPACE::map<T1, T2>::iterator ft_iterator;
+typedef TESTED_NAMESPACE::map<T1, T2>::const_iterator ft_const_iterator;
 
 static int iter = 0;
 
-template <typename MAP, typename U>
-void	ft_insert(MAP &mp, U param, U param2)
+template <typename MAP>
+void	ft_bound(MAP &mp, const T1 &param)
 {
+	ft_iterator ite = mp.end(), it[2];
+	_pair<ft_iterator, ft_iterator> ft_range;
+
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	mp.insert(param, param2);
-	printSize(mp);
+	std::cout << "with key [" << param << "]:" << std::endl;
+	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
+	ft_range = mp.equal_range(param);
+	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
+	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
+	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
+}
+
+template <typename MAP>
+void	ft_const_bound(const MAP &mp, const T1 &param)
+{
+	ft_const_iterator ite = mp.end(), it[2];
+	_pair<ft_const_iterator, ft_const_iterator> ft_range;
+
+	std::cout << "\t-- [" << iter++ << "] (const) --" << std::endl;
+	std::cout << "with key [" << param << "]:" << std::endl;
+	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
+	ft_range = mp.equal_range(param);
+	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
+	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
+	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 }
 
 int		main(void)
 {
 	std::list<T3> lst;
-	std::list<T3>::iterator itlst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(i + 1, (i + 1) * 3));
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	printSize(mp);
 
-	lst.push_back(T3(42, "lol"));
+	ft_const_bound(mp, -10);
+	ft_const_bound(mp, 1);
+	ft_const_bound(mp, 5);
+	ft_const_bound(mp, 10);
+	ft_const_bound(mp, 50);
 
-	lst.push_back(T3(50, "mdr"));
-	lst.push_back(T3(35, "funny"));
+	printSize(mp);
 
-	lst.push_back(T3(45, "bunny"));
-	lst.push_back(T3(21, "fizz"));
-	lst.push_back(T3(38, "buzz"));
-	lst.push_back(T3(55, "fuzzy"));
+	mp.lower_bound(3)->second = 404;
+	mp.upper_bound(7)->second = 842;
+	ft_bound(mp, 5);
+	ft_bound(mp, 7);
 
-	std::cout << "List contains:" << std::endl;
-	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
-		printPair(itlst);
-
-	std::cout << ">>>>>>>>>>>>>>>>> now inserting into map" << std::endl;
-
-	TESTED_NAMESPACE::map<T1, T2> mp;
-	ft_insert(mp, lst.begin(), lst.end());
-
-	lst.clear();
-
-	std::cout << ">>>>>>>>>>>>>>>>> cleared. manually inserting into map again" << std::endl;
-
-	lst.push_back(T3(87, "hey"));
-	lst.push_back(T3(47, "eqweqweq"));
-	lst.push_back(T3(35, "this key is already inside"));
-	lst.push_back(T3(23, "but not that one"));
-	lst.push_back(T3(1, "surprising isnt it?"));
-	lst.push_back(T3(100, "is it enough??"));
-	lst.push_back(T3(55, "inside map too"));
-
-	std::cout << "List contains:" << std::endl;
-	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
-		printPair(itlst);
-
-	std::cout << ">>>>>>>>>>>>>>>>> NOT cleared.  inserting list  again  into map again" << std::endl;
-
-
-	//ft_insert(mp, lst.begin(), lst.begin());
-	ft_insert(mp, lst.begin(), lst.end());
-
+	printSize(mp);
 	return (0);
 }
-
 
 #endif

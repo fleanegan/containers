@@ -272,14 +272,8 @@ namespace ft {
 
 		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const{
 			ft::pair<const_iterator, const_iterator> result;
-			result.first = find(key);
-			if (result.first == end())
-				result.second = result.first;
-			else
-			{
-				result.second = result.first;
-				++result.second;
-			}
+			result.first = lower_bound(key);
+			result.second = upper_bound(key);
 			return result;
 		}
 

@@ -8,7 +8,7 @@
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
-	class RedBlackTree : public ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode<TKey, TValue> > {
+	class RedBlackTree : public ft::BinarySearchTree<TKey, TValue, ft::RedBlackNode<TKey, TValue>, Compare, Allocator > {
 	public:
 		typedef TKey key_type;
 		typedef TValue mapped_type;
@@ -16,27 +16,26 @@ namespace ft {
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef NodeType Node;
-		typedef typename Allocator::reference reference;
-		typedef typename Allocator::const_reference const_reference;
-		typedef typename Allocator::pointer pointer;
-		typedef typename Allocator::const_pointer const_pointer;
+		typedef typename allocator_type::reference reference;
+		typedef typename allocator_type::const_reference const_reference;
+		typedef typename allocator_type::pointer pointer;
+		typedef typename allocator_type::const_pointer const_pointer;
 
 	public:
-
-		RedBlackTree(const key_compare &compare = std::less<TKey>(), const allocator_type &alloc = allocator_type())
-				: ft::BinarySearchTree<key_type, mapped_type, Node, key_compare, allocator_type>(compare, alloc) {
+		RedBlackTree(const Compare &compare = Compare(), const allocator_type &alloc = allocator_type())
+				: ft::BinarySearchTree<key_type, mapped_type, NodeType, Compare, allocator_type>(compare, alloc) {
 			this->nullNode->isBlack = true;
 		}
 
 		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, key_compare, const allocator_type &alloc = allocator_type())
 				: ft::BinarySearchTree<key_type, mapped_type, NodeType, key_compare, allocator_type>(alloc) {
-			BinarySearchTree<key_type, mapped_type, key_compare, Node>::operator=(rhs);
+			BinarySearchTree<key_type, mapped_type, NodeType, key_compare , allocator_type>::operator=(rhs);
 			this->nullNode->isBlack = true;
 		}
 
 		RedBlackTree<key_type, mapped_type, NodeType> &
-		operator=(const RedBlackTree<key_type, mapped_type, key_compare, NodeType> &rhs) {
-			BinarySearchTree<key_type, mapped_type, key_compare, Node>::operator=(rhs);
+		operator=(const RedBlackTree<key_type, mapped_type, NodeType, key_compare, allocator_type> &rhs) {
+			BinarySearchTree<key_type, mapped_type, NodeType, key_compare , allocator_type>::operator=(rhs);
 			return *this;
 		}
 
@@ -45,7 +44,7 @@ namespace ft {
 		}
 
 		pointer insert(ft::pair<key_type, mapped_type> const &in) {
-			Node *newNode = BinarySearchTree<key_type, mapped_type, Node>::insert(in);
+			Node *newNode = BinarySearchTree<key_type, mapped_type, NodeType, Compare, allocator_type>::insert(in);
 
 			fixupInsertion(newNode);
 			return newNode;

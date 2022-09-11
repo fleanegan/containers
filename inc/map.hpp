@@ -31,8 +31,8 @@ namespace ft {
 	public:
 		typedef MapIterator<value_type, key_type, mapped_type, NodeType, Compare> iterator;
 		typedef MapIterator<const value_type, key_type, mapped_type, const NodeType, Compare> const_iterator;
-		typedef ft::ReverseIterator<iterator> reverse_iterator;
-		typedef ft::ReverseIterator<const_iterator> const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator> reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef typename RbTree::size_type size_type;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;

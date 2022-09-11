@@ -9,7 +9,7 @@
 namespace ft {
 
 	template<typename T>
-	class ReverseIterator {
+	class reverse_iterator {
 		T iterator;
 	public:
 		typedef typename T::difference_type difference_type;
@@ -18,19 +18,19 @@ namespace ft {
 		typedef typename T::pointer pointer;
 		typedef typename T::iterator_category iterator_category;
 
-		ReverseIterator() : iterator() {}
+		reverse_iterator() : iterator() {}
 
-		explicit ReverseIterator(T it) : iterator(it) {
+		explicit reverse_iterator(T it) : iterator(it) {
 
 		}
 
-		ReverseIterator(const ReverseIterator &revIt) : iterator(revIt.base()) {}
+		reverse_iterator(const reverse_iterator &revIt) : iterator(revIt.base()) {}
 
 		template<class NonConstIterator>
-		ReverseIterator(const ReverseIterator<NonConstIterator> &revIt) : iterator(T(revIt.base())) {}
+		reverse_iterator(const reverse_iterator<NonConstIterator> &revIt) : iterator(T(revIt.base())) {}
 
 		template<class NonConstIterator>
-		ReverseIterator &operator=(const ReverseIterator<NonConstIterator> &rhs) {
+		reverse_iterator &operator=(const reverse_iterator<NonConstIterator> &rhs) {
 			iterator = T(rhs.current());
 			return *this;
 		}
@@ -49,46 +49,46 @@ namespace ft {
 			return *result;
 		}
 
-		ReverseIterator operator++(int i) {
-			ReverseIterator result = *this;
+		reverse_iterator operator++(int i) {
+			reverse_iterator result = *this;
 			iterator.operator--(i);
 			return result;
 		}
 
-		ReverseIterator &operator++() {
+		reverse_iterator &operator++() {
 			iterator.operator--();
 			return *this;
 		}
 
-		ReverseIterator &operator--() {
+		reverse_iterator &operator--() {
 			iterator.operator++();
 			return *this;
 		}
 
-		ReverseIterator operator--(int i) {
-			ReverseIterator result = *this;
+		reverse_iterator operator--(int i) {
+			reverse_iterator result = *this;
 			iterator.operator++(i);
 			return result;
 		}
 
-		ReverseIterator operator+(int i) {
+		reverse_iterator operator+(int i) {
 			T resultBase = iterator.operator-(i);
-			ReverseIterator<T> result(resultBase);
+			reverse_iterator<T> result(resultBase);
 			return result;
 		}
 
-		ReverseIterator operator-(int i) {
+		reverse_iterator operator-(int i) {
 			T resultBase = iterator.operator+(i);
-			ReverseIterator<T> result(resultBase);
+			reverse_iterator<T> result(resultBase);
 			return result;
 		}
 
-		ReverseIterator &operator+=(int i) {
+		reverse_iterator &operator+=(int i) {
 			iterator.operator-=(i);
 			return *this;
 		}
 
-		ReverseIterator &operator-=(int i) {
+		reverse_iterator &operator-=(int i) {
 			iterator.operator+=(i);
 			return *this;
 		}
@@ -165,8 +165,8 @@ namespace ft {
 	};
 
 	template<typename T>
-	ReverseIterator<T> operator+(int i, const ReverseIterator<T> &n) {
-		ReverseIterator<T> result(n.current() - i);
+	reverse_iterator<T> operator+(int i, const reverse_iterator<T> &n) {
+		reverse_iterator<T> result(n.current() - i);
 		return result;
 	}
 }

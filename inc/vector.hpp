@@ -188,11 +188,7 @@ namespace ft {
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator from, InputIterator to) {
-			size_type requiredCapacity = ft::distance(from, to);
-			erase(begin(), end());
-			reserve(requiredCapacity);
-			while (from != to)
-				push_back(*from++);
+			assign<InputIterator>(from, to, typename ft::iterator_traits<InputIterator>::iterator_category());
 		}
 
 		void assign(size_type count, const T &value) {
@@ -356,6 +352,29 @@ namespace ft {
 			return newCapacity;
 		}
 
+		template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+		assign(InputIterator from, InputIterator to, std::forward_iterator_tag) {
+			size_type requiredCapacity = ft::distance(from, to);
+			erase(begin(), end());
+			reserve(requiredCapacity);
+			while (from != to)
+			{
+				push_back((*from));
+				++from;
+			}
+		}
+
+		template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+		assign(InputIterator from, InputIterator to, std::input_iterator_tag) {
+			erase(begin(), end());
+			while (from != to)
+			{
+				push_back((*from));
+				++from;
+			}
+		}
 	};
 	template <class T, class Allocator>
 	bool operator==(const ft::vector<T,Allocator>& x,

@@ -15,6 +15,7 @@
 #include "../inc/BinarySearchTree.hpp"
 #include "../inc/RedBlackTree.hpp"
 #include <list>
+#include <sstream>
 #include <iostream>
 #define _DEBUG_SD 0
 

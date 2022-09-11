@@ -22,6 +22,7 @@
 #ifndef TESTING
 #include <vector>
 #include <stack>
+#include <sstream>
 
 #define STD
 #ifndef STD
@@ -34,8 +35,19 @@ using namespace NAMESPACE;
 
 int main()
 {
-	ft::vector<std::string> str(235, "Test");
-
+	ft::vector<char> strvec(1, '2');
+	std::istringstream str("1 2 3 4 5 6 7");
+	std::istreambuf_iterator<char> it(str), end;
+	if (it != end)
+		std::cout << "wtf " << std::endl;
+	strvec.assign(it, end);
+	ft::vector<char>::iterator itc = strvec.begin();
+	ft::vector<char>::iterator itce = strvec.end();
+	std::cout << "printing vector: ";
+	while (itc != itce){
+		std::cout << *itc++ << ", ";
+	}
+	std::cout << std::endl;
 	ft::vector<int> tes;
 	ft::vector<int>::iterator tesIt = tes.begin();
 	ft::distance(tes.begin(), tes.end());

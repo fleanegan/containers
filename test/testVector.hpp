@@ -34,6 +34,16 @@ TEST(vector, exceedingCapacityOnPush_backDoublesSize) {
 	ASSERT_EQ(4, vec.capacity());
 }
 
+TEST(vector, assignDispatchesToWorkWithInputIterator) {
+	ft::vector<char> vec(1, '2');
+	std::istringstream str("1 2 3 4 5 6 7");
+	std::istreambuf_iterator<char> it(str), end;
+
+	vec.assign(it, end);
+
+	ASSERT_GT(vec.size(), 1);
+}
+
 TEST(vector, constructWithCopies) {
 	ft::vector<int> vec(2, 2);
 

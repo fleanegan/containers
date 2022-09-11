@@ -34,6 +34,12 @@ TEST(vector, exceedingCapacityOnPush_backDoublesSize) {
 	ASSERT_EQ(4, vec.capacity());
 }
 
+TEST(vector, constructWithCopies) {
+	ft::vector<int> vec(2, 2);
+
+	ASSERT_EQ(2, vec.size());
+}
+
 TEST(vector, properDestruction) {
 	ft::vector<simpleDummy> vec;
 

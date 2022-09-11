@@ -34,6 +34,11 @@ using namespace NAMESPACE;
 
 int main()
 {
+	ft::vector<std::string> str(235, "Test");
+
+	ft::vector<int> tes;
+	ft::vector<int>::iterator tesIt = tes.begin();
+	ft::distance(tes.begin(), tes.end());
 	NAMESPACE::stack<float> other_stack;
 	NAMESPACE::vector<std::string> lst;
 

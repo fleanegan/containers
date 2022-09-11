@@ -44,13 +44,13 @@ namespace ft {
                 _size(0), \
                 _arr() {}
 
-		explicit vector(size_type n, const allocator_type &alloc = allocator_type()) : \
-                _capacity(n), \
+		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): \
+                _capacity(count), \
                 _allocator(alloc), \
-                _size(n) {
-			_arr = _allocator.allocate(n);
-			for (size_type i = 0; i < n; ++i)
-				_allocator.construct(&_arr[i], T());
+                _size(count) {
+			_arr = _allocator.allocate(count);
+			for (size_type i = 0; i < count; ++i)
+				_allocator.construct(&_arr[i], value);
 		}
 
 		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \

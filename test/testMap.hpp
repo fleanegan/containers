@@ -283,14 +283,6 @@ TEST(Map, lowerBoundReturnsIteratorToBeginIfAllKeysInMapBiggerThanSearchKey){
 	ASSERT_EQ(map.begin(), it);
 }
 
-TEST(Map, lowerBoundOfBiggestReturnsSecondLargest){
-	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
-
-	simpleDummy value = (*map.lower_bound(simpleDummy(7))).first;
-
-	ASSERT_EQ(3, *value);
-}
-
 TEST(Map, lowerBoundReturnsSameKeyifKeyIsFound){
 	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
 

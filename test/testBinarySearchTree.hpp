@@ -335,7 +335,7 @@ TEST(BinarySearchTree, poppingLastNodeSetsAllInternalPointersToNullNode){
 TEST(BinarySearchTree, getLowestItemOnEmptyTreeReturnsNullNode){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.getLowest(bst.root());
+	ft::SearchTreeStandardNode<int, int> *result = ft::getLowest(bst.root());
 
 	ASSERT_EQ(result, bst.getNullNode());
 }
@@ -343,7 +343,7 @@ TEST(BinarySearchTree, getLowestItemOnEmptyTreeReturnsNullNode){
 TEST(BinarySearchTree, getLowestItem){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.getLowest(bst.root());
+	ft::SearchTreeStandardNode<int, int> *result = ft::getLowest(bst.root());
 
 	ASSERT_EQ(1, result->content.first);
 }
@@ -351,7 +351,7 @@ TEST(BinarySearchTree, getLowestItem){
 TEST(BinarySearchTree, getHighestItem){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
-	ft::SearchTreeStandardNode<int, int> *result = bst.getHighest(bst.root());
+	ft::SearchTreeStandardNode<int, int> *result = ft::getHighest(bst.root());
 
 	ASSERT_EQ(20, result->content.first);
 }

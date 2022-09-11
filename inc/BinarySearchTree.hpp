@@ -154,24 +154,6 @@ namespace ft {
 			return _allocator.max_size();
 		}
 
-		static pointer getLowest(pointer startingPoint) {
-			pointer tmp = startingPoint;
-
-			if (tmp->isNullNode() && tmp->getLeft()->isNullNode())
-				return tmp;
-			while (tmp->getLeft()->isNullNode() == false)
-				tmp = tmp->getLeft();
-			return tmp;
-		}
-
-		static pointer getHighest(pointer startingPoint) {
-			pointer tmp = startingPoint;
-
-			while (tmp->getRight()->isNullNode() == false)
-				tmp = tmp->getRight();
-			return tmp;
-		}
-
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode) const {
 			if (!((a->isNullNode()) && (b == bNullNode)))
 				if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
@@ -400,6 +382,26 @@ namespace ft {
 	bool operator!=(const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &x,
 					const BinarySearchTree<Key, T, NodeType, Compare, Allocator> &y) {
 		return !(x == y);
+	}
+
+	template <typename Node>
+	Node *getLowest(Node *startingPoint) {
+		Node *tmp = startingPoint;
+
+		if (tmp->isNullNode() && tmp->getLeft()->isNullNode())
+			return tmp;
+		while (tmp->getLeft()->isNullNode() == false)
+			tmp = tmp->getLeft();
+		return tmp;
+	}
+
+	template <typename Node>
+	Node *getHighest(Node *startingPoint) {
+		Node *tmp = startingPoint;
+
+		while (tmp->getRight()->isNullNode() == false)
+			tmp = tmp->getRight();
+		return tmp;
 	}
 }
 

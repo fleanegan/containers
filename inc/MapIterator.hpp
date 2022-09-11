@@ -100,8 +100,7 @@ namespace ft {
 			Key originalKey;
 
 			if (currentNode->isNullNode())
-				currentNode =
-						BinarySearchTree<key_type, mapped_type, Node>::getLowest(currentNode);
+				currentNode = ft::getLowest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->getRight()->isNullNode() == false) {
@@ -128,8 +127,7 @@ namespace ft {
 			Key originalKey;
 
 			if (currentNode->isNullNode())
-				currentNode =
-						BinarySearchTree<key_type, mapped_type, Node>::getHighest(currentNode);
+				currentNode = ft::getHighest(currentNode);
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->getLeft()->isNullNode() == false) {

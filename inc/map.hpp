@@ -93,11 +93,11 @@ namespace ft {
 		}
 
 		const_iterator begin() const {
-			return const_iterator(rbTree.getLowest(rbTree.root()), compare);
+			return const_iterator(ft::getLowest(rbTree.root()), compare);
 		}
 
 		iterator begin() {
-			return iterator(rbTree.getLowest(rbTree.root()), compare);
+			return iterator(ft::getLowest(rbTree.root()), compare);
 		}
 
 		const_iterator end() const {

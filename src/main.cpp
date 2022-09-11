@@ -24,6 +24,8 @@
 
 int		main(void)
 {
+	std::map<int, int, std::__new_allocator<int> > mapS;
+	ft::map<int, int, std::__new_allocator<int> > mapSe;
 	return (0);
 }
 

@@ -4,6 +4,8 @@
 #include "pair.hpp"
 #include "Node.hpp"
 #include "algorithm.hpp"
+#include <memory>
+#include <functional>
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >
@@ -21,7 +23,7 @@ namespace ft {
 		typedef Node *pointer;
 		typedef Node const *const_pointer;
 		typedef Compare compare_type;
-		typedef size_t size_type;
+		typedef std::size_t size_type;
 
 	private:
 		allocator_type _allocator;
@@ -215,7 +217,7 @@ namespace ft {
 					tmp = tmp->getRight();
 				}
 			}
-			return NULL;
+			return 0;
 		}
 
 		void updateNodesForRotation(pointer pivot, pointer nodeToChangePlaceWith) {

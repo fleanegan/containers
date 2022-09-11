@@ -429,12 +429,11 @@ TEST(BinarySearchTree, BinaryTreesEqualsItself){
 	ASSERT_TRUE(a == a);
 }
 
-TEST(BinarySearchTree, swappingEmptyTreeWithNonEmpty){
+TEST(BinarySearchTree, swappingEmptyTreeWithNonEmpty) {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
 
 	a.swap(b);
 
 	ASSERT_EQ(0, a.size());
-
-
+}

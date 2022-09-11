@@ -12,6 +12,7 @@
 #include "reverse_iterator.hpp"
 #include <limits>
 #include "algorithm.hpp"
+#include <iostream>
 
 namespace ft {
 	template<class T, class Allocator = std::allocator<T> >

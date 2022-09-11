@@ -267,12 +267,20 @@ TEST(Map, searchingInEmptyMapReturnsEnd){
 	ASSERT_EQ(a.end(), it);
 }
 
-TEST(Map, lowerBoundReturnsIteratorToNodeWhichIsGreaterEqual){
+TEST(Map, lowerBoundReturnsIteratorToEndIfNoValueInMapGreaterEqualSearchKey){
 	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
 
-	simpleDummy value = (*map.lower_bound(simpleDummy(21))).first;
+	ft::map<simpleDummy, simpleDummy>::iterator it = map.lower_bound(simpleDummy(21));
 
-	ASSERT_EQ(4, *value);
+	ASSERT_EQ(map.end(), it);
+}
+
+TEST(Map, lowerBoundReturnsIteratorToBeginIfAllKeysInMapBiggerThanSearchKey){
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+
+	ft::map<simpleDummy, simpleDummy>::iterator it = map.lower_bound(simpleDummy(-21));
+
+	ASSERT_EQ(map.begin(), it);
 }
 
 TEST(Map, lowerBoundOfBiggestReturnsSecondLargest){

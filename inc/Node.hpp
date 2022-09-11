@@ -5,7 +5,7 @@
 #ifndef CONTAINERS_NODE_HPP
 #define CONTAINERS_NODE_HPP
 
-#include "Pair.hpp"
+#include "pair.hpp"
 
 namespace ft {
 

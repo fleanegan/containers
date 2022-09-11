@@ -117,7 +117,7 @@ TEST(reverseIterator, movingIteratorBackwards) {
 TEST(ftDistance, useRandomAccessIterator){
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 
-	ft::ptrdiff_t result = std::distance(vec.begin(), vec.end());
+	std::ptrdiff_t result = std::distance(vec.begin(), vec.end());
 
 	ASSERT_EQ(5, result);
 }
@@ -125,7 +125,7 @@ TEST(ftDistance, useRandomAccessIterator){
 //TEST(ftDistance, useInputIterator){
 //	ft::vector<simpleDummy> vec = createTestDummyVector();
 //
-//	ft::ptrdiff_t result = std::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
+//	std::ptrdiff_t result = std::distance(StupidInputIterator(&*vec.begin()), StupidInputIterator(&*vec.end()));
 //
 //	ASSERT_EQ(5, result);
 //}

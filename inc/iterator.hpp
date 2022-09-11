@@ -1,9 +1,13 @@
-#ifndef CONTAINERS_ITERATORS_H
-#define CONTAINERS_ITERATORS_H
+//
+// Created by fleanegan on 10.09.22.
+//
 
-namespace ft {
-	typedef long long ptrdiff_t;
+#ifndef CONTAINERS_ITERATOR_HPP
+#define CONTAINERS_ITERATOR_HPP
 
+#include <cstddef>
+
+namespace ft{
 	template<class Iterator>
 	struct iterator_traits {
 		typedef typename Iterator::difference_type difference_type;
@@ -15,7 +19,7 @@ namespace ft {
 
 	template<class T>
 	struct iterator_traits<T*> {
-		typedef ft::ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef T value_type;
 		typedef T* pointer;
 		typedef T& reference;
@@ -24,14 +28,14 @@ namespace ft {
 
 	template<class T>
 	struct iterator_traits<const T*> {
-		typedef ft::ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef const T value_type;
 		typedef const T* pointer;
 		typedef const T& reference;
 		typedef std::random_access_iterator_tag iterator_category;
 	};
 
-	template<typename Category, typename Tp, typename Distance = ptrdiff_t,
+	template<typename Category, typename Tp, typename Distance = std::ptrdiff_t,
 			typename Pointer = Tp*, typename Reference = Tp&>
 	struct iterator_traits_bundle
 	{
@@ -41,6 +45,30 @@ namespace ft {
 		typedef Pointer   pointer;
 		typedef Reference reference;
 	};
+
+	template<typename It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last, std::input_iterator_tag){
+		typename ft::iterator_traits<It>::difference_type result = 0;
+
+		while (first != last){
+			++first;
+			++result;
+		}
+		return result;
+	}
+
+	template<typename It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last, std::random_access_iterator_tag){
+		return (last - first);
+	}
+
+	template<typename  It>
+	typename ft::iterator_traits<It>::difference_type
+	distance (It first, It last){
+		return ft::distance<It>(first, last, typename ft::iterator_traits<It>::iterator_category());
+	}
 }
 
-#endif //CONTAINERS_ITERATORS_H
+#endif //CONTAINERS_ITERATOR_HPP

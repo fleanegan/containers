@@ -7,7 +7,7 @@
 
 #include "RedBlackTree.hpp"
 #include "MapIterator.hpp"
-#include "ReverseIterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft {
 	template<class Key, class T, class Compare = std::less<Key>,
@@ -233,11 +233,13 @@ namespace ft {
 			const_iterator biggest = --end();
 			const_iterator smallest = begin();
 
+			if (compare(biggest->first, key))
+				return end();
 			while (1){
 				if (compare(key, biggest->first) == false)
 					return biggest;
 				if (biggest == smallest)
-					return end();
+					return smallest;
 				--biggest;
 			}
 		}

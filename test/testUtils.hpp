@@ -2,12 +2,14 @@
 # define TEST_UTILS_H
 
 #include "gtest/gtest.h"
-#include "../inc/IteratorTraits.hpp"
+#include "../inc/iterator_traits.hpp"
 #include "../inc/vector.hpp"
 #include "../inc/VectorIterator.hpp"
-#include "../inc/Stack.hpp"
-#include "../inc/Utils.hpp"
-#include "../inc/Pair.hpp"
+#include "../inc/stack.hpp"
+#include "../inc/algorithm.hpp"
+#include "../inc/type_traits.hpp"
+#include "../inc/algorithm.hpp"
+#include "../inc/pair.hpp"
 #include "../inc/map.hpp"
 #include "../inc/MapIterator.hpp"
 #include "../inc/BinarySearchTree.hpp"

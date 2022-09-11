@@ -2,9 +2,9 @@
 // Created by fleanegan on 23.06.22.
 //
 
-#ifndef CONTAINERS_REVERSEITERATOR_HPP
-#define CONTAINERS_REVERSEITERATOR_HPP
-#include "IteratorTraits.hpp"
+#ifndef CONTAINERS_REVERSE_ITERATOR_HPP
+#define CONTAINERS_REVERSE_ITERATOR_HPP
+#include "iterator_traits.hpp"
 
 namespace ft {
 
@@ -170,4 +170,4 @@ namespace ft {
 		return result;
 	}
 }
-#endif //CONTAINERS_REVERSEITERATOR_HPP
+#endif //CONTAINERS_REVERSE_ITERATOR_HPP

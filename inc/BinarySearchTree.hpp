@@ -1,9 +1,9 @@
 #ifndef CONTAINERS_BINARYSEARCHTREE_HPP
 #define CONTAINERS_BINARYSEARCHTREE_HPP
 
-#include "Pair.hpp"
+#include "pair.hpp"
 #include "Node.hpp"
-#include "Utils.hpp"
+#include "algorithm.hpp"
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >

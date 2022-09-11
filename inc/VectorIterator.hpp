@@ -8,13 +8,14 @@
 #include "vector.hpp"
 #include "iterator.hpp"
 #include "iterator_traits.hpp"
+#include "algorithm.hpp"
 
 namespace ft {
 
 	template<typename T>
 	class VectorIterator {
 	public:
-		typedef ptrdiff_t difference_type;
+		typedef ft::ptrdiff_t difference_type;
 		typedef T value_type;
 		typedef T *pointer;
 		typedef T &reference;

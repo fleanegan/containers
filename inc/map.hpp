@@ -230,18 +230,15 @@ namespace ft {
 		}
 
 		const_iterator lower_bound( const Key& key ) const{
-			const_iterator biggest = --end();
-			const_iterator smallest = begin();
+			const_iterator ite = end();
+			const_iterator it = begin();
 
-			if (compare(biggest->first, key))
-				return end();
-			while (1){
-				if (compare(key, biggest->first) == false)
-					return biggest;
-				if (biggest == smallest)
-					return smallest;
-				--biggest;
+			while (it != ite) {
+				if (!compare((*it).first, key))
+					return (const_iterator(it));
+				++it;
 			}
+			return (this->end());
 		}
 
 		iterator upper_bound( const Key& key ){
@@ -250,13 +247,13 @@ namespace ft {
 		}
 
 		const_iterator upper_bound( const Key& key ) const{
-			const_iterator biggest = end();
-			const_iterator smallest = begin();
+			const_iterator ite = end();
+			const_iterator it = begin();
 
-			while (biggest != smallest){
-				if (compare(key, smallest->first))
-					return smallest;
-				++smallest;
+			while (ite != it){
+				if (compare(key, it->first))
+					return it;
+				++it;
 			}
 			return end();
 		}
@@ -324,6 +321,11 @@ namespace ft {
 	bool operator<=(const map<Key, T, Compare, Allocator> &x,
 					const map<Key, T, Compare, Allocator> &y) {
 		return !ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end());
+	}
+
+	template<typename K, typename T, typename Compare>
+	void swap(map<K, T, Compare> &x, map<K, T, Compare> &y) {
+		x.swap(y);
 	}
 }
 #endif //CONTAINERS_MAP_HPP

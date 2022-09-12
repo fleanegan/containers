@@ -1,7 +1,7 @@
 #ifndef TEST_UTILS_H
 # define TEST_UTILS_H
 
-#include "gtest/gtest.h"
+//#include "gtest/gtest.h"
 #include "../inc/iterator_traits.hpp"
 #include "../inc/vector.hpp"
 #include "../inc/VectorIterator.hpp"
@@ -20,7 +20,8 @@
 #define _DEBUG_SD 0
 
 struct simpleDummy {
-	int *i = NULL;
+//	int *i = NULL;
+	int *i;
 	int moves;
 	bool debug;
 
@@ -110,13 +111,13 @@ ft::vector<simpleDummy> createTestDummyVector() {
 //}
 
 template<typename It>
-bool getHasSpecializedTag(std::bidirectional_iterator_tag a) {
+bool getHasSpecializedTag(std::bidirectional_iterator_tag) {
 	_DEBUG_SD && std::cout << "specialized function called" << std::endl;
 	return true;
 }
 
 template<typename It>
-bool getHasSpecializedTag(std::input_iterator_tag a) {
+bool getHasSpecializedTag(std::input_iterator_tag) {
 	_DEBUG_SD && std::cout << "generalized function called" << std::endl;
 	return false;
 }
@@ -129,11 +130,12 @@ bool getHasSpecializedTag() {
 template<typename T>
 class StupidInputIterator {
 public:
-	typedef ptrdiff_t difference_type;
+	typedef ft::ptrdiff_t difference_type;
 	typedef T value_type;
 	typedef T *pointer;
 	typedef T &reference;
 	typedef std::input_iterator_tag iterator_category;
+
 private:
 	pointer _ptr;
 public:
@@ -182,13 +184,6 @@ public:
 	}
 };
 
-void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> &x, ft::vector<simpleDummy> &y, size_t forElements){
-	ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
-
-	for (int i = 0; i < forElements; ++i) {
-		EXPECT_EQ(*x[i], *y[i]) << "Vectors x and y differ at index " << i;
-	}
-}
 
 /*
  * 		        3
@@ -201,8 +196,8 @@ void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> 
 		    / \
 		   4   6
 */
-ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> generateFiveLevelTree() {
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> result;
+ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int> > generateFiveLevelTree() {
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int> > result;
 	result.insert(ft::make_pair(3, 0));
 	result.insert(ft::make_pair(1, 0));
 	result.insert(ft::make_pair(16, 0));

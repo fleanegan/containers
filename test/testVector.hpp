@@ -1,4 +1,13 @@
 #include "testUtils.hpp"
+#include "gtest/gtest.h"
+
+void assertEqualityOfValuesContainedBySimpleDummyVector(ft::vector<simpleDummy> &x, ft::vector<simpleDummy> &y, size_t forElements){
+	ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
+
+	for (int i = 0; i < forElements; ++i) {
+		EXPECT_EQ(*x[i], *y[i]) << "Vectors x and y differ at index " << i;
+	}
+}
 
 TEST(vector, initVectorHasCapacityZero) {
 	ft::vector<int> vec;
@@ -357,6 +366,28 @@ TEST(vector, insertingNElementsAddsCopiesToArray) {
 	ASSERT_EQ(count, vec.size());
 }
 
+TEST(vector, insertingZeroElementsDoesNotSegfault) {
+	ft::vector<int> vec;
+
+	vec.insert(vec.begin(), 0, 0);
+	ASSERT_EQ(0, vec.size());
+}
+
+TEST(vector, insertingNullSpanRangeDoesNotDoAnyThing) {
+	ft::vector<char> vec;
+	vec.push_back('a');
+	vec.push_back('b');
+	vec.push_back('c');
+	int before = vec.size();
+
+	std::istreambuf_iterator<char> end;
+
+	vec.insert(vec.begin() + 1, end, end);
+	ASSERT_EQ(before, vec.size());
+}
+
+
+
 TEST(vector, existingElementsAreNotOverwrittenByInsert) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	EXPECT_EQ(1, *vec[0]);
@@ -499,3 +530,4 @@ TEST(vector, useInputIteratorForAssign) {
 // canCompareWithConst
 // insertBeforeBeginDoes?????
 // insertAfterEndDoes?????
+// 1 + tomate -> 1.operator+(tomate);

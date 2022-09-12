@@ -23,6 +23,7 @@
 #include <vector>
 #include <stack>
 #include <sstream>
+#include "../test/testUtils.hpp"
 
 #define STD
 #ifndef STD
@@ -47,9 +48,18 @@ struct m{
 
 int main()
 {
-	std::vector<int>(getMax<std::vector<int> >() + 1);
-	//m awf;
-//	ft::vector<int> v(getMax() + 10);
+//	ft::vector<char> vec(4, '2');
+//	std::istringstream str("1 2 3 4 5 6 7");
+//	std::istreambuf_iterator<char> it(str), end;
+//
+//	vec.insert(vec.begin() + 1, it, end);
+
+	ft::vector<char> cv;
+	for (int i = 0; i < 20; ++i) {
+		cv.insert(cv.begin(), i, i);
+	}
+
+
 	return (0);
 }
 

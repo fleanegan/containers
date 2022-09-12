@@ -203,6 +203,7 @@ namespace ft {
 		typename ft::enable_if<!ft::is_integral<InputIt>::value, iterator>::type
 		insert(InputIt pos, const T &value) {
 			int index = pos - begin();
+
 			insert(pos, 1, value);
 			return (&_arr[index]);
 		}
@@ -210,12 +211,13 @@ namespace ft {
 		template<class InputIterator>
 		void
 		insert(InputIterator pos, size_type count, const T &value) {
+			if (count == 0)
+				return ;
 			int index = pos - begin();
 			size_type newSize = _size + count;
 			size_type offset = index + count - 1;
 
 			reserve(newSize);
-			//todo: segfault if pos > beginning and newSize == newCapacity
 			moveBackwardElements(begin() + index, count);
 			for (size_type i = index; i <= offset; ++i) {
 				setElementAt(value, i);
@@ -223,9 +225,25 @@ namespace ft {
 			_size = newSize;
 		}
 
-		template<class InputIt, class I>
-		typename ft::enable_if<!ft::is_integral<I>::value, void>::type
-		insert(InputIt pos, I first, I last) {
+		template<class InputIt>
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type
+		insert(iterator pos, InputIt first, InputIt last) {
+			insert<InputIt>(pos, first, last, typename ft::iterator_traits<InputIt>::iterator_category());
+		}
+
+		template<class InputIt>
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type
+		insert(iterator pos, InputIt first, InputIt last, std::input_iterator_tag) {
+			int index = pos - begin();
+
+			while (first != last){
+				insert(index++ + begin(), *first++);
+			}
+		}
+
+		template<class InputIt>
+		typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type
+		insert(iterator pos, InputIt first, InputIt last, std::forward_iterator_tag) {
 			int index = pos - begin();
 			size_type count = ft::distance(first, last);
 			size_type newSize = _size + count;

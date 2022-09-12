@@ -207,7 +207,7 @@ namespace ft {
 		const mapped_type& at(const key_type& k) const{
 			NodeType const *result = rbTree.find(k);
 
-			if (result == NULL)
+			if (result == rbTree.getNullNode())
 				throw std::out_of_range("key not found");
 			return result->content.second;
 		}
@@ -219,7 +219,7 @@ namespace ft {
 
 		const_iterator find( const Key& key ) const{
 			NodeType const *  result = rbTree.find(key);
-			if (result == NULL)
+			if (result == rbTree.getNullNode())
 				return end();
 			return const_iterator(result);
 		}

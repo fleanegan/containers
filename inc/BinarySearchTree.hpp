@@ -155,9 +155,10 @@ namespace ft {
 		}
 
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode) const {
-			if (!((a->isNullNode()) && (b == bNullNode)))
-				if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
-					return false;
+			if (b == bNullNode != a->isNullNode())
+				return false;
+			if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
+				return false;
 			if (a->getRight()->isNullNode() == false) {
 				if (b->getRight() == bNullNode || isSameStructure(a->getRight(), b->getRight(), bNullNode) == false)
 					return false;
@@ -199,7 +200,7 @@ namespace ft {
 					tmp = tmp->getRight();
 				}
 			}
-			return 0;
+			return nullNode;
 		}
 
 		void updateNodesForRotation(pointer pivot, pointer nodeToChangePlaceWith) {

@@ -1,14 +1,5 @@
 #include "testUtils.hpp"
 
-TEST(BinarySearchTree, searchingAnEmptyTreeByKeyReturnsNULL){
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int> > bst;
-	int keyToFind = 2;
-
-	ft::SearchTreeStandardNode<int, int> *result = bst.find(keyToFind);
-
-	ASSERT_EQ(nullptr, result);
-}
-
 TEST(BinarySearchTree, searchingANodeOnLevelThree){
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 	int keyToFind = 7;
@@ -236,14 +227,6 @@ TEST(BinarySearchTree, theParentOfTheRootsChildIsTheParent) {
 	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst = generateFiveLevelTree();
 
 	ASSERT_EQ(bst.root(), bst.root()->getRight()->getParent());
-}
-
-TEST(BinarySearchTree, nullNodeWillNeverBeAValidSearchResult) {
-	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> bst;
-
-	ft::SearchTreeStandardNode<int, int> *result = bst.find((int &) bst.getNullNode()->content.first);
-
-	ASSERT_EQ(nullptr, result);
 }
 
 TEST(BinarySearchTree, nullNodePointsToRoot){

@@ -178,3 +178,11 @@ TEST(MapIterator, moveBackUsesToLeft) {
 
 	ASSERT_EQ(1, *(*a).first);
 }
+
+TEST(MapIterator, compareConstAndNonConstIterator) {
+	ft::map<simpleDummy, simpleDummy> map = generateMapWithIsolatedKey();
+	ft::map<simpleDummy, simpleDummy>::iterator a = map.begin();
+	ft::map<simpleDummy, simpleDummy>::const_iterator ac = map.begin();
+
+	ASSERT_TRUE(a == ac);
+}

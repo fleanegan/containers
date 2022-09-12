@@ -153,10 +153,26 @@ namespace ft {
 			return currentNode == rhs.currentNode;
 		}
 
+		template<class VT, class KT, class MT, class NT, class CP, class CVT, class CKT, class CMT, class CNT, class CCP>
+		friend bool operator==(const MapIterator<VT, KT, MT, NT, CP> &lhs, const MapIterator<CVT, CKT, CMT, CNT, CCP> &rhs);
+
 		bool operator!=(const MapIterator &rhs) const {
 			return !(rhs == *this);
 		}
 	};
+
+	template<class VT, class KT, class MT, class NT, class CP, class CVT, class CKT, class CMT, class CNT, class CCP>
+	bool operator==(const MapIterator<VT, KT, MT, NT, CP> &lhs, const MapIterator<CVT, CKT, CMT, CNT, CCP> &rhs) {
+		MapIterator<VT const, KT, MT, NT const, CP> mlhs(lhs);
+		MapIterator<VT const, KT, MT, NT const, CP> mrhs(rhs);
+
+		return mrhs.currentNode == mlhs.currentNode;
+	}
+
+	template<class VT, class KT, class MT, class NT, class CP, class CVT, class CKT, class CMT, class CNT, class CCP>
+	bool operator!=(const MapIterator<VT, KT, MT, NT, CP> &lhs, const MapIterator<CVT, CKT, CMT, CNT, CCP> &rhs) {
+		return !(lhs == rhs);
+	}
 }
 
 #endif //CONTAINERS_MAPITERATOR_HPP

@@ -165,6 +165,27 @@ namespace ft {
 		}
 	};
 
+
+
+	template <typename Node>
+	Node *getLowest(Node *startingPoint) {
+		Node *tmp = startingPoint;
+
+		if (tmp->isNullNode() && tmp->getLeft()->isNullNode())
+			return tmp;
+		while (tmp->getLeft()->isNullNode() == false)
+			tmp = tmp->getLeft();
+		return tmp;
+	}
+
+	template <typename Node>
+	Node *getHighest(Node *startingPoint) {
+		Node *tmp = startingPoint;
+
+		while (tmp->getRight()->isNullNode() == false)
+			tmp = tmp->getRight();
+		return tmp;
+	}
 }
 
 

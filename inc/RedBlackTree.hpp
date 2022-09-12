@@ -70,7 +70,7 @@ namespace ft {
 				replaceNodeBySuccessor(nodeToBeRemoved, successor);
 				successor->isBlack = nodeToBeRemoved->isBlack;
 			}
-			this->deleteNodeWithCleanUp(nodeToBeRemoved);
+			this->deleteNodeWithCleanUp(nodeToBeRemoved, false);
 			if (isNodeToBeRemovedBlack) {
 				fixupDeletion(potentialColourTrouble);
 			}

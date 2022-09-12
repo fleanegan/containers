@@ -31,6 +31,7 @@ namespace ft {
 		size_type current_size;
 	protected:
 		pointer nullNode;
+		pointer extremeties;
 		pointer rootNode;
 
 	public:
@@ -39,14 +40,15 @@ namespace ft {
 				_compare(compare),
 				current_size(0),
 				nullNode(makeNullNode()),
+				extremeties(makeExtremety()),
 				rootNode(nullNode) {
-
 		}
 
 		BinarySearchTree(const BinarySearchTree &rhs) :
 				_allocator(rhs._allocator),
 				_compare(rhs._compare),
 				nullNode(makeNullNode()),
+				extremeties(makeExtremety()),
 				rootNode(nullNode) {
 			*this = rhs;
 		}
@@ -57,12 +59,14 @@ namespace ft {
 			clear();
 			current_size = rhs.current_size;
 			copySubTree(rhs.rootNode, rhs.nullNode, &rootNode);
+			updateExtremities();
 			return *this;
 		}
 
 		virtual ~BinarySearchTree() {
 			clear();
 			destroyAndDeallocateNode(nullNode);
+			destroyAndDeallocateNode(extremeties);
 		}
 
 		pointer find(const TKey &i) {
@@ -122,7 +126,7 @@ namespace ft {
 				replaceNode(nodeToBeRemoved, nodeToBeRemoved->getRight());
 			else
 				substituteNodeWithSuccessor(nodeToBeRemoved);
-			deleteNodeWithCleanUp(nodeToBeRemoved);
+			deleteNodeWithCleanUp(nodeToBeRemoved, false);
 			return 1;
 		}
 
@@ -183,7 +187,23 @@ namespace ft {
 			in.nullNode = nullNode_tmp;
 		}
 
+		pointer getExtremeties() const{
+			return extremeties;
+		}
+
+		pointer getExtremeties(){
+			return extremeties;
+		}
 	private:
+		pointer makeExtremety(){
+			pointer node = makeNullNode();
+
+			node->setRight(nullNode);
+			node->setLeft(nullNode);
+			node->setParent(nullNode);
+			return node;
+		}
+
 		const_pointer findByKey(const TKey &i) const {
 			pointer tmp = rootNode;
 
@@ -236,7 +256,7 @@ namespace ft {
 				return;
 			deleteSubTreeFrom((localRoot)->getLeft());
 			deleteSubTreeFrom((localRoot)->getRight());
-			deleteNodeWithCleanUp(localRoot);
+			deleteNodeWithCleanUp(localRoot, true);
 		}
 
 		void copySubTree(pointer source, const_pointer sourceNullNode, pointer *dest) {
@@ -259,6 +279,7 @@ namespace ft {
 			_allocator.construct(newNode, tmp);
 			return newNode;
 		}
+
 
 	protected:
 		pointer getInorderSuccessor(pointer localRoot, pointer biggerThan,
@@ -318,13 +339,15 @@ namespace ft {
 			replacer->setParent(nodeToBeReplaced->getParent());
 		}
 
-		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved) {
+		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved, bool clean) {
 			if (nodeToBeRemoved == rootNode) {
 				rootNode = nullNode;
 				nullNode->setRight(nullNode);
 				nullNode->setLeft(nullNode);
 				nullNode->setParent(nullNode);
 			}
+			if (clean == false)
+				updateExtremities();
 			--current_size;
 			_allocator.destroy(nodeToBeRemoved);
 			_allocator.deallocate(nodeToBeRemoved, 1);
@@ -339,6 +362,15 @@ namespace ft {
 			result->setLeft(result);
 			result->setParent(result);
 			return result;
+		}
+
+		void updateExtremities(){
+			if (rootNode == nullNode){
+				extremeties->setRight(nullNode);
+				extremeties->setLeft(nullNode);
+			}
+			extremeties->setRight(ft::getHighest(nullNode));
+			extremeties->setLeft(ft::getLowest(nullNode));
 		}
 
 		void destroyAndDeallocateNode(pointer in) {
@@ -362,11 +394,13 @@ namespace ft {
 
 		pointer pairToChildOf(const pair<TKey, TValue> &in, pointer &newParent) {
 			pointer newNode;
+
 			newNode = _allocator.allocate(1);
 			Node tmp(in, nullNode);
 			_allocator.construct(newNode, tmp);
 			linkChildAndParent(newNode, &newParent);
 			++current_size;
+			updateExtremities();
 			return newNode;
 		}
 	};
@@ -385,25 +419,6 @@ namespace ft {
 		return !(x == y);
 	}
 
-	template <typename Node>
-	Node *getLowest(Node *startingPoint) {
-		Node *tmp = startingPoint;
-
-		if (tmp->isNullNode() && tmp->getLeft()->isNullNode())
-			return tmp;
-		while (tmp->getLeft()->isNullNode() == false)
-			tmp = tmp->getLeft();
-		return tmp;
-	}
-
-	template <typename Node>
-	Node *getHighest(Node *startingPoint) {
-		Node *tmp = startingPoint;
-
-		while (tmp->getRight()->isNullNode() == false)
-			tmp = tmp->getRight();
-		return tmp;
-	}
 }
 
 #endif //CONTAINERS_BINARYSEARCHTREE_HPP

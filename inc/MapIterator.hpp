@@ -27,21 +27,26 @@ namespace ft {
 		Compare compare;
 	private:
 		Node *currentNode;
+		Node *ext;
 	public:
 		MapIterator(const compare_type &compare = compare_type()) :		compare(compare),
-																					currentNode(){}
+																		   currentNode(),
+																		   ext(){}
 
-		MapIterator(Node *const node, const compare_type &compare = compare_type()) : 	compare(compare),
-																									currentNode(node){
+		MapIterator(Node *const node, Node *const ext, const compare_type &compare = compare_type()) : 	compare(compare),
+																										  currentNode(node),
+																										  ext(ext){
 		}
 
 		template<class UVType, class UKey, class UValue, class UNode>
 		MapIterator(const MapIterator<UVType, UKey, UValue, UNode> &it) : 	compare(it.compare),
-																			currentNode(it.current()){
+																			currentNode(it.current()),
+																			 ext(it.getExt()){
 		}
 
 		MapIterator(const MapIterator &rhs) : 	compare(rhs.compare),
-												currentNode(rhs.currentNode){
+												 currentNode(rhs.currentNode),
+												 ext(rhs.ext){
 
 		}
 
@@ -62,6 +67,16 @@ namespace ft {
 		Node *current() const {
 			return currentNode;
 		}
+
+
+		Node *getExt() {
+			return ext;
+		}
+
+		Node *getExt() const {
+			return ext;
+		}
+
 
 		MapIterator operator--(int i) {
 			MapIterator<ValueType, key_type, mapped_type, NodeType> result = *this;
@@ -100,7 +115,7 @@ namespace ft {
 			Key originalKey;
 
 			if (currentNode->isNullNode())
-				currentNode = ft::getLowest(currentNode);
+				currentNode = ext->getLeft();
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->getRight()->isNullNode() == false) {
@@ -114,7 +129,6 @@ namespace ft {
 						currentNode == currentNode->getParent()->getLeft())
 						currentNode = currentNode->getParent();
 					if (compare(currentNode->content.first, originalKey))
-						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
 							currentNode = currentNode->getRight();
 					if (currentNode->isNullNode() == false && currentNode->content.first == originalKey)
@@ -127,7 +141,7 @@ namespace ft {
 			Key originalKey;
 
 			if (currentNode->isNullNode())
-				currentNode = ft::getHighest(currentNode);
+				currentNode = ext->getRight();
 			else {
 				originalKey = currentNode->content.first;
 				if (currentNode->getLeft()->isNullNode() == false) {
@@ -141,7 +155,6 @@ namespace ft {
 						currentNode == currentNode->getParent()->getRight())
 						currentNode = currentNode->getParent();
 					if (compare(currentNode->content.first, originalKey) == false)
-						//todo: replace with direct link to nullNode
 						while (currentNode->isNullNode() == false)
 							currentNode = currentNode->getRight();
 				}

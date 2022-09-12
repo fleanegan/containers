@@ -193,26 +193,22 @@ strmap;
 
 int main()
 {
-	SETUP_ARRAYS();
-
-	intmap m(intstr_arr, intstr_arr + 1);
-	intmap n;
-	std::cout << "size (n/m): " << n.size() << ", " << m.size();
-
-
-	if (m.begin() == m.end()) {
-		std::cout << ("etfsef.\n");
-	}
-
-	if (m == n) {
-		std::cout << ("Equal.\n");
-	}
-
-	if (n == m) {
-		std::cout << ("Equal.\n");
-	}
-
-
+	ft::RedBlackTree<int, int, ft::RedBlackNode<int, int> >rbt;
+	rbt.insertByValue(ft::make_pair(int(1), int(0)));
+	rbt.insertByValue(ft::make_pair(int(2), int(0)));
+	std::cout << "\n\n\nnn\n\n\n\nn\nn\nn\n\n\n";
+	rbt.insertByValue(ft::make_pair(int(3), int(0)));
+	std::cout << "\n\n\nneeeeeeeeeeeeeeeeeeeeeeen\n\n\n\nn\nn\nn\n\n\n";
+//	rbt.insertByValue(ft::make_pair(simpleDummy(6), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(0), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(10), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(11), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(9), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(13), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(7), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(12), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(14), simpleDummy(0)));
+//	rbt.insertByValue(ft::make_pair(simpleDummy(19), simpleDummy(0)));
 	return (0);
 }
 

@@ -93,15 +93,15 @@ namespace ft {
 		}
 
 		const_iterator begin() const {
-			return const_iterator(ft::getLowest(rbTree.root()), compare);
+			return const_iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
 		}
 
 		iterator begin() {
-			return iterator(ft::getLowest(rbTree.root()), compare);
+			return iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator end() const {
-			return const_iterator(rbTree.getNullNode(), compare);
+			return const_iterator(rbTree.getNullNode(), rbTree.getExtremeties(), compare);
 		}
 
 		reverse_iterator rbegin() {
@@ -121,13 +121,13 @@ namespace ft {
 		}
 
 		iterator end() {
-			return iterator(rbTree.getNullNode(), compare);
+			return iterator(rbTree.getNullNode(),  rbTree.getExtremeties(), compare);
 		}
 
 		ft::pair<iterator,bool> insert (const value_type& val) {
 			ft::pair<iterator, bool> result;
 			size_type before = size();
-			result.first = iterator(rbTree.insert(val));
+			result.first = iterator(rbTree.insert(val),  rbTree.getExtremeties(), compare);
 			result.second = true;
 			size_type after = size();
 			if (before == after)
@@ -214,19 +214,19 @@ namespace ft {
 
 		iterator find( const Key& key ){
 			const_iterator result = static_cast<const this_type &>(*this).find(key);
-			return iterator(const_cast<NodeType *>(result.current()));
+			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator find( const Key& key ) const{
 			NodeType const *  result = rbTree.find(key);
 			if (result == rbTree.getNullNode())
 				return end();
-			return const_iterator(result);
+			return const_iterator(result,  rbTree.getExtremeties(), compare);
 		}
 
 		iterator lower_bound( const Key& key ){
 			const_iterator result = static_cast<const this_type &>(*this).lower_bound(key);
-			return iterator(const_cast<NodeType *>(result.current()));
+			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator lower_bound( const Key& key ) const{
@@ -243,7 +243,7 @@ namespace ft {
 
 		iterator upper_bound( const Key& key ){
 			const_iterator result = static_cast<const this_type &>(*this).upper_bound(key);
-			return iterator(const_cast<NodeType *>(result.current()));
+			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator upper_bound( const Key& key ) const{
@@ -262,8 +262,8 @@ namespace ft {
 			ft::pair<iterator, iterator> result;
 			ft::pair<const_iterator, const_iterator> result_const = static_cast<const this_type &>(*this).equal_range(key);
 
-			result.first = iterator(const_cast<NodeType *>(result_const.first.current()));
-			result.second = iterator(const_cast<NodeType *>(result_const.second.current()));
+			result.first = iterator(const_cast<NodeType *>(result_const.first.current()),  rbTree.getExtremeties(), compare);
+			result.second = iterator(const_cast<NodeType *>(result_const.second.current()),  rbTree.getExtremeties(), compare);
 			return result;
 		}
 

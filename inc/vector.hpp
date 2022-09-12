@@ -41,19 +41,16 @@ namespace ft {
                 _size(0), \
                 _arr() {}
 
-		explicit vector(size_type count, const T &value = T(), const Allocator &alloc = Allocator()){
-			initSize(count);
+		explicit vector(size_type count, const T &value = T(), const Allocator &alloc = Allocator()) :
+			_capacity(count),
+			_allocator(alloc),
+		_size(count)
+		{
+			arrayTooBigGuard(count);
 			_allocator = alloc;
 			_arr = _allocator.allocate(count);
 			for (size_type i = 0; i < count; ++i)
 				_allocator.construct(&_arr[i], value);
-		}
-
-		void initSize(const size_type &count){
-			if (count >= max_size())
-				throw std::length_error("cannot be bigger than max_size");
-			_capacity = count;
-			_size = count;
 		}
 
 		vector(const vector &rhs, const allocator_type &alloc = allocator_type()) : \
@@ -317,7 +314,7 @@ namespace ft {
 	private:
 		void outOfRangeGuard(size_type i) const {
 			if (i >= _size)
-				throw std::out_of_range("index is out of range");
+				throw std::out_of_range("");
 		}
 
 		iterator moveForwardElements(iterator first, size_type distance) {
@@ -360,7 +357,7 @@ namespace ft {
 
 		void arrayTooBigGuard(size_type newCapacity) const {
 			if (newCapacity > max_size())
-				throw std::length_error("the requested capacity is too big");
+				throw std::length_error("");
 		}
 
 		size_type preventZeroCapacity(size_type newCapacity) const {

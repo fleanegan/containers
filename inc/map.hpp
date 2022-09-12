@@ -82,8 +82,8 @@ namespace ft {
 		map &operator=(const map &map) {
 			if (rbTree.root() == map.rbTree.root())
 				return *this;
-			rbTree = map.rbTree;
 			alloc = map.alloc;
+			rbTree = map.rbTree;
 			compare = map.compare;
 			return *this;
 		}

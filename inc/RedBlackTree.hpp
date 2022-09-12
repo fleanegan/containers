@@ -27,13 +27,13 @@ namespace ft {
 			this->nullNode->isBlack = true;
 		}
 
-		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType> &rhs, key_compare, const allocator_type &alloc = allocator_type())
+		RedBlackTree(const RedBlackTree<key_type, mapped_type, NodeType, key_compare, allocator_type> &rhs, key_compare, const allocator_type &alloc = allocator_type())
 				: ft::BinarySearchTree<key_type, mapped_type, NodeType, key_compare, allocator_type>(alloc) {
 			BinarySearchTree<key_type, mapped_type, NodeType, key_compare , allocator_type>::operator=(rhs);
 			this->nullNode->isBlack = true;
 		}
 
-		RedBlackTree<key_type, mapped_type, NodeType> &
+		RedBlackTree<key_type, mapped_type, NodeType, key_compare, allocator_type> &
 		operator=(const RedBlackTree<key_type, mapped_type, NodeType, key_compare, allocator_type> &rhs) {
 			BinarySearchTree<key_type, mapped_type, NodeType, key_compare , allocator_type>::operator=(rhs);
 			return *this;

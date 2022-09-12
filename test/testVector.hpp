@@ -386,8 +386,6 @@ TEST(vector, insertingNullSpanRangeDoesNotDoAnyThing) {
 	ASSERT_EQ(before, vec.size());
 }
 
-
-
 TEST(vector, existingElementsAreNotOverwrittenByInsert) {
 	ft::vector<simpleDummy> vec = createTestDummyVector();
 	EXPECT_EQ(1, *vec[0]);
@@ -530,4 +528,3 @@ TEST(vector, useInputIteratorForAssign) {
 // canCompareWithConst
 // insertBeforeBeginDoes?????
 // insertAfterEndDoes?????
-// 1 + tomate -> 1.operator+(tomate);

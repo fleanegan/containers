@@ -92,6 +92,7 @@ namespace ft {
 
 		}
 
+		// todo: fix const time CALL IS STUPID
 		const_iterator begin() const {
 			return const_iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
 		}

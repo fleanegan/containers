@@ -109,11 +109,11 @@ namespace ft {
 		}
 
 		const_reverse_iterator rbegin() const{
-			return reverse_iterator(end());
+			return const_reverse_iterator(end());
 		}
 
 		const_reverse_iterator rend() const {
-			return reverse_iterator(begin());
+			return const_reverse_iterator(begin());
 		}
 
 		reverse_iterator rend() {
@@ -147,7 +147,10 @@ namespace ft {
 		template <class InputIterator>
 		void insert (InputIterator first, InputIterator last){
 			while (first != last)
-				rbTree.insert(*first++);
+			{
+				rbTree.insert(*first);
+				first++;
+			}
 		}
 
 		void erase (iterator position){

@@ -79,7 +79,7 @@ namespace ft {
 
 
 		MapIterator operator--(int i) {
-			MapIterator<ValueType, key_type, mapped_type, NodeType> result = *this;
+			MapIterator<ValueType, key_type, mapped_type, NodeType, Compare> result = *this;
 			if (i == 0) {
 				moveToPrevNode();
 			}
@@ -87,7 +87,7 @@ namespace ft {
 		}
 
 		MapIterator operator++(int i) {
-			MapIterator<ValueType, key_type, mapped_type, NodeType> result = *this;
+			MapIterator<ValueType, key_type, mapped_type, NodeType, Compare> result = *this;
 			if (i == 0) {
 				moveToNextNode();
 			}

@@ -51,12 +51,12 @@ namespace ft {
 		}
 
 		MapIterator &operator--() {
-			moveToPrevNode();
+			decrement(currentNode, ext->getParent());
 			return *this;
 		}
 
 		MapIterator &operator++() {
-			moveToNextNode();
+			increment(currentNode, ext->getParent());
 			return *this;
 		}
 
@@ -81,7 +81,7 @@ namespace ft {
 		MapIterator operator--(int i) {
 			MapIterator<ValueType, key_type, mapped_type, NodeType, Compare> result = *this;
 			if (i == 0) {
-				moveToPrevNode();
+				return decrement(currentNode, ext->getParent());
 			}
 			return result;
 		}
@@ -89,7 +89,7 @@ namespace ft {
 		MapIterator operator++(int i) {
 			MapIterator<ValueType, key_type, mapped_type, NodeType, Compare> result = *this;
 			if (i == 0) {
-				moveToNextNode();
+				return increment(currentNode, ext->getParent());
 			}
 			return result;
 		}
@@ -111,6 +111,59 @@ namespace ft {
 			return currentNode->content;
 		}
 	private:
+
+		MapIterator &increment(Node *n, Node *old) {
+			if (n->isNullNode()){
+				currentNode = ext->getLeft();
+				return *this;
+			}
+			if (n->getLeft() && old == n->getParent())
+				return (increment(n->getLeft(), n));
+			if (old == n->getParent())
+			{
+				this->currentNode = (Node *)n;
+				return (*this);
+			}
+			if (n->getLeft() && n->getLeft() == old)
+			{
+				this->currentNode = (Node *)n;
+				return (*this);
+			}
+			if (n->getRight() && n->getRight() != old)
+				return (increment(n->getRight(), n));
+			if (n->getParent())
+				return (increment(n->getParent(), n));
+			return (*this);
+		}
+		MapIterator &decrement(Node * n, Node * old) {
+			if (n == ext->getLeft()){
+				currentNode = ext->getParent();
+				return *this;
+			}
+			if (n->isNullNode()){
+				currentNode = ext->getRight();
+				return *this;
+			}
+			if (n->getRight() && old == n->getParent())
+				return (decrement(n->getRight(), n));
+			if (old == n->getParent())
+			{
+				this->currentNode = (Node *)n;
+				return (*this);
+			}
+			if (n->getRight() && n->getRight() == old)
+			{
+				this->currentNode = (Node *)n;
+				return (*this);
+			}
+			if (n->getLeft() && n->getLeft() != old)
+				return (decrement(n->getLeft(), n));
+			if (n->getParent())
+				return (decrement(n->getParent(), n));
+			return (*this);
+		}
+
+/*
 		void moveToNextNode() {
 			Key originalKey;
 
@@ -159,7 +212,7 @@ namespace ft {
 							currentNode = currentNode->getRight();
 				}
 			}
-		}
+		}*/
 
 	public:
 		bool operator==(const MapIterator &rhs) const {

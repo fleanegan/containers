@@ -4,7 +4,7 @@
 #include "BinarySearchTree.hpp"
 #include "pair.hpp"
 #include "vector.hpp"
-
+#include <iostream>
 
 namespace ft {
 	template<typename TKey, typename TValue, typename NodeType = ft::RedBlackNode<TKey, TValue>, typename Compare = std::less<TKey>, typename Allocator = std::allocator<NodeType> >

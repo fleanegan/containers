@@ -353,3 +353,11 @@ TEST(Map, insertingExistingKeyDoesNotGetAddedToMap){
 	ASSERT_EQ(1, map.size());
 	ASSERT_EQ(++map.begin(),map.end());
 }
+
+TEST(Map, deletingEmptyRangeDoesNotLoopInfinitely){
+	ft::map<simpleDummy, simpleDummy> map = generateTestMap();
+
+	map.erase(++map.begin(), ++map.begin());
+
+	ASSERT_EQ(generateTestMap().size(), map.size());
+}

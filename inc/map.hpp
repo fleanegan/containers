@@ -165,6 +165,8 @@ namespace ft {
 		void erase (iterator first, iterator last){
 			iterator tmp;
 
+			if (first == last)
+				return ;
 			--last;
 			while (first != last)
 				rbTree.popNodeByPointer(last--.current());

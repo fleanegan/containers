@@ -178,13 +178,18 @@ namespace ft {
 			size_type current_size_tmp = current_size;
 			pointer rootNode_tmp = rootNode;
 			pointer nullNode_tmp = nullNode;
+			pointer extremeties_tmp = getExtremeties();
 
 			current_size = in.current_size;
 			nullNode = in.nullNode;
 			rootNode = in.rootNode;
+			extremeties = in.extremeties;
 			in.current_size = current_size_tmp;
 			in.rootNode = rootNode_tmp;
 			in.nullNode = nullNode_tmp;
+			in.extremeties = extremeties_tmp;
+			updateExtremities();
+			in.updateExtremities();
 		}
 
 		pointer getExtremeties() const{

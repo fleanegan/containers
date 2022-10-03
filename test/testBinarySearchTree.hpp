@@ -420,3 +420,14 @@ TEST(BinarySearchTree, swappingEmptyTreeWithNonEmpty) {
 
 	ASSERT_EQ(0, a.size());
 }
+
+TEST(BinarySearchTree, swappingTreeSwapsExtremeties) {
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
+	ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> b;
+	ft::SearchTreeStandardNode<int, int> *aExtremetiesBefore = a.getExtremeties();
+
+	a.swap(b);
+
+	ASSERT_EQ(aExtremetiesBefore, b.getExtremeties());
+	ASSERT_EQ(a.getNullNode(), a.getExtremeties()->getLeft());
+}

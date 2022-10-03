@@ -234,7 +234,8 @@ namespace ft {
 			int index = pos - begin();
 
 			while (first != last){
-				insert(index++ + begin(), *first++);
+				insert(index++ + begin(), *first);
+				++first;
 			}
 		}
 

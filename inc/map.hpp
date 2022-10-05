@@ -239,6 +239,8 @@ namespace ft {
 			const_iterator ite = end();
 			const_iterator it = begin();
 
+			if (key < rbTree.getExtremeties()->getLeft()->content.first)
+				return begin();
 			while (it != ite) {
 				if (!compare((*it).first, key))
 					return (const_iterator(it));
@@ -256,6 +258,8 @@ namespace ft {
 			const_iterator ite = end();
 			const_iterator it = begin();
 
+			if (key > rbTree.getExtremeties()->getRight()->content.first)
+				return end();
 			while (ite != it){
 				if (compare(key, it->first))
 					return it;

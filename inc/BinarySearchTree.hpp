@@ -4,6 +4,7 @@
 #include "pair.hpp"
 #include "Node.hpp"
 #include "algorithm.hpp"
+#include "vector.hpp"
 #include <memory>
 #include <functional>
 
@@ -199,6 +200,32 @@ namespace ft {
 		pointer getExtremeties(){
 			return extremeties;
 		}
+
+		void printTree(){
+			ft::vector<pointer> children;
+			ft::vector<pointer> current;
+
+			current.push_back(rootNode);
+			while (current.empty() == false){
+				children.clear();
+				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it)
+				{
+					std::cout << "	" << (*it)->content.first;
+					if ((*it)->getParent()->isNullNode() == false)
+						std::cout  << "(" << (*it)->getParent()->content.first + ")   ";
+				}
+				std::cout << std::endl;
+				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it){
+					if ((*it)->getRight()->isNullNode() == false)
+						children.push_back((*it)->getRight());
+					if ((*it)->getLeft()->isNullNode() == false)
+						children.push_back((*it)->getLeft());
+				}
+				current.clear();
+				current.swap(children);
+			}
+		}
+
 	private:
 		pointer makeExtremety(){
 			pointer node = makeNullNode();
@@ -284,7 +311,6 @@ namespace ft {
 			_allocator.construct(newNode, tmp);
 			return newNode;
 		}
-
 
 	protected:
 		pointer getInorderSuccessor(pointer localRoot, pointer biggerThan,

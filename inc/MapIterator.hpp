@@ -114,6 +114,15 @@ namespace ft {
 		void moveToNextNode() {
 			Key originalKey;
 
+//			std::cerr 	<< " Mapit: toNextNode, currently at:	" << currentNode->content.first
+//						<< ", leftEx: " << ext->getLeft()->content.first
+//						<< ", rightEx: " << ext->getRight()->content.first;
+			/*if (currentNode->getLeft() != ext->getParent())
+				std::cerr	<< ", nodeToLeft: " << currentNode->getLeft()->content.first;
+			if (currentNode->getRight() != ext->getParent())
+				std::cerr	<< ", nodeToRight: " << currentNode->getRight()->content.first;
+			std::cerr <<  std::endl;
+*/
 			if (currentNode->isNullNode())
 				currentNode = ext->getLeft();
 			else {

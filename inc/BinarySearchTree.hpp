@@ -60,8 +60,9 @@ namespace ft {
 			clear();
 			current_size = rhs.current_size;
 			copySubTree(rhs.rootNode, rhs.nullNode, &rootNode);
-			updateExtremities();
-			return *this;
+            rootNode->setParent(nullNode);
+            updateExtremities();
+            return *this;
 		}
 
 		virtual ~BinarySearchTree() {
@@ -160,7 +161,7 @@ namespace ft {
 		}
 
 		bool isSameStructure(const_pointer a, const_pointer const b, const_pointer bNullNode) const {
-			if (b == bNullNode != a->isNullNode())
+			if ((b == bNullNode) != a->isNullNode())
 				return false;
 			if (a->isNullNode() == false && b != bNullNode && a->content != b->content)
 				return false;
@@ -200,6 +201,22 @@ namespace ft {
 		pointer getExtremeties(){
 			return extremeties;
 		}
+
+        bool isValid() const{
+            if (rootNode != nullNode && (rootNode->getParent() != nullNode || nullNode->getRight() != rootNode || nullNode->getLeft() != rootNode))
+            {
+                std::cerr << "BinarySearchTree is invalid. rootNode: " << (void*)rootNode
+                    << " (parent: " << rootNode->getParent() << "), "
+                    "nullNode: " << nullNode << " ("
+                    "left: " << nullNode->getLeft() <<
+                    ", right: " << nullNode->getRight() << ")\n";
+                std::cerr << "root parents correct: " << (rootNode->getParent() == nullNode) <<
+                ", nullChild correct: " << (nullNode->getRight() == rootNode
+                && nullNode->getLeft() == rootNode) << std::endl;
+                return false;
+            }
+            return true;
+        }
 
 		void printTree(){
 			ft::vector<pointer> children;

@@ -64,9 +64,11 @@ namespace ft {
 				: rbTree(RbTree(comp, rb_allocator_type(alloc))),
 				  compare(comp),
 				  alloc(alloc){
+            isValid();
 		}
 
 		map(const map &rhs) {
+            isValid();
 			*this = rhs;
 		}
 
@@ -76,10 +78,12 @@ namespace ft {
 			 const allocator_type& alloc = allocator_type()) :
 					compare(comp),
 					alloc(alloc){
+            isValid();
 			insert(first, last);
 		}
 
 		map &operator=(const map &map) {
+            isValid();
 			if (rbTree.root() == map.rbTree.root())
 				return *this;
 			alloc = map.alloc;
@@ -88,44 +92,62 @@ namespace ft {
 			return *this;
 		}
 
+        void printTree(){
+            rbTree.printTree();
+        }
+
+        bool isValid() const{
+            return rbTree.isValid();
+        }
+
 		~map(){
+            isValid();
 
 		}
 
 		// todo: fix const time CALL IS STUPID
 		const_iterator begin() const {
+            isValid();
 			return const_iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
 		}
 
 		iterator begin() {
+            isValid();
 			return iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator end() const {
+            isValid();
 			return const_iterator(rbTree.getNullNode(), rbTree.getExtremeties(), compare);
 		}
 
 		reverse_iterator rbegin() {
+            isValid();
 			return reverse_iterator(end());
 		}
 
 		const_reverse_iterator rbegin() const{
+            isValid();
 			return const_reverse_iterator(end());
 		}
 
 		const_reverse_iterator rend() const {
+            isValid();
 			return const_reverse_iterator(begin());
 		}
 
 		reverse_iterator rend() {
+            isValid();
 			return reverse_iterator(begin());
 		}
 
 		iterator end() {
+            isValid();
 			return iterator(rbTree.getNullNode(),  rbTree.getExtremeties(), compare);
 		}
 
 		ft::pair<iterator,bool> insert (const value_type& val) {
+            isValid();
 			ft::pair<iterator, bool> result;
 			size_type before = size();
 			result.first = iterator(rbTree.insert(val),  rbTree.getExtremeties(), compare);
@@ -137,16 +159,19 @@ namespace ft {
 		}
 
 		iterator insert( iterator hint, const value_type& value ){
+            isValid();
 			(void) hint;
 			return insert(value).first;
 		}
 		iterator insert( const_iterator hint, const value_type& value ){
+            isValid();
 			(void) hint;
 			return insert(value).first;
 		}
 
 		template <class InputIterator>
 		void insert (InputIterator first, InputIterator last){
+            isValid();
 			while (first != last)
 			{
 				rbTree.insert(*first);
@@ -155,14 +180,17 @@ namespace ft {
 		}
 
 		void erase (iterator position){
+            isValid();
 			rbTree.popNodeByPointer(position.current());
 		}
 
 		size_type erase (const key_type& k){
+            isValid();
 			return rbTree.popNode(k);
 		}
 
 		void erase (iterator first, iterator last){
+            isValid();
 			iterator tmp;
 
 			if (first == last)
@@ -174,43 +202,53 @@ namespace ft {
 		}
 
 		void swap (map& x){
+            isValid();
 			rbTree.swap(x.rbTree);
 		}
 
 		size_type size() const {
+            isValid();
 			return rbTree.size();
 		}
 
 		size_type max_size(void) const {
+            isValid();
 			return rbTree.max_size();
 		}
 
 		bool empty() const{
+            isValid();
 			return size() == 0;
 		}
 
 		allocator_type get_allocator() const {
+            isValid();
 			return alloc;
 		}
 
 		void clear(){
+            isValid();
 			rbTree.clear();
 		}
 
 		size_type count( const Key& key ) const{
+            isValid();
 			return static_cast<size_type>(end() != find(key));
 		}
 
 		mapped_type& operator[] (const key_type& k) {
+            isValid();
 			iterator it = insert(ft::make_pair(k, mapped_type())).first;
 			return it->second;
 		}
 
 		mapped_type& at (const key_type& k){
+            isValid();
 			return const_cast<mapped_type &>(static_cast<const this_type &>(*this).at(k));
 		}
 
 		const mapped_type& at(const key_type& k) const{
+            isValid();
 			NodeType const *result = rbTree.find(k);
 
 			if (result == rbTree.getNullNode())
@@ -219,11 +257,13 @@ namespace ft {
 		}
 
 		iterator find( const Key& key ){
+            isValid();
 			const_iterator result = static_cast<const this_type &>(*this).find(key);
 			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator find( const Key& key ) const{
+            isValid();
 			NodeType const *  result = rbTree.find(key);
 			if (result == rbTree.getNullNode())
 				return end();
@@ -231,11 +271,13 @@ namespace ft {
 		}
 
 		iterator lower_bound( const Key& key ){
+            isValid();
 			const_iterator result = static_cast<const this_type &>(*this).lower_bound(key);
 			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator lower_bound( const Key& key ) const{
+            isValid();
 			const_iterator ite = end();
 			const_iterator it = begin();
 
@@ -250,11 +292,13 @@ namespace ft {
 		}
 
 		iterator upper_bound( const Key& key ){
+            isValid();
 			const_iterator result = static_cast<const this_type &>(*this).upper_bound(key);
 			return iterator(const_cast<NodeType *>(result.current()),  rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator upper_bound( const Key& key ) const{
+            isValid();
 			const_iterator ite = end();
 			const_iterator it = begin();
 
@@ -269,6 +313,7 @@ namespace ft {
 		}
 
 		ft::pair<iterator,iterator> equal_range( const Key& key ){
+            isValid();
 			ft::pair<iterator, iterator> result;
 			ft::pair<const_iterator, const_iterator> result_const = static_cast<const this_type &>(*this).equal_range(key);
 
@@ -278,6 +323,7 @@ namespace ft {
 		}
 
 		ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const{
+            isValid();
 			ft::pair<const_iterator, const_iterator> result;
 			result.first = lower_bound(key);
 			result.second = upper_bound(key);
@@ -285,10 +331,12 @@ namespace ft {
 		}
 
 		key_compare key_comp() const{
+            isValid();
 			return compare;
 		}
 
 		value_compare value_comp() const{
+            isValid();
 			return value_compare(compare);
 		}
 

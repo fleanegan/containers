@@ -76,8 +76,11 @@ namespace ft {
 			}
 		}
 
-		bool isValid() {
+		bool isValid() const {
 			ft::vector<int> blackNodeCountPerBranch;
+
+            if (this->ft::BinarySearchTree<key_type, mapped_type, NodeType, Compare, Allocator>::isValid() == false)
+                throw std::invalid_argument("oh oh");
 			countBranches(this->rootNode, 0, blackNodeCountPerBranch);
 			if (!this->rootNode->isBlack)
 				return false;
@@ -251,7 +254,7 @@ namespace ft {
 			return sibling;
 		}
 
-		void countBranches(Node *current, int sum, ft::vector<int> &result) {
+		void countBranches(Node *current, int sum, ft::vector<int> &result) const {
 			if (current->isNullNode() == false) {
 				sum += current->isBlack;
 				countBranches(current->getRight(), sum, result);
@@ -261,7 +264,7 @@ namespace ft {
 			}
 		}
 
-		bool isContainingDoubleRed(Node *current) {
+		bool isContainingDoubleRed(Node *current) const {
 			if (current->isNullNode() == false) {
 				if (current->isBlack == current->getParent()->isBlack && current->isBlack == false)
 					return true;

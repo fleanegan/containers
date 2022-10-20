@@ -431,3 +431,9 @@ TEST(BinarySearchTree, swappingTreeSwapsExtremeties) {
 	ASSERT_EQ(aExtremetiesBefore, b.getExtremeties());
 	ASSERT_EQ(a.getNullNode(), a.getExtremeties()->getLeft());
 }
+
+TEST(BinarySearchTree, testPrint) {
+ft::BinarySearchTree<int, int, ft::SearchTreeStandardNode<int, int>> a = generateFiveLevelTree();
+
+a.printTree();
+}

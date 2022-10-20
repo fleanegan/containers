@@ -105,15 +105,14 @@ namespace ft {
 
 		}
 
-		// todo: fix const time CALL IS STUPID
 		const_iterator begin() const {
             isValid();
-			return const_iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
+			return const_iterator(rbTree.getExtremeties()->getLeft(), rbTree.getExtremeties(), compare);
 		}
 
 		iterator begin() {
             isValid();
-			return iterator(ft::getLowest(rbTree.root()), rbTree.getExtremeties(), compare);
+			return iterator(rbTree.getExtremeties()->getLeft(), rbTree.getExtremeties(), compare);
 		}
 
 		const_iterator end() const {

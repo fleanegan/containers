@@ -60,9 +60,9 @@ namespace ft {
 			clear();
 			current_size = rhs.current_size;
 			copySubTree(rhs.rootNode, rhs.nullNode, &rootNode);
-            rootNode->setParent(nullNode);
-            updateExtremities();
-            return *this;
+			rootNode->setParent(nullNode);
+			updateExtremities();
+			return *this;
 		}
 
 		virtual ~BinarySearchTree() {
@@ -194,45 +194,45 @@ namespace ft {
 			in.updateExtremities();
 		}
 
-		pointer getExtremeties() const{
+		pointer getExtremeties() const {
 			return extremeties;
 		}
 
-		pointer getExtremeties(){
+		pointer getExtremeties() {
 			return extremeties;
 		}
 
-        bool isValid() const{
-            if (rootNode != nullNode && (rootNode->getParent() != nullNode || nullNode->getRight() != rootNode || nullNode->getLeft() != rootNode))
-            {
-                std::cerr << "BinarySearchTree is invalid. rootNode: " << (void*)rootNode
-                    << " (parent: " << rootNode->getParent() << "), "
-                    "nullNode: " << nullNode << " ("
-                    "left: " << nullNode->getLeft() <<
-                    ", right: " << nullNode->getRight() << ")\n";
-                std::cerr << "root parents correct: " << (rootNode->getParent() == nullNode) <<
-                ", nullChild correct: " << (nullNode->getRight() == rootNode
-                && nullNode->getLeft() == rootNode) << std::endl;
-                return false;
-            }
-            return true;
-        }
+		bool isValid() const {
+			if (rootNode != nullNode && (rootNode->getParent() != nullNode || nullNode->getRight() != rootNode ||
+										 nullNode->getLeft() != rootNode)) {
+				std::cerr << "BinarySearchTree is invalid. rootNode: " << (void *) rootNode
+						  << " (parent: " << rootNode->getParent() << "), "
+																	  "nullNode: " << nullNode << " ("
+																								  "left: "
+						  << nullNode->getLeft() <<
+						  ", right: " << nullNode->getRight() << ")\n";
+				std::cerr << "root parents correct: " << (rootNode->getParent() == nullNode) <<
+						  ", nullChild correct: " << (nullNode->getRight() == rootNode
+													  && nullNode->getLeft() == rootNode) << std::endl;
+				return false;
+			}
+			return true;
+		}
 
-		void printTree(){
+		void printTree() {
 			ft::vector<pointer> children;
 			ft::vector<pointer> current;
 
 			current.push_back(rootNode);
-			while (current.empty() == false){
+			while (current.empty() == false) {
 				children.clear();
-				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it)
-				{
+				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it) {
 					std::cout << "	" << (*it)->content.first;
 					if ((*it)->getParent()->isNullNode() == false)
-						std::cout  << "(" << (*it)->getParent()->content.first + ")   ";
+						std::cout << "(" << (*it)->getParent()->content.first << ")   ";
 				}
 				std::cout << std::endl;
-				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it){
+				for (typename ft::vector<pointer>::iterator it = current.begin(); it != current.end(); ++it) {
 					if ((*it)->getRight()->isNullNode() == false)
 						children.push_back((*it)->getRight());
 					if ((*it)->getLeft()->isNullNode() == false)
@@ -244,7 +244,7 @@ namespace ft {
 		}
 
 	private:
-		pointer makeExtremety(){
+		pointer makeExtremety() {
 			pointer node = makeNullNode();
 
 			node->setRight(nullNode);
@@ -387,14 +387,19 @@ namespace ft {
 			replacer->setParent(nodeToBeReplaced->getParent());
 		}
 
-		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved, bool clean) {
+		void deleteNodeWithCleanUp(const pointer nodeToBeRemoved, bool clearMap) {
 			if (nodeToBeRemoved == rootNode) {
 				rootNode = nullNode;
 				nullNode->setRight(nullNode);
 				nullNode->setLeft(nullNode);
 				nullNode->setParent(nullNode);
 			}
-			if (clean == false)
+			if (clearMap) {
+				extremeties->setRight(nullNode);
+				extremeties->setLeft(nullNode);
+				extremeties->setParent(rootNode);
+			}
+			else
 				updateExtremities();
 			--current_size;
 			_allocator.destroy(nodeToBeRemoved);
@@ -412,8 +417,8 @@ namespace ft {
 			return result;
 		}
 
-		void updateExtremities(){
-			if (rootNode == nullNode){
+		void updateExtremities() {
+			if (rootNode == nullNode) {
 				extremeties->setRight(nullNode);
 				extremeties->setLeft(nullNode);
 			}
